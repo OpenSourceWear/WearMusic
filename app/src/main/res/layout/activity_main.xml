@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context=".MainActivity" >
+
+    <LinearLayout
+        android:id="@+id/Play"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:background="#2175F3"
+            android:gravity="center"
+            android:onClick="menu"
+            android:text="WearMusic ▼"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="#999999" />
+
+            <TextView
+                android:id="@+id/msg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:onClick="lyr"
+                android:singleLine="false"
+                android:text="无音乐"
+                android:textColor="#999999" />
+
+            <ImageView
+                android:id="@+id/imageView10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/middle_s" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/middle" />
+
+                <ImageView
+                    android:id="@+id/btn_left"
+                    android:layout_width="35dp"
+                    android:layout_height="69dp"
+                    android:layout_gravity="center"
+                    android:onClick="left"
+                    android:scaleType="center"
+                    app:srcCompat="@drawable/ic_baseline_arrow_back_ios_24" />
+
+                <ImageView
+                    android:id="@+id/btn"
+                    android:layout_width="73dp"
+                    android:layout_height="69dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:onClick="c"
+                    app:srcCompat="@drawable/ic_baseline_play_circle_outline_24" />
+
+                <ImageView
+                    android:id="@+id/btn_right"
+                    android:layout_width="35dp"
+                    android:layout_height="69dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:onClick="right"
+                    android:scaleType="center"
+                    app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_24" />
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/middle" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageView15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:layout_weight="1"
+                    android:onClick="console"
+                    app:srcCompat="@drawable/ic_baseline_menu_24" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ly"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:layout_editor_absoluteY="33dp">
+
+        <TextView
+            android:id="@+id/textView37"
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:background="#2175F3"
+            android:gravity="center"
+            android:onClick="share_ly"
+            android:text="歌词 ▼"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp" />
+
+        <com.lauzy.freedom.library.LrcView
+            android:id="@+id/lrcView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:lrcTextSize="12dp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

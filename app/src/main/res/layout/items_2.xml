@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cn.wearbbs.music.CheckableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+
+        android:duplicateParentState="true"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:padding="10px"
+        android:singleLine="true"
+        android:textColor="#FFFFFF" />
+</cn.wearbbs.music.CheckableLayout>
