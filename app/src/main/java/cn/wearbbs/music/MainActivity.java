@@ -56,6 +56,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.logging.Logger;
 
+import com.microsoft.appcenter.AppCenter;
+import com.microsoft.appcenter.analytics.Analytics;
+import com.microsoft.appcenter.crashes.Crashes;
+
+
 public class MainActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer;
     int now = 0;
@@ -66,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     Map lrc_map;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AppCenter.start(getApplication(), "765f8129-50ca-4f63-9bc6-548dbcdc7103",Analytics.class, Crashes.class);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         verifyStoragePermissions(MainActivity.this);
