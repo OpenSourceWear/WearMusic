@@ -51,4 +51,12 @@ Star本仓库，前往Release下载。
 
 > 软件已在WearOS工具箱上架，欢迎前往一键安装
 
-![WearOSBOX](https://wearbbs.cn/attachments/qq-20200813174645-png.896/)
+![WearOSBOX](https://s1.ax1x.com/2020/08/13/dpUTbD.png)
+
+
+
+# ❌已删除文件
+
+##### keystore.jks - 密钥文件，请自行创建打包。
+
+##### shareapi-2.2.2.aar - 小天才官方分享API，不允许公开，如需二次打包请删除分享功能。
