@@ -42,7 +42,7 @@ public class ftp_server extends AppCompatActivity {
         }
         TextView textView = findViewById(R.id.textView);
         Toast.makeText(this,"该功能仍在测试，或许BUG较多，敬请谅解",Toast.LENGTH_SHORT).show();
-        String temp = "用户名：WearMusic\n密码：WearMusic\n端口：2222\nIP：Unknow\n连接后默认自动进入歌曲储存位置";
+        String temp = "用户名：WearMusic\n密码：WearMusic\n端口：2222\nIP：Unknown\n连接后默认自动进入歌曲储存位置";
         Thread myThread=new Thread(){//创建子线程
             @Override
             public void run() {
