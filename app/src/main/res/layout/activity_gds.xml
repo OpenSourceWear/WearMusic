@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context=".gds">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView36"
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:background="#2175F3"
+            android:gravity="center"
+            android:text="我的歌单"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp" />
+
+        <ListView
+            android:id="@+id/list_gds"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="#2A2B2C"
+            android:dividerHeight="1dp"
+            android:visibility="visible">
+
+        </ListView>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context=".download">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView36"
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:background="#2175F3"
+            android:gravity="center"
+            android:onClick="add"
+            android:text="本地音乐"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/textView38"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="\n音乐储存位置：/sdcard/Android\n/data/cn.wearbbs.music/download\n/music"
+            android:textColor="#999999"
+            android:textSize="10sp" />
+
+        <LinearLayout
+            android:id="@+id/null_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:text="TextView" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_baseline_assignment_24" />
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="暂无音乐"
+                android:textColor="#999999" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/listd"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="#2A2B2C"
+            android:dividerHeight="1dp"
+            android:visibility="visible">
+
+        </ListView>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

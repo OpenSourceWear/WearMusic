@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:divider="@drawable/middle"
+    android:showDividers="middle"
+    tools:context=".search">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="0dp"
+
+        tools:layout_editor_absoluteY="0dp">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:background="#2175F3"
+            android:gravity="center"
+            android:onClick="menu"
+            android:text="搜索"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:text="TextView" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="2dp"
+                android:layout_height="28dp"
+                android:layout_weight="1"
+                android:text="TextView" />
+
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="126dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/blur"
+                android:ems="10"
+                android:hint="   搜索内容..."
+                android:inputType="textPersonName"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#999999"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="15dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="search"
+                app:srcCompat="@drawable/ic_baseline_search_24" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="2dp"
+                android:layout_height="28dp"
+                android:layout_weight="1"
+                android:text="TextView" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:text="TextView" />
+
+        <LinearLayout
+            android:id="@+id/list_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@drawable/middle_ss"
+            android:orientation="horizontal"
+            android:showDividers="middle">
+
+            <ListView
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="#2A2B2C"
+                android:dividerHeight="1dp">
+
+            </ListView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/null_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:text="TextView" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_baseline_assignment_24" />
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="暂无音乐"
+                android:textColor="#999999" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

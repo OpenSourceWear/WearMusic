@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context=".console">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView27"
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:background="#2175F3"
+            android:gravity="center"
+            android:text="控制台"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="135dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:divider="@drawable/middle_ss"
+                    android:orientation="horizontal"
+                    android:showDividers="middle">
+
+                    <ImageView
+                        android:id="@+id/imageView9"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:onClick="voice_down"
+                        app:srcCompat="@drawable/ic_baseline_volume_mute_24" />
+
+                    <ImageView
+                        android:id="@+id/imageView12"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:onClick="download"
+                        app:srcCompat="@drawable/ic_baseline_cloud_download_24" />
+
+                    <ImageView
+                        android:id="@+id/imageView13"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:maxWidth="40dp"
+                        android:maxHeight="40dp"
+                        android:minWidth="40dp"
+                        android:minHeight="40dp"
+                        android:onClick="voice_up"
+                        app:srcCompat="@drawable/ic_baseline_volume_up_24" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textView35"
+                    android:layout_width="match_parent"
+                    android:layout_height="6dp"
+                    android:gravity="center"
+                    android:textColor="#999999" />
+
+                <LinearLayout
+                    android:id="@+id/l2"
+                    android:layout_width="135dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:divider="@drawable/middle_ss"
+                    android:orientation="horizontal"
+                    android:showDividers="middle"
+                    tools:visibility="visible">
+
+                    <ImageView
+                        android:id="@+id/like_view"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:onClick="like"
+                        app:srcCompat="@drawable/ic_baseline_favorite_border_24" />
+
+                    <ImageView
+                        android:id="@+id/imageView12"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:onClick="message"
+                        app:srcCompat="@drawable/ic_baseline_message_24" />
+
+                    <ImageView
+                        android:id="@+id/imageView13"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:maxWidth="40dp"
+                        android:maxHeight="40dp"
+                        android:minWidth="40dp"
+                        android:minHeight="40dp"
+                        android:onClick="share"
+                        app:srcCompat="@drawable/ic_baseline_share_24" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
