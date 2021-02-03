@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "cn.wearbbs.music"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode 3
         versionName "2.0"
@@ -53,7 +53,7 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.github.Lauzy:PlayPauseView:1.0.7'
     implementation 'com.danikula:videocache:2.7.1'
-    implementation(name:'shareapi-2.2.2', ext:'aar')
+    implementation(name:'shareapi-2.2.7', ext:'aar')
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.alibaba:fastjson:1.1.72.android'

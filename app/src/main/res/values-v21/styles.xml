@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <style name="RippleWhite">
-        <item name="android:colorControlHighlight">#999999</item>
-        <item name="android:radius">20dp</item>
-    </style>
-</resources>
