@@ -31,7 +31,7 @@ WearMusic 是完全开源且免费的。同时，维护后台的[API服务器](h
 
 > 收款由 WearBBS 运维代收
 
-<img src="https://ae01.alicdn.com/kf/U0bf11df727e34cb7b7ce0a3009575accV.jpg" width="200"/>
+<img src="https://ae01.alicdn.com/kf/U0bf11df727e34cb7b7ce0a3009575accV.jpg" width="1000"/>
 
 
 ## Licence
