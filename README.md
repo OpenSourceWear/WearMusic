@@ -1,4 +1,4 @@
-<p align="center"><img src="https://s3.ax1x.com/2021/02/02/ymJArq.png" width="200px"/></p>
+<p align="center"><img src="https://s3.ax1x.com/2021/02/02/ymJArq.png" width="150px"/></p>
 <h1 align="center">WearMusic</h1>
 <p align="center">音乐的力量，听你所享。</p>
 <p align="center">
@@ -20,7 +20,7 @@
 
 ## 预览视频
 
-<iframe src="//player.bilibili.com/player.html?bvid=BV1zf4y1672n" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+<iframe src="//baidu.com" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
 
 ## 关于
 
