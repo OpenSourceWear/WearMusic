@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- 填充颜色 -->
-    <solid android:color="#2175F3"></solid>
-    <!-- 设置圆角的半径 -->
-    <corners android:radius="5dp"></corners>
-    <!-- 描边 -->
-<!--    <stroke android:color="#2A2B2C" android:width="1dp"></stroke>-->
-</shape>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#2A2B2C">
+    <item
+        android:id="@android:id/mask"
+        android:drawable="@android:color/white" />
+    <item>
+        <shape android:drawable="@android:color/white" >
+            <solid android:color="#2175F3" />
+            <corners android:radius="5dp" />
+    </shape>
+    </item>
+
+</ripple>

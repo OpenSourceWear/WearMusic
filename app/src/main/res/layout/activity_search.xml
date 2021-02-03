@@ -2,12 +2,64 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="#FAFAFA"
+    android:animateLayoutChanges="true"
     android:divider="@drawable/middle"
     android:showDividers="middle"
-    tools:context=".search">
+    tools:context=".ui.SearchActivity">
+
+    <LinearLayout
+        android:id="@+id/loading_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:layout_editor_absoluteY="33dp">
+
+        <TextView
+            android:id="@+id/textView55"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textView56"
+            android:layout_width="match_parent"
+            android:layout_height="9dp"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="63dp" />
+
+        <TextView
+            android:id="@+id/textView47"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:gravity="center"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/textView49"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="加载中..."
+            android:textColor="#2A2B2C"
+            android:textSize="15sp" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,7 +70,7 @@
         tools:layout_editor_absoluteY="0dp">
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/tv"
             android:layout_width="match_parent"
             android:layout_height="33dp"
             android:background="#2175F3"
@@ -28,58 +80,137 @@
             android:textColor="#FFFFFF"
             android:textSize="13sp" />
 
-        <TextView
-            android:id="@+id/textView8"
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:text="TextView" />
-
         <LinearLayout
+            android:id="@+id/ly"
             android:layout_width="match_parent"
             android:layout_height="28dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView4"
-                android:layout_width="2dp"
-                android:layout_height="28dp"
-                android:layout_weight="1"
-                android:text="TextView" />
+                android:id="@+id/textView6"
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
-            <EditText
-                android:id="@+id/editText"
-                android:layout_width="126dp"
-                android:layout_height="match_parent"
+            <LinearLayout
+                android:layout_width="120dp"
+                android:layout_height="28dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="2dp"
+                android:layout_weight="1"
                 android:background="@drawable/blur"
-                android:ems="10"
-                android:hint="   搜索内容..."
-                android:inputType="textPersonName"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#999999"
-                android:textSize="12sp" />
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="#FAFAFA"
+                    android:ems="10"
+                    android:hint=" 搜索内容..."
+                    android:inputType="textPersonName"
+                    android:textColor="#2A2B2C"
+                    android:textColorHint="#999999"
+                    android:textSize="12sp" />
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="15dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:onClick="search"
                 app:srcCompat="@drawable/ic_baseline_search_24" />
 
             <TextView
-                android:id="@+id/textView6"
-                android:layout_width="2dp"
-                android:layout_height="28dp"
-                android:layout_weight="1"
-                android:text="TextView" />
+                android:id="@+id/textView5"
+                android:layout_width="5dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView9"
+        <LinearLayout
+            android:id="@+id/zs"
             android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:text="TextView" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:layout_editor_absoluteY="33dp">
+
+            <ImageView
+                android:id="@+id/imageView18"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                app:srcCompat="@drawable/ic_baseline_family_restroom_24" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="你不孤单，我们都在。"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/hot_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/textView69"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="热搜榜"
+                android:textSize="12sp" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.zhy.view.flowlayout.TagFlowLayout
+                        android:id="@+id/id_flowlayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp">
+
+                    </com.zhy.view.flowlayout.TagFlowLayout>
+
+                    <TextView
+                        android:id="@+id/textView8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="没有更多了\n\n"
+                        android:textColor="#999999"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+            </ScrollView>
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/list_layout"
@@ -87,13 +218,14 @@
             android:layout_height="match_parent"
             android:divider="@drawable/middle_ss"
             android:orientation="horizontal"
-            android:showDividers="middle">
+            android:showDividers="middle"
+            android:visibility="gone">
 
             <ListView
                 android:id="@+id/list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:divider="#2A2B2C"
+                android:divider="#FAFAFA"
                 android:dividerHeight="1dp">
 
             </ListView>
@@ -110,13 +242,13 @@
                 android:id="@+id/textView17"
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
-                android:text="TextView" />
+                android:text="" />
 
             <TextView
                 android:id="@+id/textView19"
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
-                android:text="TextView" />
+                android:text="" />
 
             <ImageView
                 android:id="@+id/imageView2"
@@ -129,7 +261,7 @@
                 android:id="@+id/textView20"
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
-                android:text="TextView" />
+                android:text="" />
 
             <TextView
                 android:id="@+id/textView18"

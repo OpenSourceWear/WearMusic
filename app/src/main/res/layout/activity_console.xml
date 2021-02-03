@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
-    tools:context=".console">
+    android:background="#FAFAFA"
+    tools:context=".ui.ConsoleActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,12 +25,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="130dp"
-                android:layout_gravity="center"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -46,7 +46,9 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_weight="1"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
                         android:onClick="voice_down"
+                        android:theme="@style/RippleWhite"
                         app:srcCompat="@drawable/ic_baseline_volume_mute_24" />
 
                     <ImageView
@@ -54,7 +56,9 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_weight="1"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
                         android:onClick="download"
+                        android:theme="@style/RippleWhite"
                         app:srcCompat="@drawable/ic_baseline_cloud_download_24" />
 
                     <ImageView
@@ -62,11 +66,13 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_weight="1"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
                         android:maxWidth="40dp"
                         android:maxHeight="40dp"
                         android:minWidth="40dp"
                         android:minHeight="40dp"
                         android:onClick="voice_up"
+                        android:theme="@style/RippleWhite"
                         app:srcCompat="@drawable/ic_baseline_volume_up_24" />
 
                 </LinearLayout>
@@ -94,7 +100,9 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_weight="1"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
                         android:onClick="like"
+                        android:theme="@style/RippleWhite"
                         app:srcCompat="@drawable/ic_baseline_favorite_border_24" />
 
                     <ImageView
@@ -102,7 +110,9 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_weight="1"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
                         android:onClick="message"
+                        android:theme="@style/RippleWhite"
                         app:srcCompat="@drawable/ic_baseline_message_24" />
 
                     <ImageView
@@ -110,12 +120,56 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_weight="1"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
                         android:maxWidth="40dp"
                         android:maxHeight="40dp"
                         android:minWidth="40dp"
                         android:minHeight="40dp"
                         android:onClick="share"
+                        android:theme="@style/RippleWhite"
                         app:srcCompat="@drawable/ic_baseline_share_24" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="6dp"
+                    android:gravity="center"
+                    android:textColor="#999999" />
+
+                <LinearLayout
+                    android:id="@+id/l3"
+                    android:layout_width="135dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:divider="@drawable/middle_ss"
+                    android:orientation="horizontal"
+                    android:showDividers="middle"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/textView43"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1" />
+
+                    <ImageView
+                        android:id="@+id/like_view"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:onClick="mv"
+                        android:theme="@style/RippleWhite"
+                        app:srcCompat="@drawable/ic_baseline_music_video_24" />
+
+                    <TextView
+                        android:id="@+id/textView68"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1" />
 
                 </LinearLayout>
 
