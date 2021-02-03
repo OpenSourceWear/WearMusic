@@ -20,7 +20,7 @@
 
 ## 预览视频
 
-<iframe src="//baidu.com" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+<iframe src="//player.bilibili.com/player.html?bvid=BV1zf4y1672n" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
 
 ## 关于
 
@@ -32,7 +32,7 @@ WearMusic 是完全开源且免费的。同时，维护后台的[API服务器](h
 > 收款由 WearBBS 运维代收
 
 <center class="half">
-    <img src="https://wearbbs.cn/attachments/mm_facetoface_collect_qrcode_1611585553961-png.989/" width="200"/><img src="https://wearbbs.cn/attachments/1611585580845-jpg.990/" width="200"/>
+    <img src="https://ae01.alicdn.com/kf/U1ad57c50daa74408bb4e8ded9d293332D.jpg" width="200"/><img src="https://ae01.alicdn.com/kf/U5b19f01a6daa43d8b279bdb33a861c89F.jpg" width="200"/>
 </center>
 
 
