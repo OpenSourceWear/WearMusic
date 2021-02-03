@@ -20,7 +20,7 @@
 
 ## 预览视频
 
-<iframe src="//player.bilibili.com/player.html?bvid=BV1zf4y1672n" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+<a href = "https://www.bilibili.com/video/BV1zf4y1672n/ " target="_blank"><img src="https://ae01.alicdn.com/kf/U25829692e6b24c31abaa53afdbe2a9d2L.jpg" width="450"/><br>手表网易云？WearMusic 2.0 - 音乐的力量，听你所想~</a>
 
 ## 关于
 
