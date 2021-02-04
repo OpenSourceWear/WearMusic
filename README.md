@@ -12,11 +12,15 @@
 
 ### 如何安装
 
-敬请期待 2021/2/4
+- [官方网站](https://wmusic.wearbbs.cn)
+- [Github Release](https://github.com/JackuXL/WearMusic/releases)
+- [蓝奏云](https://wearbbs.lanzous.com/iMoEHl4ufsd)
 
 > 下载后，请前往 [WearBBS](https://wearbbs.cn) 查看 ADB 教程，以将其安装至手表。
 
 
+### 了解更多
+> 请前往 [WearBBS 资源中心](https://wearbbs.cn/resources/wearmusic.260/) 。
 
 ## 预览视频
 
