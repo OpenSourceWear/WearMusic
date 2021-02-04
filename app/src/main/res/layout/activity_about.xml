@@ -68,7 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="第三方网易云客户端 V2.0.1\nBy JackuXL 出品：WearBBS\n官方QQ群：1050643053\n官网：https://wmusic.wearbbs.cn\n论坛：https://wearbbs.cn\n使用【网易云API】开发\n特别感谢：@luern0313\nBuild by ShiSheng"
+                android:text="第三方网易云客户端 V2\nBy JackuXL 出品：WearBBS\n官方QQ群：1050643053\n官网：https://wmusic.wearbbs.cn\n论坛：https://wearbbs.cn\n使用【网易云API】开发\n特别感谢：@luern0313\nBuild by ShiSheng"
                 android:textColor="#999999"
                 android:textSize="10sp" />
 
