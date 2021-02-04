@@ -1,6 +1,6 @@
 <p align="center"><img src="https://s3.ax1x.com/2021/02/02/ymJArq.png" width="150px"/></p>
 <h1 align="center">WearMusic</h1>
-<p align="center">音乐的力量，听你所享。</p>
+<p align="center">音乐的力量，听你所想。</p>
 <p align="center">
    <a href="https://github.com/JackuXL/WearMusic/releases"><img src="https://img.shields.io/github/v/release/JackuXL/wearmusic.svg?style=flat-square"></a>
    <a href="https://github.com/JackuXL/WearMusic/blob/master/LICENSE"><img src="https://img.shields.io/github/license/JackuXL/wearmusic.svg?style=flat-square"></a>
