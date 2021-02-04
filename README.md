@@ -1,12 +1,15 @@
 <p align="center"><img src="https://s3.ax1x.com/2021/02/02/ymJArq.png" width="150px"/></p>
 <h1 align="center">WearMusic</h1>
 <p align="center">音乐的力量，听你所想。</p>
+<p align="center">
+   <a href="https://install.appcenter.ms/users/shisheng233/apps/wearmusic/distribution_groups/public"><img src="https://build.appcenter.ms/v0.1/apps/83af8ac2-0f2a-4b43-9bb2-9cf616d1b3a2/branches/master/badge"></a>
+</p>
 
-[![Build status](https://build.appcenter.ms/v0.1/apps/83af8ac2-0f2a-4b43-9bb2-9cf616d1b3a2/branches/master/badge)](https://appcenter.ms)
 
 ## 使用
 
 在[原版](https://github.com/JackuXL/WearMusic)的基础上，我们增添了CI自动构建的功能，在每一次Push时便会自动构建相应的版本；在原版进行更新的时候，我们**可能**会跟进原版，但**可能**会不及时。
+
 点击[此链接](https://install.appcenter.ms/users/shisheng233/apps/wearmusic/distribution_groups/public)以获取CI自动构建的版本。
 
 ## 注意
