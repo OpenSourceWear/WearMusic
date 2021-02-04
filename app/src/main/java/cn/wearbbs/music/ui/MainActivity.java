@@ -504,8 +504,8 @@ public class MainActivity extends SlideBackActivity {
                     // 暂时失去audio focus，但是很快就会重新获得，在此状态应该暂停所有音频播放，但是不能清除资源
                     if (mediaPlayer.isPlaying())
                         mediaPlayer.pause();
-                        ImageView imageView = findViewById(R.id.btn);
-                        imageView.setImageResource(R.drawable.ic_baseline_play_circle_outline_24);
+                    ImageView imageView = findViewById(R.id.btn);
+                    imageView.setImageResource(R.drawable.ic_baseline_play_circle_outline_24);
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                     // 暂时失去 audio focus，但是允许持续播放音频(以很小的声音)，不需要完全停止播放。
@@ -680,10 +680,12 @@ public class MainActivity extends SlideBackActivity {
     public void right(View view){
         now += 1;
         next_music();
+        c(null);
     }
     public void left(View view){
         now -= 1;
         next_music();
+        c(null);
     }
     public void wz2gd(View view) throws IOException {
         if(nc.equals("LRC")){
