@@ -680,10 +680,12 @@ public class MainActivity extends SlideBackActivity {
     public void right(View view){
         now += 1;
         next_music();
+        c(null);
     }
     public void left(View view){
         now -= 1;
         next_music();
+        c(null);
     }
     public void wz2gd(View view) throws IOException {
         if(nc.equals("LRC")){
