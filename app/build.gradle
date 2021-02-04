@@ -5,11 +5,11 @@ android {
     buildToolsVersion "30.0.0"
 
     defaultConfig {
-        applicationId "cn.wearbbs.music"
+        applicationId 'icu.shisheng.wearmusic.cn.jackuxl'
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 3
-        versionName '2.0.1'
+        versionName '2.0.2'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

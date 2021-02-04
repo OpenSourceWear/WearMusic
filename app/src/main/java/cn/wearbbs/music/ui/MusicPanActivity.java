@@ -7,6 +7,7 @@ import android.text.Html;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -99,5 +100,15 @@ public class MusicPanActivity extends SlideBackActivity {
             startActivity(intent1);
         });
         list_pan.setAdapter(adapter);
+        if(names.size() == 0){
+            LinearLayout null_layout = findViewById(R.id.null_layout);
+            null_layout.setVisibility(View.VISIBLE);
+            list_pan.setVisibility(View.GONE);
+        }
+        else{
+            LinearLayout null_layout = findViewById(R.id.null_layout);
+            null_layout.setVisibility(View.GONE);
+            list_pan.setVisibility(View.VISIBLE);
+        }
     }
 }
