@@ -2,37 +2,19 @@
 <h1 align="center">WearMusic</h1>
 <p align="center">音乐的力量，听你所想。</p>
 <p align="center">
-   <a href="https://github.com/JackuXL/WearMusic/releases"><img src="https://img.shields.io/github/v/release/JackuXL/wearmusic.svg?style=flat-square"></a>
-   <a href="https://github.com/JackuXL/WearMusic/blob/master/LICENSE"><img src="https://img.shields.io/github/license/JackuXL/wearmusic.svg?style=flat-square"></a>
+   <a href="https://install.appcenter.ms/users/shisheng233/apps/wearmusic/distribution_groups/public"><img src="https://build.appcenter.ms/v0.1/apps/83af8ac2-0f2a-4b43-9bb2-9cf616d1b3a2/branches/master/badge"></a>
 </p>
 
 
+## 使用
 
-## 立即使用
+在[原版](https://github.com/JackuXL/WearMusic)的基础上，我们增添了CI自动构建的功能，在每一次Push时便会自动构建相应的版本；在原版进行更新的时候，我们**可能**会跟进原版，但**可能**会不及时。
 
-### 如何安装
+点击[此链接](https://install.appcenter.ms/users/shisheng233/apps/wearmusic/distribution_groups/public)以获取CI自动构建的版本。
 
-敬请期待 2021/2/4
+## 注意
 
-> 下载后，请前往 [WearBBS](https://wearbbs.cn) 查看 ADB 教程，以将其安装至手表。
-
-
-
-## 预览视频
-
-<a href = "https://www.bilibili.com/video/BV1zf4y1672n/ " target="_blank"><img src="https://ae01.alicdn.com/kf/U25829692e6b24c31abaa53afdbe2a9d2L.jpg" width="450"/><br>手表网易云？WearMusic 2.0 - 音乐的力量，听你所想~</a>
-
-## 关于
-
-- 哔哩哔哩：@JackuXL
-- 软件交流群：1050643053
-
-WearMusic 是完全开源且免费的。同时，维护后台的[API服务器](https://music.wearbbs.cn)和[更新服务器](https://wmu.wearbbs.cn)需要投入大量的资金，您可以自愿捐助我们，保证WearMusic 的正常更新、运行。
-
-> 收款由 WearBBS 运维代收
-
-<img src="https://ae01.alicdn.com/kf/U0bf11df727e34cb7b7ce0a3009575accV.jpg" width="450"/>
-
+本版本并非为JackuXL的版本，CI构建时使用的签名并非来自Jackuxl。
 
 ## Licence
 
