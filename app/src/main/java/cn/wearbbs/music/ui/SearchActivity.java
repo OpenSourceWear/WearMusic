@@ -63,7 +63,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends SlideBackActivity {
     List arr;
     String temp_hl;
     List tmp;

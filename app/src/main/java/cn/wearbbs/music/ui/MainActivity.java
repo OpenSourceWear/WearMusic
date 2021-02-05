@@ -66,6 +66,7 @@ import cn.wearbbs.music.api.MusicApi;
 import cn.wearbbs.music.api.UpdateApi;
 import cn.wearbbs.music.api.UserApi;
 import cn.wearbbs.music.util.HeadSetUtil;
+import cn.wearbbs.music.util.PermissionUtil;
 
 public class MainActivity extends SlideBackActivity {
     public static MediaPlayer mediaPlayer;
@@ -89,12 +90,13 @@ public class MainActivity extends SlideBackActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         search_list = new ArrayList();
+        String PERMISSION_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         AppCenter.start(getApplication(), "9250a12d-0fa9-4292-99fc-9d09dcc32012", Analytics.class, Crashes.class);
         HeadSetUtil.getInstance().setOnHeadSetListener(headSetListener);
         HeadSetUtil.getInstance().open(MainActivity.this);
-        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        if (PermissionUtil.checkPermission(this,PERMISSION_STORAGE)) {
             try {
                 File dl = new File("/sdcard/Android/data/cn.wearbbs.music/deleted.lock");
                 if(!dl.exists()){

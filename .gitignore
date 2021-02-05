@@ -9,6 +9,9 @@
 /.idea/assetWizardSettings.xml
 .DS_Store
 /build
+/app/release
+*.gitignore
+ketstore.jks
 /captures
 .externalNativeBuild
 .cxx

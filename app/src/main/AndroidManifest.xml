@@ -25,7 +25,7 @@
         <service
             android:name=".ui.MusicService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
         <activity android:name=".ui.MusicPanActivity" />
 

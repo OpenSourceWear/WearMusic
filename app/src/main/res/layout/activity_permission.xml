@@ -7,43 +7,58 @@
     android:background="#FAFAFA"
     tools:context=".ui.PermissionActivity">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textView39"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="33dp"
-            android:background="#2175F3"
-            android:gravity="center"
-            android:text="无权限"
-            android:textColor="#FFFFFF"
-            android:textSize="13sp" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView40"
-            android:layout_width="match_parent"
-            android:layout_height="9dp" />
+            <TextView
+                android:id="@+id/textView39"
+                android:layout_width="match_parent"
+                android:layout_height="33dp"
+                android:background="#2175F3"
+                android:gravity="center"
+                android:text="无权限"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp" />
 
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_launcher_round" />
+            <TextView
+                android:id="@+id/textView40"
+                android:layout_width="match_parent"
+                android:layout_height="9dp" />
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="37dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/blur_2"
-            android:onClick="get_per"
-            android:text="授予权限"
-            android:textColor="#FFFFFF" />
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_launcher_round" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:text="由于WearOS系统限制，自动申请体验较差，推荐您退出应用，进入设置手动授权。" />
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="wrap_content"
+                android:layout_height="37dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/blur_2"
+                android:onClick="getPermission"
+                android:text="授予权限"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
