@@ -14,7 +14,7 @@
 
 ## 注意
 
-本版本并非为JackuXL的版本，CI构建时使用的签名并非来自Jackuxl。
+本版本并非为JackuXL的版本，CI构建时使用的签名并非来自JackuXL。
 
 ## Licence
 
