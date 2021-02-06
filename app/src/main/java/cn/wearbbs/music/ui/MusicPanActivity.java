@@ -55,17 +55,21 @@ public class MusicPanActivity extends SlideBackActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        try {
-            init_view();
-        } catch (Exception e) {
-            Toast.makeText(MusicPanActivity.this,"获取失败",Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-        findViewById(R.id.loading_layout).setVisibility(View.GONE);
+        Thread thread = new Thread(()->{
+            try {
+                MusicPanActivity.this.runOnUiThread(()-> {
+                    try {
+                        init_view();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+            } catch (Exception e) {
+                MusicPanActivity.this.runOnUiThread(()-> Toast.makeText(this,"获取失败",Toast.LENGTH_SHORT).show());
+            }
+            MusicPanActivity.this.runOnUiThread(()-> findViewById(R.id.loading_layout).setVisibility(View.GONE));
+        });
+        thread.start();
     }
     public void init_view() throws InterruptedException {
         ListView list_pan  = findViewById(R.id.list_pan);

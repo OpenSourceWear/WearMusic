@@ -21,7 +21,7 @@
             android:visibility="visible">
 
             <RelativeLayout
-                android:id="@+id/main_title"
+                android:id="@+id/like"
                 android:layout_width="match_parent"
                 android:layout_height="33dp"
                 android:background="#2175F3"

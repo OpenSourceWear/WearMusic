@@ -15,8 +15,6 @@ out/
 .gradle/
 build/
 
-# 忽略不允许公开的模块
-libs/shareapi-2.2.2.aar
 
 # 忽略Android编译生成文件
 # Built application files

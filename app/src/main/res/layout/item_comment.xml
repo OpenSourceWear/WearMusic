@@ -1,12 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/title"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
     android:background="@drawable/ripple_item_normal"
-    android:gravity="center_vertical"
-    android:padding="10px"
-    android:singleLine="false"
-    android:textColor="#2A2B2C" />
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="3dp"
+        android:gravity="center_vertical"
+        android:padding="10px"
+        android:singleLine="false"
+        android:textColor="#2A2B2C" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/blur"
+            android:gravity="center_vertical"
+            android:onClick="menu"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
+
+            <TextView
+                android:id="@+id/like_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="false"
+                android:layout_marginLeft="5dp"
+                android:text="点赞 "
+                android:textColor="#2A2B2C" />
+
+            <ImageView
+                android:id="@+id/like_icon"
+                android:layout_width="12dp"
+                android:layout_height="19dp"
+                android:layout_marginRight="5dp"
+                android:layout_toRightOf="@id/like_title"
+                app:srcCompat="@drawable/ic_baseline_favorite_border_24" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:singleLine="true"
+            android:text="未命名" />
+    </LinearLayout>
+
+</LinearLayout>

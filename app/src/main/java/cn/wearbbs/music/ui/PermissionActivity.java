@@ -2,6 +2,7 @@ package cn.wearbbs.music.ui;
 
 import android.Manifest;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -17,6 +18,9 @@ public class PermissionActivity extends SlideBackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_permission);
+        if (Build.MANUFACTURER.equals("XTC")) {
+            findViewById(R.id.tv_tip).setVisibility(View.GONE);
+        }
     }
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {

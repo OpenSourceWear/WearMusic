@@ -69,17 +69,22 @@ public class SongListActivity extends SlideBackActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        try {
-            init_view();
-        } catch (Exception e) {
-            Toast.makeText(SongListActivity.this,"获取失败",Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-        findViewById(R.id.loading_layout).setVisibility(View.GONE);
+        Thread thread = new Thread(()->{
+            try {
+                SongListActivity.this.runOnUiThread(()-> {
+                    try {
+                        init_view();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                });
+            } catch (Exception e) {
+                SongListActivity.this.runOnUiThread(()-> Toast.makeText(SongListActivity.this,"获取失败",Toast.LENGTH_SHORT).show());
+                e.printStackTrace();
+            }
+            SongListActivity.this.runOnUiThread(()-> findViewById(R.id.loading_layout).setVisibility(View.GONE));
+        });
+        thread.start();
     }
     public void init_view() throws InterruptedException {
         Intent intent = getIntent();

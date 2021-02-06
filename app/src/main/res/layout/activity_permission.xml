@@ -39,12 +39,13 @@
                 app:srcCompat="@drawable/ic_launcher_round" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/tv_tip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="10dp"
+                android:gravity="center"
                 android:text="由于WearOS系统限制，自动申请体验较差，推荐您退出应用，进入设置手动授权。" />
 
             <Button

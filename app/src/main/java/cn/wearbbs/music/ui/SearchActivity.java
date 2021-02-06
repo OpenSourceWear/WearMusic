@@ -187,7 +187,6 @@ public class SearchActivity extends SlideBackActivity {
                 }
             }
         } catch (Exception e) {
-            Toast.makeText(this, "请输入搜索内容", Toast.LENGTH_SHORT).show();
             list_layout.setVisibility(View.GONE);
             null_layout.setVisibility(View.VISIBLE);
             hot_layout.setVisibility(View.GONE);

@@ -62,16 +62,21 @@ public class PlayListActivity extends SlideBackActivity {
         tv.setGravity(Gravity.CENTER);
         tv.setTextSize(12);
         list_gds.addFooterView(tv,null,false);
-    }
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        try {
-            init_list();
-        } catch (Exception e) {
-            Toast.makeText(this,"获取失败",Toast.LENGTH_SHORT).show();
-        }
-        findViewById(R.id.loading_layout).setVisibility(View.GONE);
+        Thread thread = new Thread(()->{
+            try {
+                PlayListActivity.this.runOnUiThread(()-> {
+                    try {
+                        init_list();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+            } catch (Exception e) {
+                PlayListActivity.this.runOnUiThread(()-> Toast.makeText(this,"获取失败",Toast.LENGTH_SHORT).show());
+            }
+            PlayListActivity.this.runOnUiThread(()-> findViewById(R.id.loading_layout).setVisibility(View.GONE));
+        });
+        thread.start();
     }
     public void init_list() throws Exception {
         File user = new File("/sdcard/Android/data/cn.wearbbs.music/user.txt");

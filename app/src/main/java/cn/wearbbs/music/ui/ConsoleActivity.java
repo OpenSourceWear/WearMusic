@@ -78,8 +78,15 @@ public class ConsoleActivity extends SlideBackActivity {
                 l2.setVisibility(View.GONE);
                 l3.setVisibility(View.GONE);
             }
+        }
+        if(type.equals("1")){
+            LinearLayout l2 = findViewById(R.id.l2);
+            l2.setVisibility(View.GONE);
+            LinearLayout l3 = findViewById(R.id.l3);
+            l3.setVisibility(View.GONE);
+        }
+        Thread thread = new Thread(()->{
             try {
-                String text;
                 try {
                     File saver = new File("/sdcard/Android/data/cn.wearbbs.music/cookie.txt");
                     BufferedReader in = new BufferedReader(new FileReader(saver));
@@ -109,13 +116,8 @@ public class ConsoleActivity extends SlideBackActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        if(type.equals("1")){
-            LinearLayout l2 = findViewById(R.id.l2);
-            l2.setVisibility(View.GONE);
-            LinearLayout l3 = findViewById(R.id.l3);
-            l3.setVisibility(View.GONE);
-        }
+        });
+        thread.start();
     }
     public void voice_up(View view){
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);

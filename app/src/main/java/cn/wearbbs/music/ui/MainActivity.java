@@ -566,7 +566,15 @@ public class MainActivity extends SlideBackActivity {
                     id = temp_ni.get("id").toString();
                 }
                 Map maps_yz = new MusicApi().checkMusic(cookie,id);
-                if(maps_yz.get("success").toString().equals("true")){
+                if(maps_yz == null){
+                    maps_yz = new MusicApi().checkMusic(cookie,id);
+                }
+                if(maps_yz == null){
+                    TextView textView = findViewById(R.id.msg);
+                    textView.setText("播放出错（请求失败）");
+                    ((ImageView)findViewById(R.id.imageView11)).setImageResource(R.drawable.ic_baseline_error_24);
+                }
+                else if(maps_yz.get("success").toString().equals("true")){
                     Map maps = new MusicApi().getMusicUrl(cookie,id);
                     if (maps.get("code").toString().equals("200")){
                         System.out.println(maps);
