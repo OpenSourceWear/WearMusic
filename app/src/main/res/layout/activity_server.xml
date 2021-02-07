@@ -22,43 +22,128 @@
                 android:layout_height="33dp"
                 android:background="#2175F3"
                 android:gravity="center"
-                android:text="FTP导入歌曲"
+                android:text="导入音乐"
                 android:textColor="#FFFFFF"
                 android:textSize="13sp" />
 
-            <TextView
-                android:id="@+id/textView48"
+            <LinearLayout
+                android:id="@+id/choose"
                 android:layout_width="match_parent"
-                android:layout_height="7dp" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="visible">
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="用户名：WearMusic\n密码：WearMusic\n端口：2222\nIP：Unknown\n连接后默认自动进入歌曲储存位置"
-                android:textColor="#999999" />
+                <TextView
+                    android:id="@+id/textView48"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:text="请选择导入方式" />
 
-            <TextView
-                android:id="@+id/textView52"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="5dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnFTP"
+                        android:layout_width="74dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_marginBottom="7dp"
+                        android:background="@drawable/blur_2"
+                        android:onClick="onClick"
+                        android:text="FTP"
+                        android:textColor="#FFFFFF" />
+
+                    <Button
+                        android:id="@+id/btnSelf"
+                        android:layout_width="74dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="7dp"
+                        android:background="@drawable/blur_2"
+                        android:onClick="onClick"
+                        android:text="手动"
+                        android:textColor="#FFFFFF" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/self"
                 android:layout_width="match_parent"
-                android:layout_height="7dp" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
 
-            <Button
-                android:id="@+id/btn"
-                android:layout_width="74dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center"
-                android:background="@drawable/blur_2"
-                android:onClick="Start_Stop_Ftp"
-                android:text="开启"
-                android:textColor="#FFFFFF" />
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="\n音乐储存位置：\n/sdcard/Android/data/cn.wearbbs.music/download/music"
+                    android:textColor="#999999" />
 
-            <TextView
-                android:id="@+id/textView53"
+                <TextView
+                    android:id="@+id/textView38"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="\n歌词储存位置：\n/sdcard/Android/data/cn.wearbbs.music/download/lrc"
+                    android:textColor="#999999" />
+
+                <TextView
+                    android:id="@+id/textView41"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="\n封面储存位置：\n/sdcard/Android/data/cn.wearbbs.music/download/cover\n"
+                    android:textColor="#999999" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/FTP"
                 android:layout_width="match_parent"
-                android:layout_height="7dp" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="用户名：WearMusic\n密码：WearMusic\n端口：2222\nIP：Unknown\n连接后默认自动进入歌曲储存位置"
+                    android:textColor="#999999" />
+
+                <TextView
+                    android:id="@+id/textView52"
+                    android:layout_width="match_parent"
+                    android:layout_height="7dp" />
+
+                <Button
+                    android:id="@+id/btn"
+                    android:layout_width="74dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="7dp"
+                    android:background="@drawable/blur_2"
+                    android:onClick="Start_Stop_Ftp"
+                    android:text="开启"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

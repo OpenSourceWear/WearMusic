@@ -5,7 +5,7 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.util.Log;
 
-import cn.wearbbs.music.MediaButtonReceiver;
+import cn.wearbbs.music.receiver.MediaButtonReceiver;
 
 public class HeadSetUtil {
 

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -27,9 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.wearbbs.music.R;
-import cn.wearbbs.music.api.MusicApi;
 import cn.wearbbs.music.api.MusicPanApi;
-import cn.wearbbs.music.api.PlayListApi;
 
 public class MusicPanActivity extends SlideBackActivity {
     String cookie;
@@ -57,12 +56,9 @@ public class MusicPanActivity extends SlideBackActivity {
         }
         Thread thread = new Thread(()->{
             try {
+                Map maps = new MusicPanApi().getPanList(cookie);
                 MusicPanActivity.this.runOnUiThread(()-> {
-                    try {
-                        init_view();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    init_view(maps);
                 });
             } catch (Exception e) {
                 MusicPanActivity.this.runOnUiThread(()-> Toast.makeText(this,"获取失败",Toast.LENGTH_SHORT).show());
@@ -71,20 +67,37 @@ public class MusicPanActivity extends SlideBackActivity {
         });
         thread.start();
     }
-    public void init_view() throws InterruptedException {
+    public void init_view(Map maps) {
+        List mvids = new ArrayList();
         ListView list_pan  = findViewById(R.id.list_pan);
-        Map maps = new MusicPanApi().getPanList(cookie);
         List data = JSON.parseArray(maps.get("data").toString());
         List names = new ArrayList();
         List search_list = new ArrayList();
         for(int i = 0; i < data.size(); i+=1) {
             Map item = new HashMap();
-            Map tmp_1 = (Map)JSON.parse(data.get(i).toString());
-            names.add(tmp_1.get("songName"));
-            item.put("artists","未知");
-            item.put("id",tmp_1.get("songId"));
-            item.put("name",tmp_1.get("songName"));
-            item.put("picUrl","https://s3.ax1x.com/2020/12/19/rNiPh9.png");
+            Map tmp1 = (Map)JSON.parse(data.get(i).toString());
+            Map simpleSong = (Map)JSON.parse(tmp1.get("simpleSong").toString());
+            Log.d("MusicPan", JSON.toJSONString(simpleSong));
+            names.add(simpleSong.get("name"));
+            List ars = (List)JSON.parseArray(simpleSong.get("ar").toString());
+            Map ar=(Map)ars.get(0);
+            Map al=(Map)JSON.parse(simpleSong.get("al").toString());
+            item.put("artists",ar.get("name"));
+            item.put("id",simpleSong.get("id").toString());
+            if(ar.get("name") == null){
+                item.put("name","未知");
+            }
+            else{
+                item.put("name",simpleSong.get("name"));
+            }
+            item.put("picUrl",al.get("picUrl"));
+            if(tmp1.get("songId") == simpleSong.get("songId")){
+                item.put("comment","false");
+            }
+            else{
+                item.put("comment","true");
+            }
+            mvids.add(simpleSong.get("mv").toString());
             search_list.add(item);
         }
         ArrayAdapter adapter = new ArrayAdapter(MusicPanActivity.this, R.layout.item, names){
@@ -101,6 +114,7 @@ public class MusicPanActivity extends SlideBackActivity {
             intent1.putExtra("type", "0");
             intent1.putExtra("list", jsonString);
             intent1.putExtra("start", String.valueOf(i));
+            intent1.putExtra("mvids", JSON.toJSONString(mvids));
             startActivity(intent1);
         });
         list_pan.setAdapter(adapter);

@@ -41,14 +41,10 @@
                 android:textSize="10sp" />
 
             <TextView
-                android:id="@+id/textView11"
-                android:layout_width="match_parent"
-                android:layout_height="7dp" />
-
-            <TextView
                 android:id="@+id/textView7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
                 android:gravity="center"
                 android:text="*使用网易云音乐APP扫码"
                 android:textColor="#999999"

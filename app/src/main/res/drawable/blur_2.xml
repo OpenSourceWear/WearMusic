@@ -8,7 +8,7 @@
         <shape android:drawable="@android:color/white" >
             <solid android:color="#2175F3" />
             <corners android:radius="5dp" />
-    </shape>
+        </shape>
     </item>
 
 </ripple>

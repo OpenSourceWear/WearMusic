@@ -53,6 +53,18 @@ public class ServerActivity extends SlideBackActivity {
             Toast.makeText(this,"初始化失败",Toast.LENGTH_SHORT).show();
         }
     }
+    public void onClick(View view){
+        switch (view.getId()){
+            case R.id.btnFTP:
+                findViewById(R.id.choose).setVisibility(View.GONE);
+                findViewById(R.id.FTP).setVisibility(View.VISIBLE);
+                break;
+            case R.id.btnSelf:
+                findViewById(R.id.choose).setVisibility(View.GONE);
+                findViewById(R.id.self).setVisibility(View.VISIBLE);
+                break;
+        }
+    }
     public static String getIpAddress() {
         try {
             Enumeration<NetworkInterface> allNetInterfaces = NetworkInterface.getNetworkInterfaces();

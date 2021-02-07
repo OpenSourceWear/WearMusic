@@ -7,7 +7,7 @@
     android:background="@drawable/ripple_item_normal"
     android:orientation="vertical">
 
-    <TextView
+    <cn.carbs.android.expandabletextview.library.ExpandableTextView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +16,8 @@
         android:gravity="center_vertical"
         android:padding="10px"
         android:singleLine="false"
-        android:textColor="#2A2B2C" />
+        android:textColor="#2A2B2C"
+        app:etv_ToExpandHintColor="#2175F3" />
 
     <LinearLayout
         android:layout_width="match_parent"

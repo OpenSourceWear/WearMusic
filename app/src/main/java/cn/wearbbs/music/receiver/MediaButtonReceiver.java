@@ -1,4 +1,4 @@
-package cn.wearbbs.music;
+package cn.wearbbs.music.receiver;
 
 import java.util.Timer;
 import java.util.TimerTask;

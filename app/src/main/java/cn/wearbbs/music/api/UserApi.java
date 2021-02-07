@@ -22,8 +22,8 @@ import cn.wearbbs.music.util.NetWorkUtil;
 public class UserApi {
     private String result;
     public Map checkLogin(String cookie) throws InterruptedException {
-        Thread tmp = new Thread(() -> {
-            result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/login/status" + "?cookie=" + cookie + "&timestamp=" + System.currentTimeMillis());
+        Thread tmp = new Thread((Runnable)() -> {
+            result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/login/status" + "?cookie=" + cookie);
         });
         tmp.start();
         tmp.join();

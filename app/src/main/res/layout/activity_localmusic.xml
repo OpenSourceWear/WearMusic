@@ -69,18 +69,19 @@
             android:layout_height="33dp"
             android:background="#2175F3"
             android:gravity="center"
-            android:onClick="add"
             android:text="本地音乐"
             android:textColor="#FFFFFF"
             android:textSize="13sp" />
 
         <TextView
-            android:id="@+id/textView38"
+            android:id="@+id/textView3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
+            android:background="#BF2175F3"
             android:gravity="center"
-            android:text="\n音乐储存位置：/sdcard/Android\n/data/cn.wearbbs.music/download\n/music"
-            android:textColor="#999999"
+            android:onClick="add"
+            android:text="导入音乐 >"
+            android:textColor="#FFFFFF"
             android:textSize="10sp" />
 
         <LinearLayout

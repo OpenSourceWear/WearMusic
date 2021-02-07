@@ -16,20 +16,21 @@
     <application
         android:allowBackup="true"
         android:fullBackupContent="@xml/appcenter_backup_rule"
-        android:icon="@drawable/ic_launcher_round"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
-        android:roundIcon="@drawable/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+
         <service
-            android:name=".ui.MusicService"
+            android:name=".service.MusicService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".ui.MusicPanActivity" />
 
-        <receiver android:name=".MediaButtonReceiver">
+        <receiver android:name=".receiver.MediaButtonReceiver">
             <intent-filter android:priority="1000">
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
@@ -43,6 +44,8 @@
         <activity android:name=".ui.SongListActivity" />
         <activity android:name=".ui.PlayListActivity" />
         <activity android:name=".ui.PermissionActivity" />
+        <activity android:name=".ui.PicActivity"></activity>
+        <activity android:name=".ui.MusicPanActivity" />
         <activity android:name=".ui.ChooseActivity" />
         <activity android:name=".ui.LocalMusicActivity" />
         <activity android:name=".ui.QRCodeActivity" />
@@ -55,8 +58,8 @@
         <activity android:name=".ui.MenuActivity" />
         <activity
             android:name=".ui.MainActivity"
-            android:theme="@style/SplashTheme"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

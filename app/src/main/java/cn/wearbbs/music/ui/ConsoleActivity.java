@@ -48,6 +48,7 @@ public class ConsoleActivity extends SlideBackActivity {
     String url;
     String type;
     String coverurl;
+    String comment;
     boolean is_like = false;
     Map requests_name_map = new HashMap();
     String mvid;
@@ -70,6 +71,7 @@ public class ConsoleActivity extends SlideBackActivity {
             url = intent.getStringExtra("url");
             mvid = intent.getStringExtra("mvid");
             coverurl = intent.getStringExtra("coverUrl");
+            comment = intent.getStringExtra("comment");
             LinearLayout l2 = findViewById(R.id.l2);
             l2.setVisibility(View.VISIBLE);
             LinearLayout l3 = findViewById(R.id.l3);
@@ -78,6 +80,10 @@ public class ConsoleActivity extends SlideBackActivity {
                 l2.setVisibility(View.GONE);
                 l3.setVisibility(View.GONE);
             }
+            if(comment.equals("true")){
+                l2.setVisibility(View.VISIBLE);
+                l3.setVisibility(View.VISIBLE);
+            }
         }
         if(type.equals("1")){
             LinearLayout l2 = findViewById(R.id.l2);
@@ -85,7 +91,7 @@ public class ConsoleActivity extends SlideBackActivity {
             LinearLayout l3 = findViewById(R.id.l3);
             l3.setVisibility(View.GONE);
         }
-        Thread thread = new Thread(()->{
+        Thread thread = new Thread((Runnable)()->{
             try {
                 try {
                     File saver = new File("/sdcard/Android/data/cn.wearbbs.music/cookie.txt");
@@ -118,6 +124,9 @@ public class ConsoleActivity extends SlideBackActivity {
             }
         });
         thread.start();
+        if(mvid.equals("0")){
+            findViewById(R.id.mv_view).setVisibility(View.GONE);
+        }
     }
     public void voice_up(View view){
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);

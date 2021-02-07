@@ -21,7 +21,7 @@
             android:visibility="visible">
 
             <RelativeLayout
-                android:id="@+id/like"
+                android:id="@+id/main_title"
                 android:layout_width="match_parent"
                 android:layout_height="33dp"
                 android:background="#2175F3"
@@ -53,17 +53,12 @@
                 android:orientation="vertical"
                 android:visibility="visible">
 
-                <TextView
-                    android:id="@+id/textView13"
-                    android:layout_width="match_parent"
-                    android:layout_height="6dp"
-                    android:gravity="center"
-                    android:textColor="#999999" />
-
                 <ImageView
                     android:id="@+id/imageView11"
                     android:layout_width="match_parent"
                     android:layout_height="77dp"
+                    android:layout_marginTop="5dp"
+                    android:onClick="onImgClick"
                     app:srcCompat="@drawable/ic_baseline_photo_size_select_actual_24" />
 
                 <TextView

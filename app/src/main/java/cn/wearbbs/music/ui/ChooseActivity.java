@@ -128,7 +128,7 @@ public class ChooseActivity extends SlideBackActivity implements IResponseCallba
             if (Build.MANUFACTURER.equals("XTC")) {
                 //第一步：创建XTCTextObject对象，并设置text属性为要分享的文本内容
                 XTCTextObject xtcTextObject = new XTCTextObject();
-                xtcTextObject.setText(tmp + "——" + name);
+                xtcTextObject.setText(tmp);
                 //第二步：创建XTCShareMessage对象，并将shareObject属性设置为xtcTextObject对象
                 XTCShareMessage xtcShareMessage = new XTCShareMessage();
                 xtcShareMessage.setShareObject(xtcTextObject);

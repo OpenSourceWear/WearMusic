@@ -1,21 +1,16 @@
 package cn.wearbbs.music.ui;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.fastjson.JSON;
 import com.microsoft.appcenter.AppCenter;
@@ -31,19 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.api.PlayListApi;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class SongListActivity extends SlideBackActivity {
     String cookie;
@@ -71,9 +55,14 @@ public class SongListActivity extends SlideBackActivity {
         }
         Thread thread = new Thread(()->{
             try {
+                Intent intent = getIntent();
+                Map cs = (Map)JSON.parse(intent.getStringExtra("cs"));
+                TextView title = findViewById(R.id.title);
+                title.setText(cs.get("name").toString());
+                Map maps = new PlayListApi().getPlayListDetail(cs.get("id").toString(),cookie);
                 SongListActivity.this.runOnUiThread(()-> {
                     try {
-                        init_view();
+                        init_view(maps);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -86,14 +75,9 @@ public class SongListActivity extends SlideBackActivity {
         });
         thread.start();
     }
-    public void init_view() throws InterruptedException {
-        Intent intent = getIntent();
+    public void init_view(Map maps) throws InterruptedException {
         List mvids = new ArrayList();
-        Map cs = (Map)JSON.parse(intent.getStringExtra("cs"));
-        TextView title = findViewById(R.id.title);
-        title.setText(cs.get("name").toString());
         ListView list_gd  = findViewById(R.id.list_gd);
-        Map maps = new PlayListApi().getPlayListDetail(cs.get("id").toString(),cookie);
         Map play_list = (Map) JSON.parse(maps.get("playlist").toString());
         List tracks = JSON.parseArray(play_list.get("trackIds").toString());
         List names = new ArrayList();

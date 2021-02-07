@@ -113,7 +113,6 @@ public class LocalMusicActivity extends SlideBackActivity {
                         alertDialog2 = new AlertDialog.Builder(LocalMusicActivity.this)
                                 .setTitle("提示")
                                 .setMessage("要删除该文件吗？")
-                                .setIcon(R.drawable.ic_launcher_round)
                                 .setPositiveButton("确定", (dialogInterface, i1) -> {
                                     File delete_mp3 = new File("/sdcard/Android/data/cn.wearbbs.music/download/music/" + arr.get(im).toString() + ".mp3");
                                     System.out.println(delete_mp3.getName());

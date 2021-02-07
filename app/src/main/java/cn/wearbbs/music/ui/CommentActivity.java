@@ -58,7 +58,7 @@ public class CommentActivity extends SlideBackActivity {
             AppCenter.start(getApplication(), "9250a12d-0fa9-4292-99fc-9d09dcc32012", Analytics.class, Crashes.class);
         }
         Analytics.trackEvent("comment");
-        Thread thread = new Thread(()->{
+        Thread thread = new Thread((Runnable) ()->{
             Intent intent = getIntent();
             id= intent.getStringExtra("id");
             String temp = "[]";

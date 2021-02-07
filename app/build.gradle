@@ -63,8 +63,9 @@ dependencies {
     implementation 'com.squareup.okio:okio:1.17.4'
     implementation 'com.hyman:flowlayout-lib:1.1.2'
     def appCenterSdkVersion = '4.1.0'
-    implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
     implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
     implementation 'me.wcy:lrcview:2.2'
+    implementation 'cn.carbs.android:ExpandableTextView:1.0.3'
+    implementation 'me.panpf:sketch:2.7.1'
 }

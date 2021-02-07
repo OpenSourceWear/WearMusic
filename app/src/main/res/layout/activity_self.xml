@@ -35,6 +35,7 @@
             android:layout_width="64dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
+            android:onClick="onImgClick"
             app:srcCompat="@drawable/ic_baseline_supervised_user_circle_24" />
 
         <TextView

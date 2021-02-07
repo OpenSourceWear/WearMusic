@@ -66,7 +66,7 @@ public class UpdateActivity extends SlideBackActivity {
         dm = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
         mTaskId = new DownloadUtil().download(data.get("link").toString(),"/Android/data/cn.wearbbs.music/temp",data.get("version").toString() + ".apk", dm);
         Toast.makeText(this,"开始下载，请不要离开此界面",Toast.LENGTH_SHORT).show();
-        Thread thread = new Thread(() -> {
+        Thread thread = new Thread((Runnable)() -> {
             while(true){
                 if(checkDownloadStatus()){
                     break;

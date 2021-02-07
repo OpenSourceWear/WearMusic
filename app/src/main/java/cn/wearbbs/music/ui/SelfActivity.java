@@ -21,7 +21,7 @@ import java.io.File;
 import cn.wearbbs.music.R;
 
 public class SelfActivity extends SlideBackActivity {
-    String result;
+    String avatarUrl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +31,7 @@ public class SelfActivity extends SlideBackActivity {
         }
         Intent intent = getIntent();
         String userName = intent.getStringExtra("userName");
-        String avatarUrl = intent.getStringExtra("avatarUrl");
+        avatarUrl = intent.getStringExtra("avatarUrl");
         String userId = intent.getStringExtra("userId");
         System.out.println(avatarUrl);
         ImageView gi = findViewById(R.id.gi);
@@ -41,12 +41,6 @@ public class SelfActivity extends SlideBackActivity {
         text.setText(userName);
         TextView text3 = findViewById(R.id.text3);
         text3.setText("ID：" + userId);
-//        text.setText(userName + "\n粉丝：");
-//        try {
-//            init_fans();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
     }
     public void menu(View view){
         Intent intent = new Intent(SelfActivity.this, MenuActivity.class);
@@ -88,5 +82,12 @@ public class SelfActivity extends SlideBackActivity {
             }
         }
         return file.delete();
+    }
+    public void onImgClick(View view){
+        Intent intent = new Intent(SelfActivity.this, PicActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
+        intent.putExtra("url",avatarUrl);
+        startActivity(intent);
     }
 }

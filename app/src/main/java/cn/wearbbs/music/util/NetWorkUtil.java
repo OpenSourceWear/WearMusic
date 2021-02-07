@@ -3,6 +3,7 @@ package cn.wearbbs.music.util;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -18,7 +19,9 @@ public class NetWorkUtil {
         }
         Log.d("Url","请求URL:" + url);
         String result;
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient().newBuilder().connectTimeout(60000, TimeUnit.MILLISECONDS)
+                .readTimeout(60000, TimeUnit.MILLISECONDS)
+                .build();
         Request request = new Request.Builder()
                 .url(url)
                 .build();
