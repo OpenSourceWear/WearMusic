@@ -1,22 +1,17 @@
 package cn.wearbbs.music.adapter;
 
 import android.content.Context;
-import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +19,6 @@ import java.util.Map;
 import cn.carbs.android.expandabletextview.library.ExpandableTextView;
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.api.CommentApi;
-import cn.wearbbs.music.ui.CommentActivity;
 
 public class CommentAdapter extends BaseAdapter {
     private List listText;
@@ -33,6 +27,7 @@ public class CommentAdapter extends BaseAdapter {
     private String id;
     private List id_list;
     private List liked_items;
+    Map map = new HashMap();
     String cookie;
     public CommentAdapter(List listText, List arr_name,String id,List id_list,Context context){
         this.listText=listText;
@@ -86,7 +81,7 @@ public class CommentAdapter extends BaseAdapter {
                 });
                 thread.start();
                 ((ImageView)view.findViewById(R.id.like_icon)).setImageResource(R.drawable.ic_baseline_favorite_border_24);
-                liked_items.remove(position);
+                liked_items.remove(map.get(position));
             }
             else{
                 Thread thread = new Thread(()-> {
@@ -99,6 +94,7 @@ public class CommentAdapter extends BaseAdapter {
                 thread.start();
                 ((ImageView)view.findViewById(R.id.like_icon)).setImageResource(R.drawable.ic_baseline_favorite_24);
                 liked_items.add(position);
+                map.put(position,liked_items.size()-1);
             }
         });
         ((ExpandableTextView)view.findViewById(R.id.title)).setText(listText.get(position).toString());

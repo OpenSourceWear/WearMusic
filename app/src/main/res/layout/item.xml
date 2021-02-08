@@ -1,13 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--    android:background="@drawable/list_bg"-->
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/title"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="40dp"
-    android:layout_gravity="center"
-    android:background="@drawable/ripple_item_normal"
-    android:ellipsize="end"
     android:gravity="center"
-    android:padding="10px"
-    android:singleLine="true"
-    android:textColor="#2A2B2C" />
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="left"
+        android:background="@drawable/ripple_item_normal"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textColor="#2A2B2C"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/mv_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:background="#FAFAFA"
+        android:onClick="mv"
+        android:scaleType="centerInside"
+        android:theme="@style/RippleWhite"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_music_video_24" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

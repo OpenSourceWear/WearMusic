@@ -1,9 +1,11 @@
 package cn.wearbbs.music.ui;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -27,10 +29,12 @@ import java.util.List;
 import java.util.Map;
 
 import cn.wearbbs.music.R;
+import cn.wearbbs.music.adapter.DefaultAdapter;
 import cn.wearbbs.music.api.PlayListApi;
 
 public class SongListActivity extends SlideBackActivity {
     String cookie;
+    public static String ID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +61,7 @@ public class SongListActivity extends SlideBackActivity {
             try {
                 Intent intent = getIntent();
                 Map cs = (Map)JSON.parse(intent.getStringExtra("cs"));
+                ID = cs.get("id").toString();
                 TextView title = findViewById(R.id.title);
                 title.setText(cs.get("name").toString());
                 Map maps = new PlayListApi().getPlayListDetail(cs.get("id").toString(),cookie);
@@ -75,6 +80,8 @@ public class SongListActivity extends SlideBackActivity {
         });
         thread.start();
     }
+
+    public static String ids;
     public void init_view(Map maps) throws InterruptedException {
         List mvids = new ArrayList();
         ListView list_gd  = findViewById(R.id.list_gd);
@@ -82,7 +89,7 @@ public class SongListActivity extends SlideBackActivity {
         List tracks = JSON.parseArray(play_list.get("trackIds").toString());
         List names = new ArrayList();
         List search_list = new ArrayList();
-        String ids = "";
+        ids = "";
         for(int i = 0; i < tracks.size(); i+=1) {
             Map tmp_1 = (Map)JSON.parse(tracks.get(i).toString());
             ids += tmp_1.get("id").toString() + ",";
@@ -102,42 +109,37 @@ public class SongListActivity extends SlideBackActivity {
                 System.out.println(tmp_song);
                 mvids.add(tmp_song.get("mv").toString());
                 Map tmp_4 = (Map)JSON.parse(tmp_3.get(0).toString());
-                String tmp_5 = tmp_4.get("name").toString();
+                String tmp_5 = "未知";
+                if(tmp_4.get("name") != null){
+                    tmp_5 = tmp_4.get("name").toString();
+                }
                 String tmp = "<font color=#2A2B2C>" + tmp_2 + "</font> - <font color=#999999>" + tmp_5 + "</font>";
                 names.add(tmp);
                 item.put("artists",tmp_5);
                 item.put("id",tmp_id);
                 item.put("name",tmp_2);
+                if(tmp_song.get("t").toString().equals("1")){
+                    item.put("comment","false");
+                }
+                else{
+                    item.put("comment","true");
+                }
                 Map al = (Map)tmp_1.get("al");
                 item.put("picUrl",al.get("picUrl"));
                 System.out.println(item);
                 search_list.add(item);
             }
             catch (Exception e){
+                e.printStackTrace();
                 unknown += 1;
             }
         }
         if(unknown!=0){
-            Toast.makeText(SongListActivity.this,"共有" + unknown + "首云盘歌曲暂不支持，已跳过",Toast.LENGTH_SHORT).show();
+            Toast.makeText(SongListActivity.this,"共有" + unknown + "首音乐加载出错，已跳过",Toast.LENGTH_SHORT).show();
         }
 
         String jsonString = JSON.toJSONString(search_list);
-        ArrayAdapter adapter = new ArrayAdapter(SongListActivity.this, R.layout.item, names){
-            public Object getItem(int position)
-            {
-                return Html.fromHtml(names.get(position).toString());
-            }
-        };
-        list_gd.setOnItemClickListener((adapterView, view, i, l) -> {
-            Intent intent1 = new Intent(SongListActivity.this, MainActivity.class);
-            intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
-            intent1.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-            intent1.putExtra("type", "0");
-            intent1.putExtra("list", jsonString);
-            intent1.putExtra("start", String.valueOf(i));
-            intent1.putExtra("mvids", JSON.toJSONString(mvids));
-            startActivity(intent1);
-        });
+        DefaultAdapter adapter = new DefaultAdapter(JSON.toJSONString(mvids),jsonString,search_list.size(),JSON.toJSONString(names),this,0);
         list_gd.setAdapter(adapter);
         if(names.size() == 0){
             LinearLayout null_layout = findViewById(R.id.null_layout);

@@ -179,7 +179,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:background="@drawable/blur"
+                    android:background="@drawable/et_blue"
                     android:orientation="vertical">
 
                     <EditText
@@ -226,7 +226,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:background="@drawable/blur"
+                    android:background="@drawable/et_blue"
                     android:orientation="horizontal">
 
                     <EditText
@@ -268,7 +268,7 @@
                 android:layout_width="74dp"
                 android:layout_height="36dp"
                 android:layout_gravity="center"
-                android:background="@drawable/blur_2"
+                android:background="@drawable/btn_blue"
                 android:gravity="center"
                 android:onClick="onClick"
                 android:text="登录"

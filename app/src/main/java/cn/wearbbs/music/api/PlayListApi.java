@@ -17,15 +17,23 @@ public class PlayListApi {
         return (Map)JSON.parse(result);
     }
     public Map deletePlayList(String id,String cookie) throws InterruptedException {
-        Thread tmp = new Thread((Runnable)() -> {
+        Thread tmp = new Thread(() -> {
             result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/playlist/delete?id="+ id + "&cookie=" + cookie + "&timestamp=" + System.currentTimeMillis());
         });
         tmp.start();
         tmp.join();
         return (Map)JSON.parse(result);
     }
+    public Map deletePlayListMusic(String id,String tracks,String cookie) throws InterruptedException {
+        Thread tmp = new Thread(() -> {
+            result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/playlist/tracks?op=del&pid="+ id + "&tracks=" + tracks + "&cookie=" + cookie + "&timestamp=" + System.currentTimeMillis());
+        });
+        tmp.start();
+        tmp.join();
+        return (Map)JSON.parse(result);
+    }
     public Map getPlayListDetail(String id,String cookie) throws InterruptedException {
-        Thread tmp = new Thread((Runnable)() -> {
+        Thread tmp = new Thread(() -> {
             result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/playlist/detail?id=" + id + "&cookie=" + cookie + "&timestamp=" + System.currentTimeMillis());
         });
         tmp.start();

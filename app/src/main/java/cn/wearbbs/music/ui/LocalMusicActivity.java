@@ -48,18 +48,7 @@ public class LocalMusicActivity extends SlideBackActivity {
         tv.setGravity(Gravity.CENTER);
         tv.setTextSize(12);
         listd.addFooterView(tv,null,false);
-    }
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        try {
-            init_file_list();
-            Toast.makeText(LocalMusicActivity.this,"点击标题栏导入歌曲",Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            Toast.makeText(LocalMusicActivity.this,"获取失败",Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-        findViewById(R.id.loading_layout).setVisibility(View.GONE);
+        init_file_list();
     }
     public void add(View view){
         Intent intent = new Intent(LocalMusicActivity.this, ServerActivity.class);
@@ -91,7 +80,7 @@ public class LocalMusicActivity extends SlideBackActivity {
                     arr.add(arr_temp[i].toString().replace("/sdcard/Android/data/cn.wearbbs.music/download/music/","").replace(".mp3",""));
                     file_list.add(arr_temp[i].toString());
                 }
-                ArrayAdapter adapter = new ArrayAdapter(LocalMusicActivity.this, R.layout.item, arr);
+                ArrayAdapter adapter = new ArrayAdapter(LocalMusicActivity.this, R.layout.item_default, arr);
                 listd.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

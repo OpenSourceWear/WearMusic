@@ -45,7 +45,7 @@ public class ServerActivity extends SlideBackActivity {
         }
         TextView textView = findViewById(R.id.textView);
         Toast.makeText(this,"该功能仍在测试，或许BUG较多，敬请谅解",Toast.LENGTH_SHORT).show();
-        String temp = "用户名：WearMusic\n密码：WearMusic\n端口：2222\nIP：" + getIpAddress() + "\n连接后默认自动进入歌曲储存位置";
+        String temp = "用户名：WearMusic\n密码：WearMusic\n端口：2222\nIP：" + getIpAddress() + "\n连接后默认自动进入音乐储存位置";
         textView.setText(temp);
         try {
             init_();

@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:background="@drawable/blur"
+            android:background="@drawable/et_blue"
             android:gravity="center_vertical"
             android:onClick="menu"
             android:paddingTop="5dp"

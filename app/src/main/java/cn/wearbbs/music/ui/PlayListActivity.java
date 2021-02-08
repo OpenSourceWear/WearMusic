@@ -29,7 +29,7 @@ import cn.wearbbs.music.R;
 import cn.wearbbs.music.api.PlayListApi;
 
 public class PlayListActivity extends SlideBackActivity {
-    AlertDialog alertDialog2;
+    AlertDialog alertDialog;
     int im = 0;
     String cookie;
     Map maps;
@@ -81,7 +81,7 @@ public class PlayListActivity extends SlideBackActivity {
             names.add(tmp.get("name").toString());
         }
         ListView list_gds = findViewById(R.id.list_gds);
-        ArrayAdapter adapter = new ArrayAdapter(PlayListActivity.this,R.layout.item,names);
+        ArrayAdapter adapter = new ArrayAdapter(PlayListActivity.this,R.layout.item_default,names);
         list_gds.setOnItemClickListener((adapterView, view, i, l) -> {
             Intent intent = new Intent(PlayListActivity.this, SongListActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
@@ -91,10 +91,7 @@ public class PlayListActivity extends SlideBackActivity {
         });
         list_gds.setOnItemLongClickListener((adapterView, view, i, l) -> {
             im = i;
-            //添加取消
-            //添加"Yes"按钮
-            alertDialog2 = new AlertDialog.Builder(PlayListActivity.this)
-                    .setTitle("提示")
+            alertDialog = new AlertDialog.Builder(PlayListActivity.this)
                     .setMessage("要删除该歌单吗？")
                     .setPositiveButton("确定", (dialogInterface, i12) -> {
                         try {
@@ -104,15 +101,20 @@ public class PlayListActivity extends SlideBackActivity {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                        try {
+                            new PlayListApi().deletePlayList(((Map)items.get(im)).get("id").toString(),cookie);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         Toast.makeText(PlayListActivity.this,"删除成功",Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(PlayListActivity.this,PlayListActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
                         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
                         startActivity(intent);
                     })
-                    .setNegativeButton("取消", (dialogInterface, i1) -> alertDialog2.dismiss())
+                    .setNegativeButton("取消", (dialogInterface, i1) -> alertDialog.dismiss())
                     .create();
-            alertDialog2.show();
+            alertDialog.show();
             return true;
         });
         list_gds.setAdapter(adapter);

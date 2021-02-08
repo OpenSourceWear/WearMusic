@@ -100,7 +100,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="2dp"
                 android:layout_weight="1"
-                android:background="@drawable/blur"
+                android:background="@drawable/et_blue"
                 android:orientation="horizontal">
 
                 <EditText

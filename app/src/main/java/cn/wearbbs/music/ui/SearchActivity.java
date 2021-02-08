@@ -1,20 +1,16 @@
 package cn.wearbbs.music.ui;
 
-import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -33,12 +29,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.adapter.SearchAdapter;
 import cn.wearbbs.music.api.HotApi;
-import cn.wearbbs.music.api.MVApi;
 import cn.wearbbs.music.api.SearchApi;
 
 public class SearchActivity extends SlideBackActivity {
@@ -196,7 +190,6 @@ public class SearchActivity extends SlideBackActivity {
                 }
                 String jsonString = JSON.toJSONString(idItems);
                 refresh_list(songsList, jsonString, idItems);
-                Toast.makeText(this,"长按歌曲名观看MV",Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 list_layout.setVisibility(View.GONE);
                 null_layout.setVisibility(View.VISIBLE);

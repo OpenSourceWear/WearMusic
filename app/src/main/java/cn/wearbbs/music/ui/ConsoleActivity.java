@@ -80,9 +80,11 @@ public class ConsoleActivity extends SlideBackActivity {
                 l2.setVisibility(View.GONE);
                 l3.setVisibility(View.GONE);
             }
-            if(comment.equals("true")){
-                l2.setVisibility(View.VISIBLE);
-                l3.setVisibility(View.VISIBLE);
+            if(comment!=null){
+                if(comment.equals("true")){
+                    l2.setVisibility(View.VISIBLE);
+                    l3.setVisibility(View.VISIBLE);
+                }
             }
         }
         if(type.equals("1")){
@@ -91,7 +93,7 @@ public class ConsoleActivity extends SlideBackActivity {
             LinearLayout l3 = findViewById(R.id.l3);
             l3.setVisibility(View.GONE);
         }
-        Thread thread = new Thread((Runnable)()->{
+        Thread thread = new Thread(()->{
             try {
                 try {
                     File saver = new File("/sdcard/Android/data/cn.wearbbs.music/cookie.txt");
@@ -216,7 +218,7 @@ public class ConsoleActivity extends SlideBackActivity {
         else{
             Map maps = null;
             try {
-                maps = (Map) new MVApi().MV(mvid);
+                maps = (Map) new MVApi().getMVUrl(mvid);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

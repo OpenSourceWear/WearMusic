@@ -1,13 +1,10 @@
 package cn.wearbbs.music.ui;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.wearbbs.music.R;
+import cn.wearbbs.music.adapter.DefaultAdapter;
 import cn.wearbbs.music.api.MusicPanApi;
 
 public class MusicPanActivity extends SlideBackActivity {
@@ -78,18 +76,23 @@ public class MusicPanActivity extends SlideBackActivity {
             Map tmp1 = (Map)JSON.parse(data.get(i).toString());
             Map simpleSong = (Map)JSON.parse(tmp1.get("simpleSong").toString());
             Log.d("MusicPan", JSON.toJSONString(simpleSong));
-            names.add(simpleSong.get("name"));
             List ars = (List)JSON.parseArray(simpleSong.get("ar").toString());
             Map ar=(Map)ars.get(0);
             Map al=(Map)JSON.parse(simpleSong.get("al").toString());
-            item.put("artists",ar.get("name"));
             item.put("id",simpleSong.get("id").toString());
+            String alName;
+            String arName;
+            alName = simpleSong.get("name").toString();
             if(ar.get("name") == null){
-                item.put("name","未知");
+                arName = "未知";
             }
             else{
-                item.put("name",simpleSong.get("name"));
+                arName = ar.get("name").toString();
             }
+            item.put("name",alName);
+            item.put("artists",arName);
+            String tmpName = "<font color=#2A2B2C>" + simpleSong.get("name") + "</font> - <font color=#999999>" + arName + "</font>";
+            names.add(tmpName);
             item.put("picUrl",al.get("picUrl"));
             if(tmp1.get("songId") == simpleSong.get("songId")){
                 item.put("comment","false");
@@ -100,23 +103,8 @@ public class MusicPanActivity extends SlideBackActivity {
             mvids.add(simpleSong.get("mv").toString());
             search_list.add(item);
         }
-        ArrayAdapter adapter = new ArrayAdapter(MusicPanActivity.this, R.layout.item, names){
-            public Object getItem(int position)
-            {
-                return Html.fromHtml(names.get(position).toString());
-            }
-        };
         String jsonString = JSON.toJSONString(search_list);
-        list_pan.setOnItemClickListener((adapterView, view, i, l) -> {
-            Intent intent1 = new Intent(MusicPanActivity.this, MainActivity.class);
-            intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
-            intent1.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-            intent1.putExtra("type", "0");
-            intent1.putExtra("list", jsonString);
-            intent1.putExtra("start", String.valueOf(i));
-            intent1.putExtra("mvids", JSON.toJSONString(mvids));
-            startActivity(intent1);
-        });
+        DefaultAdapter adapter = new DefaultAdapter(JSON.toJSONString(mvids),jsonString,search_list.size(),JSON.toJSONString(names),this,1);
         list_pan.setAdapter(adapter);
         if(names.size() == 0){
             LinearLayout null_layout = findViewById(R.id.null_layout);

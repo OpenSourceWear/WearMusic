@@ -5,6 +5,6 @@
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
     android:padding="5dp"
-    android:background="@drawable/blur"
+    android:background="@drawable/et_blue"
     android:textColor="#2A2B2C">
 </TextView>

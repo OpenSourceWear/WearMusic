@@ -20,6 +20,7 @@ public class ChooseAdapter extends BaseAdapter {
     private Context context;
     private List choose;
     private List positions;
+    Map Keymap = new HashMap();
     private Map<Integer,Boolean> map=new HashMap<>();
     public ChooseAdapter(List<String> listText,Context context){
         this.listText=listText;
@@ -71,14 +72,10 @@ public class ChooseAdapter extends BaseAdapter {
             if (checkBox.isChecked()){
                 map.put(position,true);
                 positions.add(position);
-
+                Keymap.put(position,positions.size()-1);
             }else {
                 map.remove(position);
-                for (int i = 0;i<positions.size();i++){
-                    if(position == Integer.parseInt(positions.get(i).toString())){
-                        positions.remove(i);
-                    }
-                }
+                positions.remove(Keymap.get(position));
 
             }
         });

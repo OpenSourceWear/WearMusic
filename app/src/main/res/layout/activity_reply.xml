@@ -30,7 +30,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginTop="22dp"
             android:layout_marginRight="15dp"
-            android:background="@drawable/blur"
+            android:background="@drawable/et_blue"
             android:orientation="vertical">
 
             <EditText
@@ -62,7 +62,7 @@
             android:layout_height="25dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:background="@drawable/blur_2"
+            android:background="@drawable/btn_blue"
             android:onClick="send"
             android:text="发送评论"
             android:textColor="#FFFFFF"

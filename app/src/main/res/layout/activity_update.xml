@@ -136,7 +136,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="5dp"
-                    android:background="@drawable/blur_2"
+                    android:background="@drawable/btn_blue"
                     android:onClick="download_update"
                     android:text="下载更新"
                     android:textColor="#FFFFFF" />

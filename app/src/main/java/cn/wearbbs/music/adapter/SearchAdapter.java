@@ -7,27 +7,18 @@ import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import cn.carbs.android.expandabletextview.library.ExpandableTextView;
 import cn.wearbbs.music.R;
-import cn.wearbbs.music.api.CommentApi;
 import cn.wearbbs.music.api.MVApi;
 import cn.wearbbs.music.ui.MainActivity;
-import cn.wearbbs.music.ui.SearchActivity;
 
 public class SearchAdapter extends BaseAdapter {
     private List listText;
@@ -39,7 +30,7 @@ public class SearchAdapter extends BaseAdapter {
     String temp_hl;
     List tmp;
     List mvids;
-    public SearchAdapter(final List search_list, final String idl, List idi, List tmp,Context context){
+    public SearchAdapter(final List search_list, final String idl, List idi, List tmp, Context context){
         this.listText=search_list;
         this.context=context;
         this.idl = idl;
@@ -80,7 +71,7 @@ public class SearchAdapter extends BaseAdapter {
         View view;
         if (convertView==null){
             //通过一个打气筒 inflate 可以把一个布局转换成一个view对象
-            view=View.inflate(context,R.layout.item_searchcl,null);
+            view=View.inflate(context,R.layout.item,null);
         }else {
             view=convertView;//复用历史缓存对象
         }
@@ -109,7 +100,7 @@ public class SearchAdapter extends BaseAdapter {
             else{
                 Map maps = null;
                 try {
-                    maps = new MVApi().MV(mvid);
+                    maps = new MVApi().getMVUrl(mvid);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

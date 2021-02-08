@@ -88,7 +88,7 @@
                 android:id="@+id/button4"
                 android:layout_width="65dp"
                 android:layout_height="25dp"
-                android:background="@drawable/blur_2"
+                android:background="@drawable/btn_blue"
                 android:onClick="message"
                 android:text="发送评论"
                 android:textColor="#FFFFFF"

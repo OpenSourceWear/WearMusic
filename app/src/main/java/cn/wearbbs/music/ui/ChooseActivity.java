@@ -1,30 +1,20 @@
 package cn.wearbbs.music.ui;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.Target;
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
-import com.xtc.shareapi.share.communication.BaseResponse;
 import com.xtc.shareapi.share.communication.SendMessageToXTC;
-import com.xtc.shareapi.share.communication.ShowMessageFromXTC;
-import com.xtc.shareapi.share.interfaces.IResponseCallback;
 import com.xtc.shareapi.share.interfaces.IXTCCallback;
 import com.xtc.shareapi.share.manager.ShareMessageManager;
-import com.xtc.shareapi.share.manager.XTCCallbackImpl;
 import com.xtc.shareapi.share.shareobject.XTCShareMessage;
 import com.xtc.shareapi.share.shareobject.XTCTextObject;
 
@@ -38,7 +28,7 @@ import java.util.List;
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.adapter.ChooseAdapter;
 
-public class ChooseActivity extends SlideBackActivity implements IResponseCallback {
+public class ChooseActivity extends SlideBackActivity {
     List arr;
     ChooseAdapter adapter;
     private static int counter = 0;
@@ -46,7 +36,6 @@ public class ChooseActivity extends SlideBackActivity implements IResponseCallba
     String type;
     String pic;
     File lrc;
-    private IXTCCallback xtcCallback;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,20 +87,7 @@ public class ChooseActivity extends SlideBackActivity implements IResponseCallba
         adapter = new ChooseAdapter(arr,this);
         lrcs.setAdapter(adapter);
         Toast.makeText(this,"点击标题栏分享歌词",Toast.LENGTH_SHORT).show();
-        //处理回调
-        xtcCallback = new XTCCallbackImpl();
-        xtcCallback.handleIntent(getIntent(), this);
     }
-    public void onResp(boolean isSuccess, BaseResponse response) {
-        finish();
-    }
-    public void onReq(ShowMessageFromXTC.Request request) {
-        Intent intent = new Intent(ChooseActivity.this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-        startActivity(intent);
-    }
-
     public void share(View view){
         List choose = adapter.getChoose();
         String tmp = "";
@@ -136,7 +112,10 @@ public class ChooseActivity extends SlideBackActivity implements IResponseCallba
                 SendMessageToXTC.Request request = new SendMessageToXTC.Request();
                 request.setMessage(xtcShareMessage);
                 //第四步：创建ShareMessageManagr对象，调用sendRequestToXTC方法，传入SendMessageToXTC.Request对象和AppKey
-                new ShareMessageManager(this).sendRequestToXTC(request, "");
+                ShareMessageManager SMA = new ShareMessageManager(this);
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round, null);
+                SMA.setAppIcon(bitmap);
+                SMA.sendRequestToXTC(request, "");
             }
             else {
                 Intent intent = new Intent(ChooseActivity.this, QRCodeActivity.class);

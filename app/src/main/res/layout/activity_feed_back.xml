@@ -83,7 +83,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
-                android:background="@drawable/blur"
+                android:background="@drawable/et_blue"
                 android:orientation="vertical">
 
                 <EditText
@@ -126,7 +126,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
-                android:background="@drawable/blur"
+                android:background="@drawable/et_blue"
                 android:orientation="vertical">
 
                 <EditText
@@ -169,7 +169,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
-                android:background="@drawable/blur"
+                android:background="@drawable/et_blue"
                 android:orientation="vertical">
 
                 <EditText
@@ -202,7 +202,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="40dp"
-                android:background="@drawable/blur_2"
+                android:background="@drawable/btn_blue"
                 android:onClick="send"
                 android:text="反馈"
                 android:textColor="#FFFFFF"
