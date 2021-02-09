@@ -2,8 +2,8 @@
 <h1 align="center">WearMusic</h1>
 <p align="center">音乐的力量，听你所想。</p>
 <p align="center">
-   <a href="https://github.com/JackuXL/WearMusic/releases"><img src="https://img.shields.io/github/v/release/JackuXL/wearmusic.svg?style=flat-square"></a>
-   <a href="https://github.com/JackuXL/WearMusic/blob/master/LICENSE"><img src="https://img.shields.io/github/license/JackuXL/wearmusic.svg?style=flat-square"></a>
+   <a href="https://github.com/JackuXL/WearMusic/releases"><img src="https://img.shields.io/github/v/release/JackuXL/wearmusic.svg"></a>
+   <a href="https://github.com/JackuXL/WearMusic/blob/master/LICENSE"><img src="https://img.shields.io/github/license/JackuXL/wearmusic.svg"></a>
    <a href="https://github.com/JackuXL/WearMusic/pulls"><img src="https://img.shields.io/badge/PRs-Welcome-orange.svg"></a>
 </p>
 
