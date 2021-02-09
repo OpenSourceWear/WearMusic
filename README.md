@@ -9,9 +9,31 @@
 
 
 
+## 应用详情
+
+### 应用简介
+
+一款第三方网易云音乐客户端，支持歌词、音乐云盘、歌单、评论等功能。
+
+### 预览图片
+
+![预览图片](https://ae01.alicdn.com/kf/U709cedf0d260414989ab0899f9a24b88g.jpg)
+
+
+
 ## 立即使用
 
 ### 如何安装
+
+#### 一键安装（推荐）
+
+安装 WearOS 工具箱，连接手表，进入应用库，轻触 “WearMusic” ，一键安装，耐心等下系统下载并安装即可。
+
+![一键安装教程](https://www.hualigs.cn/image/602271994bd07.jpg)
+
+> 在此之前，请您务必确认是否已经打开ADB。详情可前往 [WearBBS](https://wearbbs.cn) 查看。
+
+#### 手动安装
 
 - [官方网站](https://wmusic.wearbbs.cn)
 - [Github Release](https://github.com/JackuXL/WearMusic/releases)
@@ -21,11 +43,16 @@
 
 
 ### 了解更多
+
 > 请前往 [WearBBS 资源中心](https://wearbbs.cn/resources/wearmusic.260/) 。
+
+
 
 ## 预览视频
 
 <a href = "https://www.bilibili.com/video/BV1zf4y1672n/ " target="_blank"><img src="https://ae01.alicdn.com/kf/U25829692e6b24c31abaa53afdbe2a9d2L.jpg" width="450"/><br>手表网易云？WearMusic 2.0 - 音乐的力量，听你所想~</a>
+
+
 
 ## 关于
 
