@@ -27,11 +27,11 @@
 
 #### 一键安装（推荐）
 
-安装 WearOS 工具箱，连接手表，进入应用库，轻触 “WearMusic” ，一键安装，耐心等下系统下载并安装即可。
+安装 WearOS 工具箱，连接手表，进入应用库，轻触 “WearMusic” ，一键安装，耐心等待系统下载并安装即可。
 
 ![一键安装教程](https://www.hualigs.cn/image/602271994bd07.jpg)
 
-> 在此之前，请您务必确认是否已经打开ADB。详情可前往 [WearBBS](https://wearbbs.cn) 查看。
+> 在此之前，请您务必确认是否已经打开ADB。详情可前往 [WearBBS](https://wearbbs.cn) 查看 [ADB开启教程](https://wearbbs.cn/threads/adb.110/)。
 
 #### 手动安装
 
@@ -39,7 +39,7 @@
 - [Github Release](https://github.com/JackuXL/WearMusic/releases)
 - [蓝奏云](https://wearbbs.lanzous.com/iMoEHl4ufsd)
 
-> 下载后，请前往 [WearBBS](https://wearbbs.cn) 查看 ADB 教程，以将其安装至手表。
+> 下载后，请前往 [WearBBS](https://wearbbs.cn) 查看 [ADB 教程](https://wearbbs.cn/threads/adb.110/)，以将其安装至手表。
 
 
 ### 了解更多
