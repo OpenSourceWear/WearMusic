@@ -52,7 +52,8 @@
 
 <a href = "https://www.bilibili.com/video/BV1zf4y1672n/ " target="_blank"><img src="https://ae01.alicdn.com/kf/U25829692e6b24c31abaa53afdbe2a9d2L.jpg" width="450"/><br>手表网易云？WearMusic 2.0 - 音乐的力量，听你所想~</a>
 
-
+## 软件进阶
+- 如何在WearMusic中听其他平台（如QQ音乐）的歌曲，同时可以查看歌词、Cover？
 
 ## 关于
 
