@@ -10,7 +10,7 @@ public class PlayListApi {
     private String result;
     public Map getPlayList(String user_id,String cookie) throws InterruptedException {
         Thread tmp = new Thread((Runnable)() -> {
-            result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/user/playlist?uid=" + user_id + "&timestamp=" + System.currentTimeMillis());
+            result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/user/playlist?uid=" + user_id + "&cookie=" + cookie + "&timestamp=" + System.currentTimeMillis());
         });
         tmp.start();
         tmp.join();

@@ -62,7 +62,7 @@ public class UpdateActivity extends SlideBackActivity {
         }
     }
     public void download_update(View view) throws Exception {
-        new File("/sdcard/Android/data/cn.wearbbs.music/temp").mkdirs();
+        new File("/storage/emulated/0/Android/data/cn.wearbbs.music/temp").mkdirs();
         dm = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
         mTaskId = new DownloadUtil().download(data.get("link").toString(),"/Android/data/cn.wearbbs.music/temp",data.get("version").toString() + ".apk", dm);
         Toast.makeText(this,"开始下载，请不要离开此界面",Toast.LENGTH_SHORT).show();
@@ -76,7 +76,7 @@ public class UpdateActivity extends SlideBackActivity {
         thread.start();
         thread.join();
         Toast.makeText(this,"开始安装",Toast.LENGTH_SHORT).show();
-        runShellCommand("su -c pm install -g -r /sdcard/Android/data/cn.wearbbs.music/temp/" + data.get("version").toString() + ".apk");
+        runShellCommand("su -c pm install -g -r /storage/emulated/0/Android/data/cn.wearbbs.music/temp/" + data.get("version").toString() + ".apk");
     }
     private void runShellCommand(String command) throws Exception {
         Runtime.getRuntime().exec(command);

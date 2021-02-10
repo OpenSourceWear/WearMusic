@@ -26,7 +26,7 @@ public class PermissionActivity extends SlideBackActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         if(PermissionUtil.checkPermission(this,PERMISSION_STORAGE)){
             Toast.makeText(PermissionActivity.this,"授权成功",Toast.LENGTH_SHORT).show();
-            File dir = new File("/sdcard/Android/data/cn.wearbbs.music/");
+            File dir = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/");
             if(dir.exists())
                 toMainActivity();
             else

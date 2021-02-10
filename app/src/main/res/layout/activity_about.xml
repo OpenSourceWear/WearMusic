@@ -20,7 +20,7 @@
                 android:id="@+id/tv_title"
                 android:layout_width="match_parent"
                 android:layout_height="33dp"
-                android:background="#2175F3"
+                android:background="@color/colorPrimary"
                 android:gravity="center"
                 android:text="关于软件"
                 android:textColor="#FFFFFF"
@@ -68,7 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="第三方网易云客户端 V2.0\nBy JackuXL 出品：WearBBS\n官方QQ群：1050643053\n官网：https://wmusic.wearbbs.cn\n论坛：https://wearbbs.cn\n使用【网易云API】开发\n特别感谢：@luern0313"
+                android:text="第三方网易云客户端 V2.1\nBy JackuXL 出品：WearBBS\n官方QQ群：1050643053\n官网：https://wmusic.wearbbs.cn\n论坛：https://wearbbs.cn\n使用【网易云API】开发\n特别感谢：@luern0313"
                 android:textColor="#999999"
                 android:textSize="10sp" />
 
@@ -77,7 +77,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_marginTop="10dp"
-                android:background="#2175F3"
+                android:background="@color/colorPrimary"
                 android:onClick="onClick"
                 android:orientation="horizontal"
                 android:visibility="visible">
@@ -115,7 +115,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_marginTop="10dp"
-                android:background="#2175F3"
+                android:background="@color/colorPrimary"
                 android:onClick="cu"
                 android:orientation="horizontal"
                 android:visibility="visible">

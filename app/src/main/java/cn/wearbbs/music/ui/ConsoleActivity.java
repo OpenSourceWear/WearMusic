@@ -39,6 +39,7 @@ import cn.wearbbs.music.R;
 import cn.wearbbs.music.api.MVApi;
 import cn.wearbbs.music.api.MusicApi;
 import cn.wearbbs.music.util.DownloadUtil;
+import cn.wearbbs.music.util.UserInfoUtil;
 
 public class ConsoleActivity extends SlideBackActivity {
     String id;
@@ -95,14 +96,8 @@ public class ConsoleActivity extends SlideBackActivity {
         }
         Thread thread = new Thread(()->{
             try {
-                try {
-                    File saver = new File("/sdcard/Android/data/cn.wearbbs.music/cookie.txt");
-                    BufferedReader in = new BufferedReader(new FileReader(saver));
-                    cookie = in.readLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                File user = new File("/sdcard/Android/data/cn.wearbbs.music/user.txt");
+                cookie = UserInfoUtil.getUserInfo(this,"cookie");
+                File user = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/user.txt");
                 BufferedReader in = new BufferedReader(new FileReader(user));
                 String temp = in.readLine();
                 Map user_id_temp = (Map)JSON.parse(temp);
@@ -258,7 +253,7 @@ public class ConsoleActivity extends SlideBackActivity {
     }
     public void download(View view) throws Exception {
         if(!type.equals("1")){
-            File temp = new File("/sdcard/Android/data/cn.wearbbs.music/download/music/" + song + ".mp3");
+            File temp = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music/" + song + ".mp3");
             if(!temp.exists()){
                 if (url.contains("http://")){
                     url = url.replace("http://","https://");
@@ -270,18 +265,18 @@ public class ConsoleActivity extends SlideBackActivity {
                 if(maps.get("code").toString().equals("200")) {
                     if(maps.get("lrc") != null){
                         lrc_map = (Map) JSON.parse(maps.get("lrc").toString());
-                        File dir = new File("/sdcard/Android/data/cn.wearbbs.music/download/lrc");
+                        File dir = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/download/lrc");
                         dir.mkdirs();
-                        File tl = new File("/sdcard/Android/data/cn.wearbbs.music/download/lrc/" + song + ".lrc");
+                        File tl = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/download/lrc/" + song + ".lrc");
                         tl.createNewFile();
                         FileOutputStream outputStream;
                         outputStream = new FileOutputStream(tl);
                         outputStream.write(lrc_map.get("lyric").toString().getBytes());
                         outputStream.close();
                     }else{
-                        File dir = new File("/sdcard/Android/data/cn.wearbbs.music/download/lrc");
+                        File dir = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/download/lrc");
                         dir.mkdirs();
-                        File tl = new File("/sdcard/Android/data/cn.wearbbs.music/download/lrc/" + song + ".lrc");
+                        File tl = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/download/lrc/" + song + ".lrc");
                         tl.createNewFile();
                         FileOutputStream outputStream;
                         outputStream = new FileOutputStream(tl);

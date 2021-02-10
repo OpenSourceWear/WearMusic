@@ -16,7 +16,7 @@
             android:id="@+id/textView27"
             android:layout_width="match_parent"
             android:layout_height="33dp"
-            android:background="#2175F3"
+            android:background="@color/colorPrimary"
             android:gravity="center"
             android:text="控制台"
             android:textColor="#FFFFFF"

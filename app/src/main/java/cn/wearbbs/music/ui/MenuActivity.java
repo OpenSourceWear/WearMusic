@@ -33,7 +33,7 @@ public class MenuActivity extends SlideBackActivity {
         if (!AppCenter.isConfigured()) {
             AppCenter.start(getApplication(), "9250a12d-0fa9-4292-99fc-9d09dcc32012", Analytics.class, Crashes.class);
         }
-        File user = new File("/sdcard/Android/data/cn.wearbbs.music/user.txt");
+        File user = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/user.txt");
         if (user.exists()){
             try {
                 BufferedReader in = new BufferedReader(new FileReader(user));

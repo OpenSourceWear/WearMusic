@@ -21,7 +21,7 @@
                 android:id="@+id/tv_title2"
                 android:layout_width="match_parent"
                 android:layout_height="33dp"
-                android:background="#2175F3"
+                android:background="@color/colorPrimary"
                 android:gravity="center"
                 android:text="联系作者"
                 android:textColor="#FFFFFF"
@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="WearBBS：@JackuXL"
-                android:textColor="#2175F3" />
+                android:textColor="@color/colorPrimary" />
 
             <TextView
                 android:id="@+id/textView60"
@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:text="邮箱：jackuxl@qq.com"
-                android:textColor="#2175F3" />
+                android:textColor="@color/colorPrimary" />
 
             <TextView
                 android:id="@+id/textView62"
@@ -64,7 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_marginTop="10dp"
-                android:background="#2175F3"
+                android:background="@color/colorPrimary"
                 android:onClick="feed_back"
                 android:orientation="horizontal"
                 android:visibility="gone">

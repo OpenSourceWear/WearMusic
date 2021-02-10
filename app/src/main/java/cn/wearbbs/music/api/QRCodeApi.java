@@ -9,7 +9,7 @@ import cn.wearbbs.music.util.NetWorkUtil;
 public class QRCodeApi {
     private String result;
     public Map getKey() throws InterruptedException {
-        Thread tmp = new Thread((Runnable)() -> {
+        Thread tmp = new Thread(() -> {
             result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/login/qr/key?timestamp=" + System.currentTimeMillis());
         });
         tmp.start();

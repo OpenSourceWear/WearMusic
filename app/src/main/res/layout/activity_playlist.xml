@@ -49,7 +49,7 @@
             android:id="@+id/textView36"
             android:layout_width="match_parent"
             android:layout_height="33dp"
-            android:background="#2175F3"
+            android:background="@color/colorPrimary"
             android:gravity="center"
             android:text="我的歌单"
             android:textColor="#FFFFFF"

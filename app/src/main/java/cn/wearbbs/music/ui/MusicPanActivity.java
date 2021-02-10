@@ -27,6 +27,7 @@ import java.util.Map;
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.adapter.DefaultAdapter;
 import cn.wearbbs.music.api.MusicPanApi;
+import cn.wearbbs.music.util.UserInfoUtil;
 
 public class MusicPanActivity extends SlideBackActivity {
     String cookie;
@@ -45,13 +46,7 @@ public class MusicPanActivity extends SlideBackActivity {
         tv.setGravity(Gravity.CENTER);
         tv.setTextSize(12);
         list_pan.addFooterView(tv,null,false);
-        File saver = new File("/sdcard/Android/data/cn.wearbbs.music/cookie.txt");
-        try {
-            BufferedReader in1 = new BufferedReader(new FileReader(saver));
-            cookie = in1.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        cookie = UserInfoUtil.getUserInfo(this,"cookie");
         Thread thread = new Thread(()->{
             try {
                 Map maps = new MusicPanApi().getPanList(cookie);

@@ -23,7 +23,7 @@
                 android:id="@+id/tv_title"
                 android:layout_width="match_parent"
                 android:layout_height="33dp"
-                android:background="#2175F3"
+                android:background="@color/colorPrimary"
                 android:gravity="center"
                 android:text="登录"
                 android:textColor="#FFFFFF"
@@ -54,6 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/login_change_mode"
+                android:layout_marginTop="5dp"
                 android:visibility="visible">
 
                 <ImageView
@@ -120,7 +121,7 @@
                 android:id="@+id/tv_title"
                 android:layout_width="match_parent"
                 android:layout_height="33dp"
-                android:background="#2175F3"
+                android:background="@color/colorPrimary"
                 android:gravity="center"
                 android:text="登录"
                 android:textColor="#FFFFFF"

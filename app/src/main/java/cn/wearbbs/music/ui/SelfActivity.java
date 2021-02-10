@@ -49,7 +49,7 @@ public class SelfActivity extends SlideBackActivity {
         startActivity(intent);
     }
     public void logout(View view){
-        if(delete("/sdcard/Android/data/cn.wearbbs.music")){
+        if(delete("/storage/emulated/0/Android/data/cn.wearbbs.music")){
             Toast.makeText(this,"退出成功！",Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(SelfActivity.this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新

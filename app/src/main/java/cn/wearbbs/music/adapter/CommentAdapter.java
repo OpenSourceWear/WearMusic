@@ -19,6 +19,7 @@ import java.util.Map;
 import cn.carbs.android.expandabletextview.library.ExpandableTextView;
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.api.CommentApi;
+import cn.wearbbs.music.util.UserInfoUtil;
 
 public class CommentAdapter extends BaseAdapter {
     private List listText;
@@ -64,13 +65,7 @@ public class CommentAdapter extends BaseAdapter {
             view=convertView;//复用历史缓存对象
         }
         view.findViewById(R.id.like).setOnClickListener(v -> {
-            try {
-                File saver = new File("/sdcard/Android/data/cn.wearbbs.music/cookie.txt");
-                BufferedReader in = new BufferedReader(new FileReader(saver));
-                cookie = in.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            cookie = UserInfoUtil.getUserInfo(context,cookie);
             if(liked_items.contains(position)){
                 Thread thread = new Thread(()-> {
                     try {

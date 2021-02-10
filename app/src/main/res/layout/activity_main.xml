@@ -24,7 +24,7 @@
                 android:id="@+id/main_title"
                 android:layout_width="match_parent"
                 android:layout_height="33dp"
-                android:background="#2175F3"
+                android:background="@color/colorPrimary"
                 android:gravity="center_vertical"
                 android:onClick="menu"
                 android:paddingTop="5dp"
@@ -146,9 +146,9 @@
             android:id="@+id/ly_title"
             android:layout_width="match_parent"
             android:layout_height="33dp"
-            android:background="#2175F3"
+            android:background="@color/colorPrimary"
             android:gravity="center_vertical"
-            android:onClick="share_ly"
+            android:onClick="menu"
             android:paddingTop="5dp"
             android:paddingBottom="5dp">
 
@@ -207,7 +207,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:onClick="wz2gd"
+                android:onClick="share_ly"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -216,8 +216,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="1dp"
-                    android:onClick="wz2gd"
-                    app:srcCompat="@drawable/ic_baseline_sync_alt_24" />
+                    android:onClick="share_ly"
+                    app:srcCompat="@drawable/ic_baseline_share_24" />
 
                 <TextView
                     android:id="@+id/textView58"
@@ -226,39 +226,31 @@
                     android:layout_marginLeft="1dp"
                     android:layout_marginTop="6dp"
                     android:layout_weight="1"
-                    android:onClick="wz2gd"
-                    android:text="切换显示模式"
+                    android:onClick="share_ly"
+                    android:text="分享歌词"
                     android:textColor="#2A2B2C"
                     android:textSize="10sp" />
             </LinearLayout>
 
         </LinearLayout>
 
-        <com.lauzy.freedom.library.LrcView
+        <me.wcy.lrcview.LrcView
             android:id="@+id/lrcView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="visible"
-            app:lrcCurrentTextColor="#2175F3"
+            android:layout_weight="1"
+            app:lrcAnimationDuration="1000"
+            app:lrcCurrentTextColor="@color/colorPrimary"
+            app:lrcDividerHeight="20dp"
             app:lrcNormalTextColor="#999999"
-            app:lrcTextSize="12dp" />
-
-        <TextView
-            android:id="@+id/tv_lrc"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="5dp"
-            android:gravity="clip_vertical|center_horizontal"
-            android:maxLines="10"
-            android:scrollbars="vertical"
-            android:singleLine="false"
-            android:text="（文字歌词模式 不支持滚动）\nUnknow"
-            android:textColor="#2A2B2C"
-            android:textSize="12sp"
-            android:visibility="gone" />
+            app:lrcNormalTextSize="12dp"
+            app:lrcPadding="16dp"
+            app:lrcTextGravity="center"
+            app:lrcTextSize="12dp"
+            app:lrcTimeTextColor="#999999"
+            app:lrcTimeTextSize="12dp"
+            app:lrcTimelineColor="#999999"
+            app:lrcTimelineTextColor="@color/colorPrimary" />
 
     </LinearLayout>
 

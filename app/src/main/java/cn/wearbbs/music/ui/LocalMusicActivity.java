@@ -1,7 +1,6 @@
 package cn.wearbbs.music.ui;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,8 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.fastjson.JSON;
 import com.microsoft.appcenter.AppCenter;
@@ -29,15 +26,12 @@ import java.util.List;
 import cn.wearbbs.music.R;
 
 public class LocalMusicActivity extends SlideBackActivity {
-    List<String> file_list = new ArrayList();
-    List arr = new ArrayList();
     AlertDialog alertDialog2;
     int im = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_localmusic);
-        findViewById(R.id.loading_layout).setVisibility(View.VISIBLE);
         if (!AppCenter.isConfigured()) {
             AppCenter.start(getApplication(), "9250a12d-0fa9-4292-99fc-9d09dcc32012", Analytics.class, Crashes.class);
         }
@@ -51,7 +45,7 @@ public class LocalMusicActivity extends SlideBackActivity {
         init_file_list();
     }
     public void add(View view){
-        Intent intent = new Intent(LocalMusicActivity.this, ServerActivity.class);
+        Intent intent = new Intent(LocalMusicActivity.this, AddActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
         startActivity(intent);
@@ -63,7 +57,7 @@ public class LocalMusicActivity extends SlideBackActivity {
         LinearLayout null_layout = findViewById(R.id.null_layout);
         null_layout.setVisibility(View.GONE);
         listd.setVisibility(View.VISIBLE);
-        File dir = new File("/sdcard/Android/data/cn.wearbbs.music/download/music");
+        File dir = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music");
         File[] arr_temp = dir.listFiles(new FileFilter() {
             @Override
             public boolean accept(File file) {
@@ -77,7 +71,7 @@ public class LocalMusicActivity extends SlideBackActivity {
         try{
             if(arr_temp.length != 0){
                 for (int i = 0; i < arr_temp.length; i++ ) {
-                    arr.add(arr_temp[i].toString().replace("/sdcard/Android/data/cn.wearbbs.music/download/music/","").replace(".mp3",""));
+                    arr.add(arr_temp[i].toString().replace("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music/","").replace(".mp3",""));
                     file_list.add(arr_temp[i].toString());
                 }
                 ArrayAdapter adapter = new ArrayAdapter(LocalMusicActivity.this, R.layout.item_default, arr);
@@ -103,10 +97,10 @@ public class LocalMusicActivity extends SlideBackActivity {
                                 .setTitle("提示")
                                 .setMessage("要删除该文件吗？")
                                 .setPositiveButton("确定", (dialogInterface, i1) -> {
-                                    File delete_mp3 = new File("/sdcard/Android/data/cn.wearbbs.music/download/music/" + arr.get(im).toString() + ".mp3");
+                                    File delete_mp3 = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music/" + arr.get(im).toString() + ".mp3");
                                     System.out.println(delete_mp3.getName());
                                     delete_mp3.delete();
-                                    File delete_lrc = new File("/sdcard/Android/data/cn.wearbbs.music/download/lrc/" + arr.get(im).toString() + ".lrc");
+                                    File delete_lrc = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/download/lrc/" + arr.get(im).toString() + ".lrc");
                                     if(delete_lrc.exists()){
                                         delete_lrc.delete();
                                     }

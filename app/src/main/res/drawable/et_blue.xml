@@ -5,5 +5,5 @@
     <!-- 设置圆角的半径 -->
     <corners android:radius="5dp"></corners>
     <!-- 描边 -->
-    <stroke android:color="#2175F3" android:width="1dp"></stroke>
+    <stroke android:color="@color/colorPrimary" android:width="1dp"></stroke>
 </shape>

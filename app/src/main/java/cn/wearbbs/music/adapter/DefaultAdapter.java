@@ -30,6 +30,7 @@ import cn.wearbbs.music.ui.MainActivity;
 import cn.wearbbs.music.ui.MusicPanActivity;
 import cn.wearbbs.music.ui.PlayListActivity;
 import cn.wearbbs.music.ui.SongListActivity;
+import cn.wearbbs.music.util.UserInfoUtil;
 
 public class DefaultAdapter extends BaseAdapter {
     private Context context;
@@ -139,13 +140,7 @@ public class DefaultAdapter extends BaseAdapter {
                 alertDialog = new AlertDialog.Builder(context)
                         .setMessage("要删除该音乐吗？")
                         .setPositiveButton("确定", (dialogInterface, i12) -> {
-                            try {
-                                File saver = new File("/sdcard/Android/data/cn.wearbbs.music/cookie.txt");
-                                BufferedReader in1 = new BufferedReader(new FileReader(saver));
-                                cookie = in1.readLine();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            cookie = UserInfoUtil.getUserInfo(context,"cookie");
                             try {
                                 new PlayListApi().deletePlayListMusic(SongListActivity.ID,SongListActivity.ids.split(",")[position],cookie);
                             } catch (InterruptedException e) {
@@ -169,13 +164,7 @@ public class DefaultAdapter extends BaseAdapter {
                 alertDialog = new AlertDialog.Builder(context)
                         .setMessage("要删除该音乐吗？")
                         .setPositiveButton("确定", (dialogInterface, i12) -> {
-                            try {
-                                File saver = new File("/sdcard/Android/data/cn.wearbbs.music/cookie.txt");
-                                BufferedReader in1 = new BufferedReader(new FileReader(saver));
-                                cookie = in1.readLine();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            cookie = UserInfoUtil.getUserInfo(context,"cookie");
                             try {
                                 new MusicPanApi().deletePanMusic(((Map)JSON.parse(JSON.parseArray(jsonString).get(position).toString())).get("id").toString(),cookie);
                             } catch (InterruptedException e) {

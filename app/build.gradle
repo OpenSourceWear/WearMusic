@@ -8,8 +8,8 @@ android {
         applicationId "cn.wearbbs.music"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 3
-        versionName "2.0"
+        versionCode 4
+        versionName "2.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -57,7 +57,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.alibaba:fastjson:1.1.72.android'
     implementation 'com.google.zxing:core:3.3.0'
-    implementation 'com.github.Lauzy:LyricView:1.0.4'
     implementation 'com.squareup.okhttp3:okhttp:3.14.2'
     implementation 'com.squareup.okio:okio:1.17.4'
     implementation 'com.hyman:flowlayout-lib:1.1.2'
@@ -67,4 +66,5 @@ dependencies {
     implementation 'me.wcy:lrcview:2.2'
     implementation 'cn.carbs.android:ExpandableTextView:1.0.3'
     implementation 'me.panpf:sketch:2.7.1'
+    implementation 'com.google.android.material:material:1.2.1'
 }

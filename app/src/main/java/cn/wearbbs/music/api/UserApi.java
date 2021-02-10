@@ -1,8 +1,6 @@
 package cn.wearbbs.music.api;
 
-import android.content.Intent;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.content.Context;
 
 import com.alibaba.fastjson.JSON;
 
@@ -13,11 +11,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cn.wearbbs.music.R;
-import cn.wearbbs.music.ui.LoginActivity;
-import cn.wearbbs.music.ui.MainActivity;
-import cn.wearbbs.music.ui.MenuActivity;
 import cn.wearbbs.music.util.NetWorkUtil;
+import cn.wearbbs.music.util.UserInfoUtil;
 
 public class UserApi {
     private String result;
@@ -29,7 +24,7 @@ public class UserApi {
         tmp.join();
         return (Map)JSON.parse(result);
     }
-    public Map Login(String name,String password) throws IOException {
+    public Map Login(Context context,String name,String password) throws IOException {
         String text;
         if (checkEmail(name)){
             text = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/login?email=" + name + "&password=" + password + "&timestamp=" + System.currentTimeMillis());
@@ -38,11 +33,11 @@ public class UserApi {
                 return maps;
             }
             else if (maps.get("code").toString().equals("200")){
-                File dir = new File("/sdcard/Android/data/cn.wearbbs.music");
+                File dir = new File("/storage/emulated/0/Android/data/cn.wearbbs.music");
                 dir.mkdirs();
-                File user = new File("/sdcard/Android/data/cn.wearbbs.music/user.txt");
+                File user = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/user.txt");
                 user.createNewFile();
-                File saver = new File("/sdcard/Android/data/cn.wearbbs.music/saver.txt");
+                File saver = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/saver.txt");
                 saver.createNewFile();
 
                 FileOutputStream outputStream;
@@ -58,12 +53,7 @@ public class UserApi {
                 outputStream_2.write(temp.getBytes());
                 outputStream_2.close();
 
-                File cookie_file = new File("/sdcard/Android/data/cn.wearbbs.music/cookie.txt");
-                cookie_file.createNewFile();
-                FileOutputStream outputStream_3;
-                outputStream_3 = new FileOutputStream(cookie_file);
-                outputStream_3.write(maps.get("cookie").toString().getBytes());
-                outputStream_3.close();
+                UserInfoUtil.saveUserInfo(context,"cookie",maps.get("cookie").toString());
                 return maps;
             }
             else{
@@ -83,11 +73,11 @@ public class UserApi {
                 return maps;
             }
             else if (maps.get("code").toString().equals("200")){
-                File dir = new File("/sdcard/Android/data/cn.wearbbs.music");
+                File dir = new File("/storage/emulated/0/Android/data/cn.wearbbs.music");
                 dir.mkdirs();
-                File user = new File("/sdcard/Android/data/cn.wearbbs.music/user.txt");
+                File user = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/user.txt");
                 user.createNewFile();
-                File saver = new File("/sdcard/Android/data/cn.wearbbs.music/saver.txt");
+                File saver = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/saver.txt");
                 saver.createNewFile();
 
                 FileOutputStream outputStream;
@@ -103,12 +93,7 @@ public class UserApi {
                 outputStream_2.write(temp.getBytes());
                 outputStream_2.close();
 
-                File cookie_file = new File("/sdcard/Android/data/cn.wearbbs.music/cookie.txt");
-                cookie_file.createNewFile();
-                FileOutputStream outputStream_3;
-                outputStream_3 = new FileOutputStream(cookie_file);
-                outputStream_3.write(maps.get("cookie").toString().getBytes());
-                outputStream_3.close();
+                UserInfoUtil.saveUserInfo(context,"cookie",maps.get("cookie").toString());
                 return maps;
             }
             else{

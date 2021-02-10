@@ -19,8 +19,8 @@ public class NetWorkUtil {
         }
         Log.d("Url","请求URL:" + url);
         String result;
-        OkHttpClient client = new OkHttpClient().newBuilder().connectTimeout(60000, TimeUnit.MILLISECONDS)
-                .readTimeout(60000, TimeUnit.MILLISECONDS)
+        OkHttpClient client = new OkHttpClient().newBuilder().connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
                 .build();
         Request request = new Request.Builder()
                 .url(url)

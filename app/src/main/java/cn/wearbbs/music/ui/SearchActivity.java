@@ -34,6 +34,7 @@ import cn.wearbbs.music.R;
 import cn.wearbbs.music.adapter.SearchAdapter;
 import cn.wearbbs.music.api.HotApi;
 import cn.wearbbs.music.api.SearchApi;
+import cn.wearbbs.music.util.UserInfoUtil;
 
 public class SearchActivity extends SlideBackActivity {
     List arr;
@@ -61,14 +62,7 @@ public class SearchActivity extends SlideBackActivity {
         findViewById(R.id.loading_layout).setVisibility(View.GONE);
         String temp = "[]";
         arr = JSON.parseArray(temp);
-        File saver = new File("/sdcard/Android/data/cn.wearbbs.music/cookie.txt");
-        BufferedReader in;
-        try {
-            in = new BufferedReader(new FileReader(saver));
-            cookie = in.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        cookie = UserInfoUtil.getUserInfo(this,"cookie");
         TextView tv = new TextView(this);
         tv.setText("加载中\n\n");
         tv.setTextColor(Color.parseColor("#999999"));

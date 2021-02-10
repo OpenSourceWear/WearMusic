@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.StrictMode;
 import android.text.Html;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -30,9 +29,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
-import com.lauzy.freedom.library.Lrc;
-import com.lauzy.freedom.library.LrcHelper;
-import com.lauzy.freedom.library.LrcView;
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
@@ -54,6 +50,8 @@ import cn.wearbbs.music.api.UserApi;
 import cn.wearbbs.music.service.MusicService;
 import cn.wearbbs.music.util.HeadSetUtil;
 import cn.wearbbs.music.util.PermissionUtil;
+import cn.wearbbs.music.util.UserInfoUtil;
+import me.wcy.lrcview.LrcView;
 
 public class MainActivity extends SlideBackActivity {
     public static MediaPlayer mediaPlayer;
@@ -62,16 +60,12 @@ public class MainActivity extends SlideBackActivity {
     List search_list;
     String url;
     String type;
-    static double Version = 2.0;
+    static double Version = 2.1;
     File tl;
     LrcView lrcView;
     Map lrc_map;
     String id;
-    String nc = "LRC";
     int zt = 0;
-    int FMMODE;
-    int LOCALMODE;
-    int LISTMODE;
     String cookie;
     Boolean will_next = false;
     List mvids;
@@ -90,12 +84,16 @@ public class MainActivity extends SlideBackActivity {
         HeadSetUtil.getInstance().open(MainActivity.this);
         if (PermissionUtil.checkPermission(this,PERMISSION_STORAGE)) {
             try {
-                File dl = new File("/sdcard/Android/data/cn.wearbbs.music/deleted.lock");
+                File dl = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/deleted.lock");
+                File old_cookie = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/cookie.txt");
                 if(!dl.exists()){
-                    File dir = new File("/sdcard/Android/data/cn.wearbbs.music/");
+                    File dir = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/");
                     dir.delete();
                     dir.mkdir();
                     dl.createNewFile();
+                }
+                if(old_cookie.exists()){
+                    old_cookie.delete();
                 }
                 Thread updateThread = new Thread(()->{
                     Map update_map = null;
@@ -114,12 +112,12 @@ public class MainActivity extends SlideBackActivity {
                     }
                 });
                 updateThread.start();
-                File ol = new File("/sdcard/Android/data/cn.wearbbs.music/outline.ini");
+                File ol = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/outline.ini");
                 if(ol.exists()){
                     ol.delete();
                 }
             } catch (Exception e) {
-                File ol = new File("/sdcard/Android/data/cn.wearbbs.music/outline.ini");
+                File ol = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/outline.ini");
                 if(ol.exists()){
                     type = "1";
                     Intent get_music = getIntent();
@@ -166,21 +164,17 @@ public class MainActivity extends SlideBackActivity {
                                 LinearLayout ly = findViewById(R.id.ly);
                                 Play.setVisibility(View.VISIBLE);
                                 ly.setVisibility(View.GONE);
-                                File user = new File("/sdcard/Android/data/cn.wearbbs.music/user.txt");
-                                if (!user.exists()) {
+                                File user = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/user.txt");
+                                cookie = UserInfoUtil.getUserInfo(this,"cookie");
+                                if (!user.exists() || cookie == null) {
+                                    Log.d("Main","登陆过期");
+                                    Toast.makeText(MainActivity.this, "登录过期，请重新登陆", Toast.LENGTH_SHORT).show();
                                     Intent intent_ = new Intent(MainActivity.this, LoginActivity.class);
                                     intent_.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
                                     intent_.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
                                     startActivity(intent_);
                                     finish();
                                 } else {
-                                    try {
-                                        File saver = new File("/sdcard/Android/data/cn.wearbbs.music/cookie.txt");
-                                        BufferedReader in = new BufferedReader(new FileReader(saver));
-                                        cookie = in.readLine();
-                                    } catch (IOException ea) {
-                                        ea.printStackTrace();
-                                    }
                                     Map maps = null;
                                     try {
                                         maps = new UserApi().checkLogin(cookie);
@@ -189,7 +183,7 @@ public class MainActivity extends SlideBackActivity {
                                     }
                                     if (maps.get("code").toString().equals("200")) {
                                         try {
-                                            File us = new File("/sdcard/Android/data/cn.wearbbs.music/user.txt");
+                                            File us = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/user.txt");
                                             us.createNewFile();
                                             FileOutputStream outputStream;
                                             outputStream = new FileOutputStream(us);
@@ -206,10 +200,11 @@ public class MainActivity extends SlideBackActivity {
                                             if (!MainActivity.this.isFinishing()) {
                                                 Toast.makeText(MainActivity.this, "登录过期，请重新登陆", Toast.LENGTH_SHORT).show();
                                             }
-                                            Intent intent = new Intent(MainActivity.this,LoginActivity.class);
-                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
-                                            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-                                            startActivity(intent);
+                                            Intent intentLogin = new Intent(MainActivity.this,LoginActivity.class);
+                                            intentLogin.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
+                                            intentLogin.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
+                                            startActivity(intentLogin
+                                            );
                                             finish();
                                         }
                                     }
@@ -218,12 +213,15 @@ public class MainActivity extends SlideBackActivity {
                                     //无音乐
                                     try {
                                         //无音乐
-                                        try {
-                                            File saver = new File("/sdcard/Android/data/cn.wearbbs.music/cookie.txt");
-                                            BufferedReader in = new BufferedReader(new FileReader(saver));
-                                            cookie = in.readLine();
-                                        } catch (IOException ea) {
-                                            ea.printStackTrace();
+                                        cookie = UserInfoUtil.getUserInfo(this,"cookie");
+                                        if(cookie == null){
+                                            Log.d("Main","登陆过期");
+                                            Toast.makeText(MainActivity.this, "登录过期，请重新登陆", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
+                                            startActivity(intent);
+                                            finish();
                                         }
                                         Map maps = null;
                                         try {
@@ -263,7 +261,7 @@ public class MainActivity extends SlideBackActivity {
                     builder.create().show();
                 }
             }
-            File ol = new File("/sdcard/Android/data/cn.wearbbs.music/outline.ini");
+            File ol = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/outline.ini");
             if(!ol.exists()){
                 Intent get_music = getIntent();
                 mvids = JSON.parseArray(get_music.getStringExtra("mvids"));
@@ -272,8 +270,10 @@ public class MainActivity extends SlideBackActivity {
                 LinearLayout ly = findViewById(R.id.ly);
                 Play.setVisibility(View.VISIBLE);
                 ly.setVisibility(View.GONE);
-                File user = new File("/sdcard/Android/data/cn.wearbbs.music/user.txt");
-                if (!(user.exists())){
+                File user = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/user.txt");
+                cookie = UserInfoUtil.getUserInfo(this,"cookie");
+                if (!user.exists() || cookie == null){
+                    Log.d("Main","登录过期");
                     Intent intent_ = new Intent(MainActivity.this, LoginActivity.class);
                     intent_.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
                     intent_.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
@@ -281,13 +281,6 @@ public class MainActivity extends SlideBackActivity {
                     finish();
                 }
                 else{
-                    try {
-                        File saver = new File("/sdcard/Android/data/cn.wearbbs.music/cookie.txt");
-                        BufferedReader in = new BufferedReader(new FileReader(saver));
-                        cookie = in.readLine();
-                    } catch (IOException ea) {
-                        ea.printStackTrace();
-                    }
                     Map maps = null;
                     try {
                         maps = new UserApi().checkLogin(cookie);
@@ -297,7 +290,7 @@ public class MainActivity extends SlideBackActivity {
                     }
                     if(maps.get("code").toString().equals("200")){
                         try {
-                            File us = new File("/sdcard/Android/data/cn.wearbbs.music/user.txt");
+                            File us = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/user.txt");
                             us.createNewFile();
                             FileOutputStream outputStream;
                             outputStream = new FileOutputStream(us);
@@ -327,12 +320,14 @@ public class MainActivity extends SlideBackActivity {
                     //无音乐
                     try {
                         //无音乐
-                        try {
-                            File saver = new File("/sdcard/Android/data/cn.wearbbs.music/cookie.txt");
-                            BufferedReader in = new BufferedReader(new FileReader(saver));
-                            cookie = in.readLine();
-                        } catch (IOException ea) {
-                            ea.printStackTrace();
+                        cookie = UserInfoUtil.getUserInfo(this,"cookie");
+                        if(cookie == null){
+                            Toast.makeText(MainActivity.this, "登录过期，请重新登陆", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
+                            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
+                            startActivity(intent);
+                            finish();
                         }
                         Map maps = new FMApi().FM(cookie);
                         search_list = JSON.parseArray(maps.get("data").toString());
@@ -414,12 +409,12 @@ public class MainActivity extends SlideBackActivity {
     }
 
     public void relogin() throws Exception {
-        File saver = new File("/sdcard/Android/data/cn.wearbbs.music/saver.txt");
+        File saver = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/saver.txt");
         BufferedReader in = new BufferedReader(new FileReader(saver));
         String temp = in.readLine();
         Map maps2 = (Map) JSON.parse(temp);
         String check = maps2.get("first").toString();
-        Map map = new UserApi().Login(check, maps2.get("second").toString());
+        Map map = new UserApi().Login(this,check, maps2.get("second").toString());
         if(map.containsKey("error")){
             //请求失败
             Toast.makeText(MainActivity.this,"登录过期，请重新登录",Toast.LENGTH_SHORT).show();
@@ -432,15 +427,15 @@ public class MainActivity extends SlideBackActivity {
     }
 
     public void menu(View view){
-        File user = new File("/sdcard/Android/data/cn.wearbbs.music/user.txt");
-        File ol = new File("/sdcard/Android/data/cn.wearbbs.music/outline.ini");
+        File user = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/user.txt");
+        File ol = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/outline.ini");
         if(ol.exists()){
             Intent intent = new Intent(MainActivity.this, LocalMusicActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
             startActivity(intent);
         }
-        else if (!(user.exists())){
+        else if (!user.exists() || cookie == null){
             Intent intent = new Intent(MainActivity.this,LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
@@ -595,8 +590,13 @@ public class MainActivity extends SlideBackActivity {
                                 Log.d("MediaPlayer","开始准备音乐");
                                 try {
                                     mediaPlayer.prepare();
-                                } catch (IOException e) {
-                                    MainActivity.this.runOnUiThread(() ->Toast.makeText(MainActivity.this,"音乐加载失败",Toast.LENGTH_SHORT).show());
+                                } catch (Exception e) {
+                                    try {
+                                        Thread.sleep(3000);
+                                        mediaPlayer.prepare();
+                                    } catch (Exception exception) {
+                                        exception.printStackTrace();
+                                    }
                                 }
                                 Log.d("MediaPlayer","音乐准备完成");
                                 prepareDone = true;
@@ -623,7 +623,7 @@ public class MainActivity extends SlideBackActivity {
                                     System.out.println(temp_ni);
                                     coverUrl = new MusicApi().getMusicCover(String.valueOf(temp_ni.get("albumId")));
                                 }
-                                Glide.with(MainActivity.this).load(coverUrl)
+                                Glide.with(getApplicationContext()).load(coverUrl)
                                         .apply(options)
                                         .into((ImageView) findViewById(R.id.imageView11));
                             }
@@ -634,7 +634,7 @@ public class MainActivity extends SlideBackActivity {
                                 temp = "<font color='#2A2B2C'>" + temp_ni.get("name").toString() +  "</font> - " + "<font color='#999999'>" + temp_2.get("name") + "</font>";
                                 RequestOptions options = new RequestOptions().bitmapTransform(new RoundedCorners(20)).placeholder(R.drawable.ic_baseline_photo_size_select_actual_24).error(R.drawable.ic_baseline_photo_size_select_actual_24);
                                 coverUrl = new MusicApi().getMusicCover(String.valueOf(temp_3.get("id")));
-                                Glide.with(MainActivity.this).load(coverUrl)
+                                Glide.with(getApplicationContext()).load(coverUrl)
                                         .apply(options)
                                         .into((ImageView) findViewById(R.id.imageView11));
                             }
@@ -672,11 +672,11 @@ public class MainActivity extends SlideBackActivity {
                     });
                     thread.start();
                     TextView textView = findViewById(R.id.msg);
-                    String temp = (search_list.get(now).toString().replace("/sdcard/Android/data/cn.wearbbs.music/download/music/","")).replace(".mp3","");
+                    String temp = (search_list.get(now).toString().replace("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music/","")).replace(".mp3","");
                     textView.setText(Html.fromHtml(temp));
-                    File file = new File("/sdcard/Android/data/cn.wearbbs.music/download/cover/" + temp + ".jpg");
+                    File file = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/download/cover/" + temp + ".jpg");
                     RequestOptions options = new RequestOptions().bitmapTransform(new RoundedCorners(20)).placeholder(R.drawable.ic_baseline_photo_size_select_actual_24).error(R.drawable.ic_baseline_photo_size_select_actual_24);
-                    Glide.with(MainActivity.this).load(file)
+                    Glide.with(getApplicationContext()).load(file)
                             .apply(options)
                             .into((ImageView) findViewById(R.id.imageView11));
                 } catch (Exception e) {
@@ -697,11 +697,11 @@ public class MainActivity extends SlideBackActivity {
                     });
                     thread.start();
                     TextView textView = findViewById(R.id.msg);
-                    String temp = (search_list.get(now).toString().replace("/sdcard/Android/data/cn.wearbbs.music/download/music/","")).replace(".mp3","");
+                    String temp = (search_list.get(now).toString().replace("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music/","")).replace(".mp3","");
                     textView.setText(Html.fromHtml(temp));
-                    File file = new File("/sdcard/Android/data/cn.wearbbs.music/download/cover/" + temp + ".jpg");
+                    File file = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/download/cover/" + temp + ".jpg");
                     RequestOptions options = new RequestOptions().bitmapTransform(new RoundedCorners(20)).placeholder(R.drawable.ic_baseline_photo_size_select_actual_24).error(R.drawable.ic_baseline_photo_size_select_actual_24);
-                    Glide.with(MainActivity.this).load(file)
+                    Glide.with(getApplicationContext()).load(file)
                             .apply(options)
                             .into((ImageView) findViewById(R.id.imageView11));
                 }
@@ -730,54 +730,20 @@ public class MainActivity extends SlideBackActivity {
             }
         }
         else{
-            Toast.makeText(MainActivity.this,"音乐准备中",Toast.LENGTH_SHORT).show();
+            if(view!=null) Toast.makeText(MainActivity.this,"音乐准备中",Toast.LENGTH_SHORT).show();
         }
     }
     public void right(View view){
         now += 1;
+        prepareDone = false;
         next_music();
         c(null);
     }
     public void left(View view){
         now -= 1;
+        prepareDone = false;
         next_music();
         c(null);
-    }
-    public void wz2gd(View view) throws IOException {
-        if(nc.equals("LRC")){
-            findViewById(R.id.lrcView).setVisibility(View.GONE);
-            TextView tv_lrc = findViewById(R.id.tv_lrc);
-            tv_lrc.setVisibility(View.VISIBLE);
-            StringBuilder tmp = new StringBuilder();
-            BufferedReader in = new BufferedReader(new FileReader(tl));
-            tmp.append("（文字歌词模式 不支持滚动）\n\n");
-            while(true){//使用readLine方法，一次读一行
-                String tmp_line = in.readLine();
-                if(tmp_line!=null){
-                    try {
-
-                        tmp_line = tmp_line.replace("[" + getSubString(tmp_line, "[", "]") + "]", "");
-                        tmp.append(tmp_line + "\n\n");
-                    }
-                    catch (Exception e){
-
-                    }
-                }
-                else{
-                    break;
-                }
-            }
-            in.close();
-            tv_lrc.setText(tmp);
-            tv_lrc.setMovementMethod(ScrollingMovementMethod.getInstance());
-            nc = "TEXT";
-        }
-        else{
-            findViewById(R.id.lrcView).setVisibility(View.VISIBLE);
-            TextView tv_lrc = findViewById(R.id.tv_lrc);
-            tv_lrc.setVisibility(View.GONE);
-            nc = "LRC";
-        }
     }
     /**
      * 取两个文本之间的文本值
@@ -849,24 +815,23 @@ public class MainActivity extends SlideBackActivity {
         LinearLayout ly = findViewById(R.id.ly);
         Play.setVisibility(View.GONE);
         ly.setVisibility(View.VISIBLE);
-        String text;
         if(!type.equals("1")){
             Map maps = new MusicApi().getMusicLrc(cookie,id);
             System.out.println(maps);
             try{
                 lrc_map = (Map) JSON.parse(maps.get("lrc").toString());
-                File dir = new File("/sdcard/Android/data/cn.wearbbs.music/temp/");
+                File dir = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/temp/");
                 dir.mkdirs();
-                tl = new File("/sdcard/Android/data/cn.wearbbs.music/temp/temp.lrc");
+                tl = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/temp/temp.lrc");
                 tl.createNewFile();
                 FileOutputStream outputStream;
                 outputStream = new FileOutputStream(tl);
                 outputStream.write(lrc_map.get("lyric").toString().getBytes());
                 outputStream.close();
             } catch (Exception e) {
-                File dir = new File("/sdcard/Android/data/cn.wearbbs.music/temp/");
+                File dir = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/temp/");
                 dir.mkdirs();
-                tl = new File("/sdcard/Android/data/cn.wearbbs.music/temp/temp.lrc");
+                tl = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/temp/temp.lrc");
                 tl.createNewFile();
                 FileOutputStream outputStream;
                 outputStream = new FileOutputStream(tl);
@@ -879,29 +844,18 @@ public class MainActivity extends SlideBackActivity {
             String temp = ((search_list.get(now)).toString());
             tl = new File((temp.replace("/music/","/lrc/")).replace(".mp3",".lrc"));
         }
-        List<Lrc> lrcs = LrcHelper.parseLrcFromFile(tl);
         lrcView = findViewById(R.id.lrcView);
-        lrcView.setEmptyContent("无歌词");
-        lrcView.setLrcData(lrcs);
-        new Thread(){//创建子线程
-            @Override
-            public void run() {
-                while (true){
-                    try{
-                        if(zt == 0){
-                            lrcView.updateTime(mediaPlayer.getCurrentPosition());
-                        }
-                        else{
-                            break;
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
+        File lrcFile = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/temp/temp.lrc");
+        lrcView.loadLrc(lrcFile);
+        new Thread(()->{
+            while (true){
+                lrcView.updateTime(mediaPlayer.getCurrentPosition());
             }
-        }.start();
-        lrcView.setOnPlayIndicatorLineListener((time, content) -> MusicService.seek((int) time));
-        Toast.makeText(MainActivity.this,"点击标题栏分享歌词",Toast.LENGTH_SHORT).show();
+        }).start();
+        lrcView.setDraggable(true, (view, time) -> {
+            MusicService.seek((int) time);
+            return true;
+        } );
     }
     public void lyr(View view) throws Exception {
         init_lyrics();
@@ -915,7 +869,7 @@ public class MainActivity extends SlideBackActivity {
     public void share_ly(View view) {
         String lrcResult = "";
         try {
-            File lrc = new File("/sdcard/Android/data/cn.wearbbs.music/temp/temp.lrc");
+            File lrc = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/temp/temp.lrc");
             BufferedReader in = new BufferedReader(new FileReader(lrc));
             lrcResult = in.readLine();
         } catch (IOException e) {
@@ -935,7 +889,7 @@ public class MainActivity extends SlideBackActivity {
                 intent.putExtra("pic",coverUrl);
             }
             if(type.equals("1")){
-                String tmp = search_list.get(now).toString().replace("/sdcard/Android/data/cn.wearbbs.music/download/music/","");
+                String tmp = search_list.get(now).toString().replace("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music/","");
                 intent.putExtra("song",tmp);
                 intent.putExtra("pic",coverUrl);
             }

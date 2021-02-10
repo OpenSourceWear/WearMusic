@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FAFAFA"
-    tools:context=".ui.ServerActivity">
+    tools:context=".ui.AddActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
                 android:id="@+id/title2"
                 android:layout_width="match_parent"
                 android:layout_height="33dp"
-                android:background="#2175F3"
+                android:background="@color/colorPrimary"
                 android:gravity="center"
                 android:text="导入音乐"
                 android:textColor="#FFFFFF"
@@ -78,6 +78,13 @@
                         android:textColor="#FFFFFF" />
                 </LinearLayout>
 
+                <TextView
+                    android:id="@+id/textView13"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="*若您使用的是 PC 端，请前往 WearBBS 下载 WearOS 工具箱，使用文件管理跳转导入。" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -91,25 +98,26 @@
                     android:id="@+id/textView9"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:gravity="center"
-                    android:text="\n音乐储存位置：\n/sdcard/Android/data/cn.wearbbs.music/download/music"
-                    android:textColor="#999999" />
+                    android:text="音乐储存位置：\n/storage/emulated/0/Android/data/cn.wearbbs.music/download/music" />
 
                 <TextView
                     android:id="@+id/textView38"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:gravity="center"
-                    android:text="\n歌词储存位置：\n/sdcard/Android/data/cn.wearbbs.music/download/lrc"
-                    android:textColor="#999999" />
+                    android:text="歌词储存位置：\n/storage/emulated/0/Android/data/cn.wearbbs.music/download/lrc" />
 
                 <TextView
                     android:id="@+id/textView41"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="35dp"
                     android:gravity="center"
-                    android:text="\n封面储存位置：\n/sdcard/Android/data/cn.wearbbs.music/download/cover\n"
-                    android:textColor="#999999" />
+                    android:text="封面储存位置：\n/storage/emulated/0/Android/data/cn.wearbbs.music/download/cover" />
             </LinearLayout>
 
             <LinearLayout
@@ -124,20 +132,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
                     android:gravity="center"
-                    android:text="用户名：WearMusic\n密码：WearMusic\n端口：2222\nIP：Unknown\n连接后默认自动进入音乐储存位置"
-                    android:textColor="#999999" />
-
-                <TextView
-                    android:id="@+id/textView52"
-                    android:layout_width="match_parent"
-                    android:layout_height="7dp" />
+                    android:text="用户名：WearMusic\n密码：WearMusic\n端口：2222\nIP：Unknown\n连接后默认自动进入音乐储存位置" />
 
                 <Button
                     android:id="@+id/btn"
                     android:layout_width="74dp"
                     android:layout_height="35dp"
                     android:layout_gravity="center"
+                    android:layout_marginTop="7dp"
                     android:layout_marginBottom="7dp"
                     android:background="@drawable/btn_blue"
                     android:onClick="Start_Stop_Ftp"

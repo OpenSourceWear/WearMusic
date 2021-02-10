@@ -52,10 +52,10 @@ public class ChooseActivity extends SlideBackActivity {
         catch (Exception e){}
         try{
             if(!type.equals("1")){
-                lrc = new File("/sdcard/Android/data/cn.wearbbs.music/temp/temp.lrc");
+                lrc = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/temp/temp.lrc");
             }
             else{
-                lrc = new File("/sdcard/Android/data/cn.wearbbs.music/download/lrc/" + name + ".lrc");
+                lrc = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/download/lrc/" + name + ".lrc");
             }
         } catch (Exception e) {
             finish();

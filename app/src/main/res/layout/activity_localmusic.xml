@@ -9,56 +9,6 @@
     tools:visibility="visible">
 
     <LinearLayout
-        android:id="@+id/loading_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="visible"
-        tools:layout_editor_absoluteY="33dp">
-
-        <TextView
-            android:id="@+id/textView55"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="#FFFFFF"
-            android:textSize="15sp" />
-
-        <TextView
-            android:id="@+id/textView56"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="#FFFFFF"
-            android:textSize="15sp" />
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="63dp" />
-
-        <TextView
-            android:id="@+id/textView47"
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:gravity="center"
-            android:textColor="#FFFFFF" />
-
-        <TextView
-            android:id="@+id/textView49"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="加载中..."
-            android:textColor="#2A2B2C"
-            android:textSize="15sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -67,7 +17,7 @@
             android:id="@+id/textView36"
             android:layout_width="match_parent"
             android:layout_height="33dp"
-            android:background="#2175F3"
+            android:background="@color/colorPrimary"
             android:gravity="center"
             android:text="本地音乐"
             android:textColor="#FFFFFF"

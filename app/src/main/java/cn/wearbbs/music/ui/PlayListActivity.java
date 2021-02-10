@@ -27,6 +27,7 @@ import java.util.Map;
 
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.api.PlayListApi;
+import cn.wearbbs.music.util.UserInfoUtil;
 
 public class PlayListActivity extends SlideBackActivity {
     AlertDialog alertDialog;
@@ -50,7 +51,7 @@ public class PlayListActivity extends SlideBackActivity {
         list_gds.addFooterView(tv,null,false);
         Thread thread = new Thread(()->{
             try {
-                File user = new File("/sdcard/Android/data/cn.wearbbs.music/user.txt");
+                File user = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/user.txt");
                 BufferedReader in = new BufferedReader(new FileReader(user));
                 String temp = in.readLine();
                 Map user_id_temp = (Map)JSON.parse(temp);
@@ -94,13 +95,7 @@ public class PlayListActivity extends SlideBackActivity {
             alertDialog = new AlertDialog.Builder(PlayListActivity.this)
                     .setMessage("要删除该歌单吗？")
                     .setPositiveButton("确定", (dialogInterface, i12) -> {
-                        try {
-                            File saver = new File("/sdcard/Android/data/cn.wearbbs.music/cookie.txt");
-                            BufferedReader in1 = new BufferedReader(new FileReader(saver));
-                            cookie = in1.readLine();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        cookie = UserInfoUtil.getUserInfo(this,"cookie");
                         try {
                             new PlayListApi().deletePlayList(((Map)items.get(im)).get("id").toString(),cookie);
                         } catch (InterruptedException e) {

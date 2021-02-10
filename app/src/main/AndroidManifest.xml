@@ -39,7 +39,7 @@
         <activity android:name=".ui.FeedBackActivity" />
         <activity android:name=".ui.ContactActivity" />
         <activity android:name=".ui.UpdateActivity" />
-        <activity android:name=".ui.ServerActivity" />
+        <activity android:name=".ui.AddActivity" />
         <activity android:name=".ui.ReplyActivity" />
         <activity android:name=".ui.SongListActivity" />
         <activity android:name=".ui.PlayListActivity" />
