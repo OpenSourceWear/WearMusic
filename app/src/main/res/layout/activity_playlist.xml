@@ -8,7 +8,7 @@
     tools:context=".ui.PlayListActivity">
 
     <LinearLayout
-        android:id="@+id/loading_layout"
+        android:id="@+id/ll_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
@@ -18,7 +18,7 @@
         tools:layout_editor_absoluteY="33dp">
 
         <ProgressBar
-            android:id="@+id/progressBar"
+            android:id="@+id/pb_loading"
             style="?android:attr/progressBarStyle"
             android:layout_width="match_parent"
             android:layout_height="63dp" />
@@ -31,7 +31,7 @@
             android:textColor="#FFFFFF" />
 
         <TextView
-            android:id="@+id/textView49"
+            android:id="@+id/tv_loading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -41,22 +41,23 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView36"
+            android:id="@+id/ll_title"
             android:layout_width="match_parent"
             android:layout_height="33dp"
             android:background="@color/colorPrimary"
             android:gravity="center"
-            android:text="我的歌单"
+            android:text="@string/myPlayList"
             android:textColor="#FFFFFF"
             android:textSize="13sp" />
 
         <ListView
-            android:id="@+id/list_gds"
+            android:id="@+id/lv_playlist"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="#FAFAFA"

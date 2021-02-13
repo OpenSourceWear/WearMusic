@@ -7,10 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
@@ -34,12 +31,12 @@ public class SelfActivity extends SlideBackActivity {
         avatarUrl = intent.getStringExtra("avatarUrl");
         String userId = intent.getStringExtra("userId");
         System.out.println(avatarUrl);
-        ImageView gi = findViewById(R.id.gi);
+        ImageView gi = findViewById(R.id.iv_avatar);
         RequestOptions options = new RequestOptions().circleCropTransform().placeholder(R.drawable.ic_baseline_supervised_user_circle_24).error(R.drawable.ic_baseline_error_24);
         Glide.with(SelfActivity.this).load(avatarUrl).apply(options).into(gi);
         TextView text = findViewById(R.id.text);
         text.setText(userName);
-        TextView text3 = findViewById(R.id.text3);
+        TextView text3 = findViewById(R.id.tv_id);
         text3.setText("ID：" + userId);
     }
     public void menu(View view){

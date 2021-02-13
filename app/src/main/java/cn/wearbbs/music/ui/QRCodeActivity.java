@@ -1,7 +1,5 @@
 package cn.wearbbs.music.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -28,14 +26,14 @@ public class QRCodeActivity extends SlideBackActivity {
         if(type.equals("0")){
             String id = intent.getStringExtra("id");
             Bitmap temp = QRCodeUtil.createQRCodeBitmap("https://music.163.com/#/song?id=" + id,130,130);
-            ImageView QRCode_image = findViewById(R.id.QRCode_image);
+            ImageView QRCode_image = findViewById(R.id.iv_qrcode);
             QRCode_image.setImageBitmap(temp);
         }
         else{
             Toast.makeText(QRCodeActivity.this,"请耐心等待，若歌词较长，可能会加载失败",Toast.LENGTH_SHORT).show();
             String ly = intent.getStringExtra("ly");
             Bitmap temp = QRCodeUtil.createQRCodeBitmap(ly,130,130);
-            ImageView QRCode_image = findViewById(R.id.QRCode_image);
+            ImageView QRCode_image = findViewById(R.id.iv_qrcode);
             QRCode_image.setImageBitmap(temp);
         }
     }

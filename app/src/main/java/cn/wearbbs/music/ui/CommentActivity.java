@@ -3,47 +3,25 @@ package cn.wearbbs.music.ui;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.fastjson.JSON;
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
 
-import org.w3c.dom.Comment;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.adapter.CommentAdapter;
 import cn.wearbbs.music.api.CommentApi;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+
 public class CommentActivity extends SlideBackActivity {
     List arr_re = new ArrayList();
     List arr_name;
@@ -53,7 +31,7 @@ public class CommentActivity extends SlideBackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
-        findViewById(R.id.loading_layout).setVisibility(View.VISIBLE);
+        findViewById(R.id.ll_loading).setVisibility(View.VISIBLE);
         if (!AppCenter.isConfigured()) {
             AppCenter.start(getApplication(), "9250a12d-0fa9-4292-99fc-9d09dcc32012", Analytics.class, Crashes.class);
         }
@@ -84,12 +62,12 @@ public class CommentActivity extends SlideBackActivity {
                 CommentActivity.this.runOnUiThread(() -> Toast.makeText(this,"加载失败",Toast.LENGTH_SHORT).show());
                 e.printStackTrace();
             }
-            CommentActivity.this.runOnUiThread(() -> findViewById(R.id.loading_layout).setVisibility(View.GONE));
+            CommentActivity.this.runOnUiThread(() -> findViewById(R.id.ll_loading).setVisibility(View.GONE));
         });
         thread.start();
     }
     public void init_message(Map maps) {
-        ListView messages = findViewById(R.id.messages);
+        ListView messages = findViewById(R.id.lv_comments);
         if (maps.get("code").toString().equals("200")){
             List Hot = JSON.parseArray(maps.get("hotComments").toString());
             List id_list = new ArrayList();

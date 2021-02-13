@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,8 +12,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
@@ -30,7 +27,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,25 +69,25 @@ public class ConsoleActivity extends SlideBackActivity {
             mvid = intent.getStringExtra("mvid");
             coverurl = intent.getStringExtra("coverUrl");
             comment = intent.getStringExtra("comment");
-            LinearLayout l2 = findViewById(R.id.l2);
-            l2.setVisibility(View.VISIBLE);
-            LinearLayout l3 = findViewById(R.id.l3);
+            LinearLayout ll_second = findViewById(R.id.ll_second);
+            ll_second.setVisibility(View.VISIBLE);
+            LinearLayout l3 = findViewById(R.id.ll_third);
             l3.setVisibility(View.VISIBLE);
             if(mvid.equals("")){
-                l2.setVisibility(View.GONE);
+                ll_second.setVisibility(View.GONE);
                 l3.setVisibility(View.GONE);
             }
             if(comment!=null){
                 if(comment.equals("true")){
-                    l2.setVisibility(View.VISIBLE);
+                    ll_second.setVisibility(View.VISIBLE);
                     l3.setVisibility(View.VISIBLE);
                 }
             }
         }
         if(type.equals("1")){
-            LinearLayout l2 = findViewById(R.id.l2);
+            LinearLayout l2 = findViewById(R.id.ll_second);
             l2.setVisibility(View.GONE);
-            LinearLayout l3 = findViewById(R.id.l3);
+            LinearLayout l3 = findViewById(R.id.ll_third);
             l3.setVisibility(View.GONE);
         }
         Thread thread = new Thread(()->{
@@ -109,7 +105,7 @@ public class ConsoleActivity extends SlideBackActivity {
                         is_like = true;
                     }
                 }
-                ImageView like_view = findViewById(R.id.like_view);
+                ImageView like_view = findViewById(R.id.iv_like);
                 if(is_like){
                     like_view.setImageResource(R.drawable.ic_baseline_favorite_24);
                 }
@@ -226,7 +222,7 @@ public class ConsoleActivity extends SlideBackActivity {
                 intent.putExtra("url", data.get("url").toString());
                 intent.putExtra("url_backup", data.get("url").toString());
                 intent.putExtra("title", name);
-                intent.putExtra("identity_name", getString(R.string.app_name));
+                intent.putExtra("identity_name", getString(R.string.appName));
                 startActivityForResult(intent, 0);
             }
             catch(Exception e)
@@ -240,7 +236,7 @@ public class ConsoleActivity extends SlideBackActivity {
                     intent.putExtra("url", data.get("url").toString());
                     intent.putExtra("url_backup", data.get("url").toString());
                     intent.putExtra("title", name);
-                    intent.putExtra("identity_name", getString(R.string.app_name));
+                    intent.putExtra("identity_name", getString(R.string.appName));
                     startActivityForResult(intent, 0);
                 }
                 catch(Exception ee)
@@ -299,7 +295,7 @@ public class ConsoleActivity extends SlideBackActivity {
         }
     }
     public void like(View view) throws Exception {
-        ImageView like_view = findViewById(R.id.like_view);
+        ImageView like_view = findViewById(R.id.iv_like);
         if(!is_like){
             Map maps = new MusicApi().likeMusic(id,cookie);
             if(maps.get("code").toString().equals("200")){

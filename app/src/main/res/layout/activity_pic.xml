@@ -2,12 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     tools:context=".ui.PicActivity">
 
     <me.panpf.sketch.SketchImageView
-        android:id="@+id/image_main"
+        android:id="@+id/iv_pic"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

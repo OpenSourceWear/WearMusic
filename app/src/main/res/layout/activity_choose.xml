@@ -1,38 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:visibility="visible"
     android:background="#FAFAFA"
-    tools:context=".ui.ChooseActivity">
+    tools:context=".ui.ChooseActivity"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:id="@+id/list_l"
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:onClick="share"
+        android:text="@string/chooseLyrics"
+        android:textColor="#FFFFFF"
+        android:textSize="13sp" />
+
+    <ListView
+        android:id="@+id/lv_choose"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="visible">
+        android:divider="#FAFAFA"
+        android:dividerHeight="1dp">
 
-        <TextView
-            android:id="@+id/textView34"
-            android:layout_width="match_parent"
-            android:layout_height="33dp"
-            android:background="@color/colorPrimary"
-            android:gravity="center"
-            android:onClick="share"
-            android:text="选择歌词"
-            android:textColor="#FFFFFF"
-            android:textSize="13sp" />
-
-        <ListView
-            android:id="@+id/lrcs"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="#FAFAFA"
-            android:dividerHeight="1dp">
-
-        </ListView>
-    </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </ListView>
+</LinearLayout>

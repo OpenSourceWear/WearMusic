@@ -21,10 +21,6 @@ import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,16 +46,16 @@ public class SearchActivity extends SlideBackActivity {
         if (!AppCenter.isConfigured()) {
             AppCenter.start(getApplication(), "9250a12d-0fa9-4292-99fc-9d09dcc32012", Analytics.class, Crashes.class);
         }
-        LinearLayout list_layout = findViewById(R.id.list_layout);
-        LinearLayout null_layout = findViewById(R.id.null_layout);
-        LinearLayout zs = findViewById(R.id.zs);
-        LinearLayout hot_layout = findViewById(R.id.hot_layout);
+        LinearLayout list_layout = findViewById(R.id.ll_list);
+        LinearLayout null_layout = findViewById(R.id.ll_noMusic);
+        LinearLayout zs = findViewById(R.id.ll_message);
+        LinearLayout hot_layout = findViewById(R.id.ll_hot_main);
         list_layout.setVisibility(View.GONE);
         null_layout.setVisibility(View.GONE);
-        editText = findViewById(R.id.editText);
+        editText = findViewById(R.id.et_reply);
         hot_layout.setVisibility(View.VISIBLE);
         zs.setVisibility(View.GONE);
-        findViewById(R.id.loading_layout).setVisibility(View.GONE);
+        findViewById(R.id.ll_loading).setVisibility(View.GONE);
         String temp = "[]";
         arr = JSON.parseArray(temp);
         cookie = UserInfoUtil.getUserInfo(this,"cookie");
@@ -97,7 +93,7 @@ public class SearchActivity extends SlideBackActivity {
                     }
                 });
                 search_page_flowlayout.setOnTagClickListener((view, position, parent) -> {
-                    EditText editText = findViewById(R.id.editText);
+                    EditText editText = findViewById(R.id.et_reply);
                     editText.setText(hot_list[position]);
                     search(null);
                     return true;
@@ -120,11 +116,14 @@ public class SearchActivity extends SlideBackActivity {
     LinearLayout zs;
     LinearLayout list_layout;
     public void search(View view) {
+        if(editText.getText().toString().contains("少爷")){
+            ((TextView)findViewById(R.id.tv_loading)).setText("欢迎洛府人 (*/ω＼*)");
+        }
         t = editText.getText().toString();
-        list_layout = findViewById(R.id.list_layout);
-        LinearLayout null_layout = findViewById(R.id.null_layout);
-        LinearLayout hot_layout = findViewById(R.id.hot_layout);
-        zs = findViewById(R.id.zs);
+        list_layout = findViewById(R.id.ll_list);
+        LinearLayout null_layout = findViewById(R.id.ll_noMusic);
+        LinearLayout hot_layout = findViewById(R.id.ll_hot_main);
+        zs = findViewById(R.id.ll_message);
         list_layout.setVisibility(View.VISIBLE);
         null_layout.setVisibility(View.GONE);
         hot_layout.setVisibility(View.GONE);
@@ -135,7 +134,7 @@ public class SearchActivity extends SlideBackActivity {
             able=false;
         }
         else{
-            findViewById(R.id.loading_layout).setVisibility(View.VISIBLE);
+            findViewById(R.id.ll_loading).setVisibility(View.VISIBLE);
             list_layout.setVisibility(View.GONE);
         }
         Thread thread = new Thread(()->{
@@ -148,9 +147,9 @@ public class SearchActivity extends SlideBackActivity {
             }
             SearchActivity.this.runOnUiThread(()-> {
                 changeUI(mapd);
-                zs = findViewById(R.id.zs);
-                list_layout = findViewById(R.id.list_layout);
+                zs = findViewById(R.id.ll_message);
                 zs.setVisibility(View.GONE);
+                list_layout = findViewById(R.id.ll_list);
                 list_layout.setVisibility(View.VISIBLE);
             });
         });
@@ -158,9 +157,9 @@ public class SearchActivity extends SlideBackActivity {
 
     }
     public void changeUI(Map mapd){
-        LinearLayout list_layout = findViewById(R.id.list_layout);
-        LinearLayout null_layout = findViewById(R.id.null_layout);
-        LinearLayout hot_layout = findViewById(R.id.hot_layout);
+        LinearLayout list_layout = findViewById(R.id.ll_list);
+        LinearLayout null_layout = findViewById(R.id.ll_noMusic);
+        LinearLayout hot_layout = findViewById(R.id.ll_hot_main);
         list_layout.setVisibility(View.VISIBLE);
         try {
             Map result = (Map) JSON.parse(mapd.get("result").toString());
@@ -195,7 +194,7 @@ public class SearchActivity extends SlideBackActivity {
             hot_layout.setVisibility(View.GONE);
             e.printStackTrace();
         }
-        findViewById(R.id.loading_layout).setVisibility(View.GONE);
+        findViewById(R.id.ll_loading).setVisibility(View.GONE);
     }
     public void refresh_list(final List search_list, final String idl, List idi) {
         SearchAdapter adapter = new SearchAdapter(search_list,idl,idi,tmp,this);

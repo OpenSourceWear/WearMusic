@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cl"
+    android:id="@+id/cl_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FAFAFA"
@@ -12,7 +12,7 @@
     tools:context=".ui.SearchActivity">
 
     <LinearLayout
-        android:id="@+id/loading_layout"
+        android:id="@+id/ll_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
@@ -21,39 +21,18 @@
         android:visibility="gone"
         tools:layout_editor_absoluteY="33dp">
 
-        <TextView
-            android:id="@+id/textView55"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="#FFFFFF"
-            android:textSize="15sp" />
-
-        <TextView
-            android:id="@+id/textView56"
-            android:layout_width="match_parent"
-            android:layout_height="9dp"
-            android:gravity="center"
-            android:textColor="#FFFFFF"
-            android:textSize="15sp" />
-
         <ProgressBar
-            android:id="@+id/progressBar"
+            android:id="@+id/pb_loading"
             style="?android:attr/progressBarStyle"
             android:layout_width="match_parent"
-            android:layout_height="63dp" />
+            android:layout_height="63dp"
+            android:layout_marginTop="10dp" />
 
         <TextView
-            android:id="@+id/textView47"
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:gravity="center"
-            android:textColor="#FFFFFF" />
-
-        <TextView
-            android:id="@+id/textView49"
+            android:id="@+id/tv_loading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:gravity="center"
             android:text="加载中..."
             android:textColor="#2A2B2C"
@@ -62,49 +41,45 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:layout_editor_absoluteX="0dp"
 
+        android:visibility="visible"
+        tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp">
 
         <TextView
-            android:id="@+id/tv"
+            android:id="@+id/tv_title"
             android:layout_width="match_parent"
             android:layout_height="33dp"
             android:background="@color/colorPrimary"
             android:gravity="center"
             android:onClick="menu"
-            android:text="搜索"
+            android:text="@string/searchMusic"
             android:textColor="#FFFFFF"
             android:textSize="13sp" />
 
         <LinearLayout
-            android:id="@+id/ly"
+            android:id="@+id/ly_search"
             android:layout_width="match_parent"
             android:layout_height="28dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="10dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
             <LinearLayout
                 android:layout_width="120dp"
                 android:layout_height="28dp"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="30dp"
                 android:layout_marginRight="2dp"
                 android:layout_weight="1"
                 android:background="@drawable/et_blue"
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/editText"
+                    android:id="@+id/et_reply"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
@@ -114,7 +89,7 @@
                     android:layout_marginBottom="4dp"
                     android:background="#FAFAFA"
                     android:ems="10"
-                    android:hint=" 搜索内容..."
+                    android:hint="音乐名称..."
                     android:inputType="textPersonName"
                     android:textColor="#2A2B2C"
                     android:textColorHint="#999999"
@@ -122,24 +97,18 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/iv_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="30dp"
                 android:layout_weight="1"
                 android:onClick="search"
                 app:srcCompat="@drawable/ic_baseline_search_24" />
 
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="5dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/zs"
+            android:id="@+id/ll_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -149,13 +118,13 @@
             tools:layout_editor_absoluteY="33dp">
 
             <ImageView
-                android:id="@+id/imageView18"
+                android:id="@+id/iv_message"
                 android:layout_width="match_parent"
                 android:layout_height="79dp"
                 app:srcCompat="@drawable/ic_baseline_family_restroom_24" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/tv_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -164,26 +133,28 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/hot_layout"
+            android:id="@+id/ll_hot_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:visibility="visible">
 
             <TextView
-                android:id="@+id/textView69"
+                android:id="@+id/tv_hot"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:text="热搜榜"
+                android:text="@string/hot"
                 android:textSize="12sp" />
 
             <ScrollView
+                android:id="@+id/sv_hot"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <LinearLayout
+                    android:id="@+id/ll_hot"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -198,12 +169,12 @@
                     </com.zhy.view.flowlayout.TagFlowLayout>
 
                     <TextView
-                        android:id="@+id/textView8"
+                        android:id="@+id/tv_nomore"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="没有更多了\n\n"
+                        android:text="@string/noMore"
                         android:textColor="#999999"
                         android:textSize="12sp" />
 
@@ -213,7 +184,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/list_layout"
+            android:id="@+id/ll_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@drawable/middle_ss"
@@ -232,42 +203,26 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/null_layout"
+            android:id="@+id/ll_noMusic"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:visibility="gone">
 
-            <TextView
-                android:id="@+id/textView17"
-                android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:text="" />
-
-            <TextView
-                android:id="@+id/textView19"
-                android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:text="" />
-
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/iv_noMusic"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 app:srcCompat="@drawable/ic_baseline_assignment_24" />
 
             <TextView
-                android:id="@+id/textView20"
-                android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:text="" />
-
-            <TextView
-                android:id="@+id/textView18"
+                android:id="@+id/tv_noMusic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="5dp"
                 android:gravity="center"
                 android:text="暂无音乐"
                 android:textColor="#999999" />

@@ -1,6 +1,5 @@
 package cn.wearbbs.music.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,12 +10,9 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.fastjson.JSON;
 import com.microsoft.appcenter.AppCenter;
@@ -26,27 +22,12 @@ import com.microsoft.appcenter.crashes.Crashes;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.api.QRCodeApi;
 import cn.wearbbs.music.api.UserApi;
-import cn.wearbbs.music.util.NetWorkUtil;
 import cn.wearbbs.music.util.UserInfoUtil;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class LoginActivity extends SlideBackActivity {
     int type = 0;
@@ -66,14 +47,14 @@ public class LoginActivity extends SlideBackActivity {
     }
     public void zh(View view){
         flag = false;
-        findViewById(R.id.zh).setVisibility(View.VISIBLE);
-        findViewById(R.id.qr).setVisibility(View.GONE);
+        findViewById(R.id.sv_pn).setVisibility(View.VISIBLE);
+        findViewById(R.id.sv_qr).setVisibility(View.GONE);
     }
     public void qr(View view){
         flag = true;
         refreshQRCode();
-        findViewById(R.id.qr).setVisibility(View.VISIBLE);
-        findViewById(R.id.zh).setVisibility(View.GONE);
+        findViewById(R.id.sv_qr).setVisibility(View.VISIBLE);
+        findViewById(R.id.sv_pn).setVisibility(View.GONE);
     }
     String key;
     public void refreshQRCode(){
@@ -176,11 +157,11 @@ public class LoginActivity extends SlideBackActivity {
         tmp.start();
     }
     public void onClick(View view) throws IOException {
-        EditText pe = findViewById(R.id.pe);
-        EditText pw = findViewById(R.id.pw);
+        EditText pe = findViewById(R.id.et_first);
+        EditText pw = findViewById(R.id.et_second);
         ImageView iv_eye = findViewById(R.id.iv_eye);
         switch(view.getId()){
-            case R.id.button:
+            case R.id.btn_login:
                 Map map = new UserApi().Login(this,pe.getText().toString(), pw.getText().toString());
                 if(map.containsKey("error")){
                     Toast.makeText(this,map.get("error").toString(),Toast.LENGTH_SHORT).show();

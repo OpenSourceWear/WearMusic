@@ -13,7 +13,6 @@ import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
 import com.xtc.shareapi.share.communication.SendMessageToXTC;
-import com.xtc.shareapi.share.interfaces.IXTCCallback;
 import com.xtc.shareapi.share.manager.ShareMessageManager;
 import com.xtc.shareapi.share.shareobject.XTCShareMessage;
 import com.xtc.shareapi.share.shareobject.XTCTextObject;
@@ -83,7 +82,7 @@ public class ChooseActivity extends SlideBackActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ListView lrcs = findViewById(R.id.lrcs);
+        ListView lrcs = findViewById(R.id.lv_choose);
         adapter = new ChooseAdapter(arr,this);
         lrcs.setAdapter(adapter);
         Toast.makeText(this,"点击标题栏分享歌词",Toast.LENGTH_SHORT).show();

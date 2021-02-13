@@ -12,12 +12,12 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView36"
+            android:id="@+id/ll_title"
             android:layout_width="match_parent"
             android:layout_height="33dp"
             android:background="@color/colorPrimary"
             android:gravity="center"
-            android:text="音乐云盘"
+            android:text="@string/musicCloud"
             android:textColor="#FFFFFF"
             android:textSize="13sp" />
 
@@ -33,7 +33,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/loading_layout"
+        android:id="@+id/ll_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
@@ -43,7 +43,7 @@
         tools:layout_editor_absoluteY="33dp">
 
         <ProgressBar
-            android:id="@+id/progressBar"
+            android:id="@+id/pb_loading"
             style="?android:attr/progressBarStyle"
             android:layout_width="match_parent"
             android:layout_height="63dp" />
@@ -56,17 +56,17 @@
             android:textColor="#FFFFFF" />
 
         <TextView
-            android:id="@+id/textView49"
+            android:id="@+id/tv_loading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="加载中..."
+            android:text="@string/loading"
             android:textColor="#2A2B2C"
             android:textSize="15sp" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/null_layout"
+        android:id="@+id/ll_noMusic"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
@@ -88,7 +88,7 @@
             android:text="" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/iv_noMusic"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_gravity="center"
@@ -101,14 +101,14 @@
             android:text="" />
 
         <TextView
-            android:id="@+id/textView18"
+            android:id="@+id/tv_noMusic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:gravity="center"
-            android:text="无音乐，请前往PC或手机端上传"
+            android:text="@string/noCloudMusic"
             android:textColor="#999999" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

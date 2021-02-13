@@ -1,14 +1,10 @@
 package cn.wearbbs.music.ui;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Html;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,10 +15,6 @@ import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,11 +32,11 @@ public class SongListActivity extends SlideBackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_songlist);
-        findViewById(R.id.loading_layout).setVisibility(View.VISIBLE);
+        findViewById(R.id.ll_loading).setVisibility(View.VISIBLE);
         if (!AppCenter.isConfigured()) {
             AppCenter.start(getApplication(), "9250a12d-0fa9-4292-99fc-9d09dcc32012", Analytics.class, Crashes.class);
         }
-        ListView list_gd  = findViewById(R.id.list_gd);
+        ListView list_gd  = findViewById(R.id.lv_songlist);
         TextView tv = new TextView(this);
         tv.setText("没有更多了\n\n");
         tv.setTextColor(Color.parseColor("#999999"));
@@ -71,7 +63,7 @@ public class SongListActivity extends SlideBackActivity {
                 SongListActivity.this.runOnUiThread(()-> Toast.makeText(SongListActivity.this,"获取失败",Toast.LENGTH_SHORT).show());
                 e.printStackTrace();
             }
-            SongListActivity.this.runOnUiThread(()-> findViewById(R.id.loading_layout).setVisibility(View.GONE));
+            SongListActivity.this.runOnUiThread(()-> findViewById(R.id.ll_loading).setVisibility(View.GONE));
         });
         thread.start();
     }
@@ -79,7 +71,7 @@ public class SongListActivity extends SlideBackActivity {
     public static String ids;
     public void init_view(Map maps) throws InterruptedException {
         List mvids = new ArrayList();
-        ListView list_gd  = findViewById(R.id.list_gd);
+        ListView list_gd  = findViewById(R.id.lv_songlist);
         Map play_list = (Map) JSON.parse(maps.get("playlist").toString());
         List tracks = JSON.parseArray(play_list.get("trackIds").toString());
         List names = new ArrayList();
@@ -137,12 +129,12 @@ public class SongListActivity extends SlideBackActivity {
         DefaultAdapter adapter = new DefaultAdapter(JSON.toJSONString(mvids),jsonString,search_list.size(),JSON.toJSONString(names),this,0);
         list_gd.setAdapter(adapter);
         if(names.size() == 0){
-            LinearLayout null_layout = findViewById(R.id.null_layout);
+            LinearLayout null_layout = findViewById(R.id.ll_noMusic);
             null_layout.setVisibility(View.VISIBLE);
             list_gd.setVisibility(View.GONE);
         }
         else{
-            LinearLayout null_layout = findViewById(R.id.null_layout);
+            LinearLayout null_layout = findViewById(R.id.ll_noMusic);
             null_layout.setVisibility(View.GONE);
             list_gd.setVisibility(View.VISIBLE);
         }

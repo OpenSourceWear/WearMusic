@@ -19,6 +19,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -123,9 +125,9 @@ public class MainActivity extends SlideBackActivity {
                     Intent get_music = getIntent();
                     mvids = JSON.parseArray(get_music.getStringExtra("mvids"));
                     String start = get_music.getStringExtra("start");
-                    LinearLayout Play = findViewById(R.id.Play);
-                    LinearLayout ly = findViewById(R.id.ly);
-                    Play.setVisibility(View.VISIBLE);
+                    ScrollView sv_main = findViewById(R.id.sv_main);
+                    LinearLayout ly = findViewById(R.id.ly_search);
+                    sv_main.setVisibility(View.VISIBLE);
                     ly.setVisibility(View.GONE);
                     if (!(start == null)) {
                         search_list = JSONObject.parseArray(get_music.getStringExtra("list"));
@@ -160,9 +162,9 @@ public class MainActivity extends SlideBackActivity {
                                 Intent get_music = getIntent();
                                 mvids = JSON.parseArray(get_music.getStringExtra("mvids"));
                                 String start = get_music.getStringExtra("start");
-                                LinearLayout Play = findViewById(R.id.Play);
-                                LinearLayout ly = findViewById(R.id.ly);
-                                Play.setVisibility(View.VISIBLE);
+                                ScrollView sv_main = findViewById(R.id.sv_main);
+                                LinearLayout ly = findViewById(R.id.ly_search);
+                                sv_main.setVisibility(View.VISIBLE);
                                 ly.setVisibility(View.GONE);
                                 File user = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/user.txt");
                                 cookie = UserInfoUtil.getUserInfo(this,"cookie");
@@ -230,6 +232,20 @@ public class MainActivity extends SlideBackActivity {
                                             interruptedException.printStackTrace();
                                         }
                                         search_list = JSON.parseArray(maps.get("data").toString());
+                                        if(search_list.size() == 0){
+                                            maps = new FMApi().FM(cookie);
+                                            search_list = JSON.parseArray(maps.get("data").toString());
+                                            if(search_list.size() == 0){
+                                                Log.d("Main","登陆过期");
+                                                Toast.makeText(MainActivity.this, "登录过期，请重新登陆", Toast.LENGTH_SHORT).show();
+                                                Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                        }
+
                                         now = 0;
                                         type = "3";
                                         if (!MainActivity.this.isFinishing()) {
@@ -238,8 +254,8 @@ public class MainActivity extends SlideBackActivity {
                                             TextView msg = findViewById(R.id.msg);
                                             msg.setText("加载中");
                                         }
-                                        ImageView imageView = findViewById(R.id.btn);
-                                        imageView.setImageResource(R.drawable.ic_baseline_play_circle_outline_24);
+                                        ImageView imageView = findViewById(R.id.btn_open);
+                                        imageView.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
                                     } catch (Exception ea) {
                                         if (!MainActivity.this.isFinishing()) {
                                             Toast.makeText(MainActivity.this, "加载失败", Toast.LENGTH_SHORT).show();
@@ -266,9 +282,9 @@ public class MainActivity extends SlideBackActivity {
                 Intent get_music = getIntent();
                 mvids = JSON.parseArray(get_music.getStringExtra("mvids"));
                 String start = get_music.getStringExtra("start");
-                LinearLayout Play = findViewById(R.id.Play);
-                LinearLayout ly = findViewById(R.id.ly);
-                Play.setVisibility(View.VISIBLE);
+                ScrollView sv_main = findViewById(R.id.sv_main);
+                LinearLayout ly = findViewById(R.id.ly_search);
+                sv_main.setVisibility(View.VISIBLE);
                 ly.setVisibility(View.GONE);
                 File user = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/user.txt");
                 cookie = UserInfoUtil.getUserInfo(this,"cookie");
@@ -340,8 +356,8 @@ public class MainActivity extends SlideBackActivity {
                             TextView msg = findViewById(R.id.msg);
                             msg.setText("加载中");
                         }
-                        ImageView imageView = findViewById(R.id.btn);
-                        imageView.setImageResource(R.drawable.ic_baseline_play_circle_outline_24);
+                        ImageView imageView = findViewById(R.id.btn_open);
+                        imageView.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
                     } catch (Exception ea) {
                         if(!MainActivity.this.isFinishing()){
                             Toast.makeText(MainActivity.this,"加载失败",Toast.LENGTH_SHORT).show();
@@ -384,13 +400,7 @@ public class MainActivity extends SlideBackActivity {
         @Override
         public void onClick() {
             if(mediaPlayer!=null){
-                if(mediaPlayer.isPlaying()){
-                    mediaPlayer.pause();
-                }
-                else{
-                    mediaPlayer.start();
-                }
-
+                c(null);
             }
         }
         @Override
@@ -400,10 +410,11 @@ public class MainActivity extends SlideBackActivity {
             }
         }
     };
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         if(will_next){
-            next_music();
+            nextMusic();
             will_next=false;
         }
     }
@@ -468,7 +479,7 @@ public class MainActivity extends SlideBackActivity {
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnCompletionListener(mediaPlayer -> {
             now += 1;
-            next_music();
+            nextMusic();
         });
         mediaPlayer.setOnErrorListener((mediaPlayer, i, i1) -> {
             TextView textView = findViewById(R.id.msg);
@@ -504,8 +515,8 @@ public class MainActivity extends SlideBackActivity {
                     // 暂时失去audio focus，但是很快就会重新获得，在此状态应该暂停所有音频播放，但是不能清除资源
                     if (mediaPlayer.isPlaying())
                         mediaPlayer.pause();
-                        ImageView imageView = findViewById(R.id.btn);
-                        imageView.setImageResource(R.drawable.ic_baseline_play_circle_outline_24);
+                        ImageView imageView = findViewById(R.id.btn_open);
+                        imageView.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                     // 暂时失去 audio focus，但是允许持续播放音频(以很小的声音)，不需要完全停止播放。
@@ -534,16 +545,14 @@ public class MainActivity extends SlideBackActivity {
     public static MediaPlayer getMediaPlayer(){
         return mediaPlayer;
     }
-    public void next_music(){
-        Intent intent=new Intent(this, MusicService.class);
-        startService(intent);
+    public void nextMusic(){
         zt = 1;
-        LinearLayout Play = findViewById(R.id.Play);
-        LinearLayout ly = findViewById(R.id.ly);
-        Play.setVisibility(View.VISIBLE);
+        ScrollView sv_main = findViewById(R.id.sv_main);
+        LinearLayout ly = findViewById(R.id.ly_search);
+        sv_main.setVisibility(View.VISIBLE);
         ly.setVisibility(View.GONE);
-        ImageView imageView = findViewById(R.id.btn);
-        imageView.setImageResource(R.drawable.ic_baseline_pause_circle_outline_24);
+        ImageView imageView = findViewById(R.id.btn_open);
+        imageView.setImageResource(R.drawable.ic_baseline_pause_circle_filled_24);
         //有音乐
         try {
             if (mediaPlayer == null){
@@ -606,8 +615,8 @@ public class MainActivity extends SlideBackActivity {
                                 }
                                 else{
                                     playing = false;
-                                    ImageView imageViewBtn = findViewById(R.id.btn);
-                                    imageViewBtn.setImageResource(R.drawable.ic_baseline_play_circle_outline_24);
+                                    ImageView imageViewBtn = findViewById(R.id.btn_open);
+                                    imageViewBtn.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
                                 }
                             });
                             thread.start();
@@ -651,7 +660,7 @@ public class MainActivity extends SlideBackActivity {
                 else{
                     Toast.makeText(MainActivity.this,"该音乐暂无版权",Toast.LENGTH_SHORT).show();
                     now += 1;
-                    next_music();
+                    nextMusic();
                 }
             }
             else{
@@ -706,6 +715,22 @@ public class MainActivity extends SlideBackActivity {
                             .into((ImageView) findViewById(R.id.imageView11));
                 }
             }
+            Intent intent=new Intent(this, MusicService.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startService(intent);
+            Thread pbThread = new Thread(()->{
+                ProgressBar pb_main = findViewById(R.id.pb_main);
+                ProgressBar pb_lyrics = findViewById(R.id.pb_lyrics);
+                while (true){
+                    if(prepareDone){
+                        pb_main.setMax(mediaPlayer.getDuration());
+                        pb_main.setProgress(mediaPlayer.getCurrentPosition());
+                        pb_lyrics.setMax(mediaPlayer.getDuration());
+                        pb_lyrics.setProgress(mediaPlayer.getCurrentPosition());
+                    }
+                }
+            });
+            pbThread.start();
         } catch (Exception e) {
             //播放出错
             TextView textView = findViewById(R.id.msg);
@@ -713,20 +738,21 @@ public class MainActivity extends SlideBackActivity {
             ((ImageView)findViewById(R.id.imageView11)).setImageResource(R.drawable.ic_baseline_error_24);
             e.printStackTrace();
         }
+
     }
     public void c(View view){
         if(prepareDone){
             if(MusicService.isPlaying()){
                 MusicService.stopPlaySong();
                 playing = false;
-                ImageView imageView = findViewById(R.id.btn);
-                imageView.setImageResource(R.drawable.ic_baseline_play_circle_outline_24);
+                ImageView imageView = findViewById(R.id.btn_open);
+                imageView.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
             }
             else{
                 MusicService.startPlaySong();
                 playing = true;
-                ImageView imageView = findViewById(R.id.btn);
-                imageView.setImageResource(R.drawable.ic_baseline_pause_circle_outline_24);
+                ImageView imageView = findViewById(R.id.btn_open);
+                imageView.setImageResource(R.drawable.ic_baseline_pause_circle_filled_24);
             }
         }
         else{
@@ -736,13 +762,13 @@ public class MainActivity extends SlideBackActivity {
     public void right(View view){
         now += 1;
         prepareDone = false;
-        next_music();
+        nextMusic();
         c(null);
     }
     public void left(View view){
         now -= 1;
         prepareDone = false;
-        next_music();
+        nextMusic();
         c(null);
     }
     /**
@@ -811,10 +837,10 @@ public class MainActivity extends SlideBackActivity {
     }
     public void init_lyrics() throws Exception {
         zt = 0;
-        LinearLayout Play = findViewById(R.id.Play);
-        LinearLayout ly = findViewById(R.id.ly);
-        Play.setVisibility(View.GONE);
-        ly.setVisibility(View.VISIBLE);
+        ScrollView sv_main = findViewById(R.id.sv_main);
+        LinearLayout ly_main = findViewById(R.id.ly_search);
+        sv_main.setVisibility(View.GONE);
+        ly_main.setVisibility(View.VISIBLE);
         if(!type.equals("1")){
             Map maps = new MusicApi().getMusicLrc(cookie,id);
             System.out.println(maps);
@@ -844,7 +870,7 @@ public class MainActivity extends SlideBackActivity {
             String temp = ((search_list.get(now)).toString());
             tl = new File((temp.replace("/music/","/lrc/")).replace(".mp3",".lrc"));
         }
-        lrcView = findViewById(R.id.lrcView);
+        lrcView = findViewById(R.id.lv_main);
         File lrcFile = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/temp/temp.lrc");
         lrcView.loadLrc(lrcFile);
         new Thread(()->{
@@ -853,7 +879,11 @@ public class MainActivity extends SlideBackActivity {
             }
         }).start();
         lrcView.setDraggable(true, (view, time) -> {
-            MusicService.seek((int) time);
+            try{
+                MusicService.seek((int) time);
+            }
+            catch (Exception e){
+            }
             return true;
         } );
     }
@@ -861,9 +891,9 @@ public class MainActivity extends SlideBackActivity {
         init_lyrics();
     }
     public void t(View view){
-        LinearLayout Play1 = findViewById(R.id.Play);
-        LinearLayout ly1 = findViewById(R.id.ly);
-        Play1.setVisibility(View.VISIBLE);
+        ScrollView sv_main = findViewById(R.id.sv_main);
+        LinearLayout ly1 = findViewById(R.id.ly_search);
+        sv_main.setVisibility(View.VISIBLE);
         ly1.setVisibility(View.GONE);
     }
     public void share_ly(View view) {

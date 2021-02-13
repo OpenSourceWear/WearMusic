@@ -7,11 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.Scroller;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.fastjson.JSON;
 
@@ -38,11 +35,11 @@ public class UpdateActivity extends SlideBackActivity {
                 data = new UpdateApi().checkUpdate();
             }
 
-            findViewById(R.id.loading_layout).setVisibility(View.GONE);
+            findViewById(R.id.ll_loading).setVisibility(View.GONE);
             LinearLayout no_layout = findViewById(R.id.no_layout);
             ScrollView yes_scroll = findViewById(R.id.yes_scroll);
-            TextView tv_no = findViewById(R.id.tv_no);
-            TextView tv_yes = findViewById(R.id.tv_yes);
+            TextView tv_no = findViewById(R.id.tv_no_hint);
+            TextView tv_yes = findViewById(R.id.tv_yes_hint);
             if(MainActivity.Version >= Double.parseDouble(data.get("version").toString())){
                 no_layout.setVisibility(View.VISIBLE);
                 yes_scroll.setVisibility(View.GONE);

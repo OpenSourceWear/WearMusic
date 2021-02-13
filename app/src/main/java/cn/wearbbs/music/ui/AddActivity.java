@@ -43,19 +43,19 @@ public class AddActivity extends SlideBackActivity {
         if (!AppCenter.isConfigured()) {
             AppCenter.start(getApplication(), "9250a12d-0fa9-4292-99fc-9d09dcc32012", Analytics.class, Crashes.class);
         }
-        TextView textView = findViewById(R.id.textView);
+        TextView textView = findViewById(R.id.tv_hintForFtp);
         String temp = "用户名：WearMusic\n密码：WearMusic\n端口：2222\nIP：" + getIpAddress() + "\n连接后默认自动进入音乐储存位置";
         textView.setText(temp);
     }
     public void onClick(View view){
         switch (view.getId()){
             case R.id.btnFTP:
-                findViewById(R.id.choose).setVisibility(View.GONE);
-                findViewById(R.id.FTP).setVisibility(View.VISIBLE);
+                findViewById(R.id.ll_choose).setVisibility(View.GONE);
+                findViewById(R.id.ll_ftp).setVisibility(View.VISIBLE);
                 break;
             case R.id.btnSelf:
-                findViewById(R.id.choose).setVisibility(View.GONE);
-                findViewById(R.id.self).setVisibility(View.VISIBLE);
+                findViewById(R.id.ll_choose).setVisibility(View.GONE);
+                findViewById(R.id.ll_self).setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -83,7 +83,7 @@ public class AddActivity extends SlideBackActivity {
         return "";
     }
     public void Start_Stop_Ftp(View view) throws FtpException {
-        Button btn = findViewById(R.id.btn);
+        Button btn = findViewById(R.id.btn_open);
         if(is_start){
             server.stop();
             is_start = false;

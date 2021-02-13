@@ -41,7 +41,7 @@ public class MenuActivity extends SlideBackActivity {
                 avatar_Url = ((Map) JSON.parse(temp)).get("avatarUrl").toString();
                 user_Name = ((Map) JSON.parse(temp)).get("nickname").toString();
                 user_Id = ((Map) JSON.parse(temp)).get("userId").toString();
-                ImageView gi = findViewById(R.id.img);
+                ImageView gi = findViewById(R.id.iv_avatar);
                 RequestOptions options = new RequestOptions().circleCropTransform().placeholder(R.drawable.ic_baseline_supervised_user_circle_24_wh).error(R.drawable.ic_baseline_error_24_wh);
                 Glide.with(MenuActivity.this).load(avatar_Url).apply(options).into(gi);
 

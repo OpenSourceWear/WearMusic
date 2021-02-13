@@ -15,10 +15,6 @@ import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +31,7 @@ public class MusicPanActivity extends SlideBackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_musicpan);
-        findViewById(R.id.loading_layout).setVisibility(View.VISIBLE);
+        findViewById(R.id.ll_loading).setVisibility(View.VISIBLE);
         if (!AppCenter.isConfigured()) {
             AppCenter.start(getApplication(), "9250a12d-0fa9-4292-99fc-9d09dcc32012", Analytics.class, Crashes.class);
         }
@@ -56,7 +52,7 @@ public class MusicPanActivity extends SlideBackActivity {
             } catch (Exception e) {
                 MusicPanActivity.this.runOnUiThread(()-> Toast.makeText(this,"获取失败",Toast.LENGTH_SHORT).show());
             }
-            MusicPanActivity.this.runOnUiThread(()-> findViewById(R.id.loading_layout).setVisibility(View.GONE));
+            MusicPanActivity.this.runOnUiThread(()-> findViewById(R.id.ll_loading).setVisibility(View.GONE));
         });
         thread.start();
     }
@@ -102,12 +98,12 @@ public class MusicPanActivity extends SlideBackActivity {
         DefaultAdapter adapter = new DefaultAdapter(JSON.toJSONString(mvids),jsonString,search_list.size(),JSON.toJSONString(names),this,1);
         list_pan.setAdapter(adapter);
         if(names.size() == 0){
-            LinearLayout null_layout = findViewById(R.id.null_layout);
+            LinearLayout null_layout = findViewById(R.id.ll_noMusic);
             null_layout.setVisibility(View.VISIBLE);
             list_pan.setVisibility(View.GONE);
         }
         else{
-            LinearLayout null_layout = findViewById(R.id.null_layout);
+            LinearLayout null_layout = findViewById(R.id.ll_noMusic);
             null_layout.setVisibility(View.GONE);
             list_pan.setVisibility(View.VISIBLE);
         }

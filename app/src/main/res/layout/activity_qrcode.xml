@@ -1,37 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FAFAFA"
+    android:orientation="vertical"
     tools:context=".ui.QRCodeActivity">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/tv_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="33dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:text="@string/QRCodeView"
+        android:textColor="#FFFFFF"
+        android:textSize="13sp" />
 
-        <TextView
-            android:id="@+id/textView32"
-            android:layout_width="match_parent"
-            android:layout_height="33dp"
-            android:background="@color/colorPrimary"
-            android:gravity="center"
-            android:text="扫码查看"
-            android:textColor="#FFFFFF"
-            android:textSize="13sp" />
+    <ImageView
+        android:id="@+id/iv_qrcode"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp" />
+</LinearLayout>
 
-        <TextView
-            android:id="@+id/textView33"
-            android:layout_width="match_parent"
-            android:layout_height="5dp" />
-
-        <ImageView
-            android:id="@+id/QRCode_image"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
-            android:layout_gravity="center" />
-    </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,7 +19,6 @@ import com.microsoft.appcenter.crashes.Crashes;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,11 +37,11 @@ public class PlayListActivity extends SlideBackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playlist);
-        findViewById(R.id.loading_layout).setVisibility(View.VISIBLE);
+        findViewById(R.id.ll_loading).setVisibility(View.VISIBLE);
         if (!AppCenter.isConfigured()) {
             AppCenter.start(getApplication(), "9250a12d-0fa9-4292-99fc-9d09dcc32012", Analytics.class, Crashes.class);
         }
-        ListView list_gds = findViewById(R.id.list_gds);
+        ListView list_gds = findViewById(R.id.lv_playlist);
         TextView tv = new TextView(this);
         tv.setText("没有更多了\n\n");
         tv.setTextColor(Color.parseColor("#999999"));
@@ -65,7 +64,7 @@ public class PlayListActivity extends SlideBackActivity {
             } catch (Exception e) {
                 PlayListActivity.this.runOnUiThread(()-> Toast.makeText(this,"获取失败",Toast.LENGTH_SHORT).show());
             }
-            PlayListActivity.this.runOnUiThread(()-> findViewById(R.id.loading_layout).setVisibility(View.GONE));
+            PlayListActivity.this.runOnUiThread(()-> findViewById(R.id.ll_loading).setVisibility(View.GONE));
         });
         thread.start();
     }
@@ -81,7 +80,7 @@ public class PlayListActivity extends SlideBackActivity {
             items.add(item);
             names.add(tmp.get("name").toString());
         }
-        ListView list_gds = findViewById(R.id.list_gds);
+        ListView list_gds = findViewById(R.id.lv_playlist);
         ArrayAdapter adapter = new ArrayAdapter(PlayListActivity.this,R.layout.item_default,names);
         list_gds.setOnItemClickListener((adapterView, view, i, l) -> {
             Intent intent = new Intent(PlayListActivity.this, SongListActivity.class);

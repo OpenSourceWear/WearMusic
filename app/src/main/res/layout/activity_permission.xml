@@ -1,65 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sv_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FAFAFA"
     tools:context=".ui.PermissionActivity">
 
-    <ScrollView
+    <LinearLayout
+        android:id="@+id/ll_main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:background="@color/colorPrimary"
+            android:gravity="center"
+            android:text="@string/noPermission"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp" />
+
+        <ImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="9dp"
+            android:contentDescription="@string/todo"
+            app:srcCompat="@mipmap/ic_launcher_round" />
+
+        <TextView
+            android:id="@+id/tv_tip"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:text="@string/permissionTip" />
 
-            <TextView
-                android:id="@+id/textView39"
-                android:layout_width="match_parent"
-                android:layout_height="33dp"
-                android:background="@color/colorPrimary"
-                android:gravity="center"
-                android:text="无权限"
-                android:textColor="#FFFFFF"
-                android:textSize="13sp" />
+        <Button
+            android:id="@+id/btn_give"
+            android:layout_width="wrap_content"
+            android:layout_height="37dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/btn_blue"
+            android:onClick="getPermission"
+            android:text="@string/givePermission"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/textView40"
-                android:layout_width="match_parent"
-                android:layout_height="9dp" />
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_gravity="center"
-                app:srcCompat="@mipmap/ic_launcher_round" />
-
-            <TextView
-                android:id="@+id/tv_tip"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="10dp"
-                android:gravity="center"
-                android:text="由于WearOS系统限制，自动申请体验较差，推荐您退出应用，进入设置手动授权。" />
-
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="wrap_content"
-                android:layout_height="37dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/btn_blue"
-                android:onClick="getPermission"
-                android:text="授予权限"
-                android:textColor="#FFFFFF" />
-        </LinearLayout>
-    </ScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

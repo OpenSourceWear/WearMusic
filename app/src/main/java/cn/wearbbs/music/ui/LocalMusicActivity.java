@@ -35,7 +35,7 @@ public class LocalMusicActivity extends SlideBackActivity {
         if (!AppCenter.isConfigured()) {
             AppCenter.start(getApplication(), "9250a12d-0fa9-4292-99fc-9d09dcc32012", Analytics.class, Crashes.class);
         }
-        ListView listd = findViewById(R.id.listd);
+        ListView listd = findViewById(R.id.lv_music);
         TextView tv = new TextView(this);
         tv.setText("没有更多了\n\n");
         tv.setTextColor(Color.parseColor("#999999"));
@@ -53,8 +53,8 @@ public class LocalMusicActivity extends SlideBackActivity {
     public void init_file_list(){
         List<String> file_list = new ArrayList();
         List arr = new ArrayList();
-        ListView listd = findViewById(R.id.listd);
-        LinearLayout null_layout = findViewById(R.id.null_layout);
+        ListView listd = findViewById(R.id.lv_music);
+        LinearLayout null_layout = findViewById(R.id.ll_noMusic);
         null_layout.setVisibility(View.GONE);
         listd.setVisibility(View.VISIBLE);
         File dir = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music");

@@ -13,7 +13,4 @@ public class ContactActivity extends SlideBackActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
     }
-    public void feed_back(View view){
-        startActivity(new Intent(ContactActivity.this, FeedBackActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
-    }
 }
