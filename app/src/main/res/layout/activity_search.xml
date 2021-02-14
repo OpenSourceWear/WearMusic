@@ -67,14 +67,14 @@
             android:layout_height="28dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="120dp"
                 android:layout_height="28dp"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="5dp"
                 android:layout_marginRight="2dp"
-                android:layout_weight="1"
                 android:background="@drawable/et_blue"
                 android:orientation="horizontal">
 
@@ -100,8 +100,7 @@
                 android:id="@+id/iv_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginRight="30dp"
-                android:layout_weight="1"
+                android:layout_marginRight="5dp"
                 android:onClick="search"
                 app:srcCompat="@drawable/ic_baseline_search_24" />
 

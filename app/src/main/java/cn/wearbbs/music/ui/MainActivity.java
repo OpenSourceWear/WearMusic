@@ -35,6 +35,8 @@ import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
 
+import org.apache.log4j.chainsaw.Main;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -597,26 +599,51 @@ public class MainActivity extends SlideBackActivity {
                             mediaPlayer.setDataSource(url);
                             Thread thread = new Thread(()->{
                                 Log.d("MediaPlayer","开始准备音乐");
-                                try {
-                                    mediaPlayer.prepare();
-                                } catch (Exception e) {
-                                    try {
-                                        Thread.sleep(3000);
-                                        mediaPlayer.prepare();
-                                    } catch (Exception exception) {
-                                        exception.printStackTrace();
+                                if(MusicService.prepare()){
+                                    Log.d("MediaPlayer","音乐准备成功");
+                                    if(!type.equals("3")){
+                                        MusicService.startPlaySong();
+                                        playing = true;
                                     }
-                                }
-                                Log.d("MediaPlayer","音乐准备完成");
-                                prepareDone = true;
-                                if(!type.equals("3")){
-                                    MusicService.startPlaySong();
-                                    playing = true;
+                                    else{
+                                        playing = false;
+                                        MainActivity.this.runOnUiThread(()->{
+                                            ImageView imageViewBtn = findViewById(R.id.btn_open);
+                                            imageViewBtn.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
+                                        });
+                                    }
+                                    prepareDone = true;
                                 }
                                 else{
-                                    playing = false;
-                                    ImageView imageViewBtn = findViewById(R.id.btn_open);
-                                    imageViewBtn.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
+                                    mediaPlayer.release();
+                                    init_player();
+                                    mediaPlayer.reset();
+                                    try {
+                                        mediaPlayer.setDataSource(url);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    if(MusicService.prepare()){
+                                        Log.d("MediaPlayer","音乐准备成功");
+                                        if(!type.equals("3")){
+                                            MusicService.startPlaySong();
+                                            playing = true;
+                                        }
+                                        else{
+                                            playing = false;
+                                        }
+                                        prepareDone = true;
+                                    }
+                                    else{
+                                        Log.d("MediaPlayer","音乐准备失败");
+                                        MainActivity.this.runOnUiThread(()->Toast.makeText(MainActivity.this,"音乐准备失败",Toast.LENGTH_SHORT).show());
+                                        prepareDone = false;
+                                        playing = false;
+                                        MainActivity.this.runOnUiThread(()->{
+                                            ImageView imageViewBtn = findViewById(R.id.btn_open);
+                                            imageViewBtn.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
+                                        });
+                                    }
                                 }
                             });
                             thread.start();
@@ -669,15 +696,22 @@ public class MainActivity extends SlideBackActivity {
                     mediaPlayer.setDataSource(search_list.get(now).toString());
                     Thread thread = new Thread(()->{
                         Log.d("MediaPlayer","开始准备音乐");
-                        try {
-                            mediaPlayer.prepare();
-                        } catch (IOException e) {
-                            MainActivity.this.runOnUiThread(() ->Toast.makeText(MainActivity.this,"音乐加载失败",Toast.LENGTH_SHORT).show());
+                        if(MusicService.prepare()){
+                            Log.d("MediaPlayer","音乐准备成功");
+                            prepareDone = true;
+                            MusicService.startPlaySong();
+                            playing = true;
                         }
-                        MusicService.startPlaySong();
-                        playing = true;
+                        else{
+                            MainActivity.this.runOnUiThread(() ->Toast.makeText(MainActivity.this,"音乐加载失败",Toast.LENGTH_SHORT).show());
+                            prepareDone = false;
+                            playing = false;
+                            MainActivity.this.runOnUiThread(()->{
+                                ImageView imageViewBtn = findViewById(R.id.btn_open);
+                                imageViewBtn.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
+                            });
+                        }
                         Log.d("MediaPlayer","音乐准备完成");
-                        prepareDone = true;
                     });
                     thread.start();
                     TextView textView = findViewById(R.id.msg);
@@ -694,15 +728,22 @@ public class MainActivity extends SlideBackActivity {
                     mediaPlayer.setDataSource(search_list.get(now).toString());
                     Thread thread = new Thread(()->{
                         Log.d("MediaPlayer","开始准备音乐");
-                        try {
-                            mediaPlayer.prepare();
-                        } catch (IOException ioException) {
-                            MainActivity.this.runOnUiThread(() ->Toast.makeText(MainActivity.this,"音乐加载失败",Toast.LENGTH_SHORT).show());
+                        if(MusicService.prepare()){
+                            Log.d("MediaPlayer","音乐准备完成");
+                            MusicService.startPlaySong();
+                            playing = true;
+                            prepareDone = true;
                         }
-                        Log.d("MediaPlayer","音乐准备完成");
-                        MusicService.startPlaySong();
-                        playing = true;
-                        prepareDone = true;
+                        else {
+                            MainActivity.this.runOnUiThread(() ->Toast.makeText(MainActivity.this,"音乐加载失败",Toast.LENGTH_SHORT).show());
+                            playing = false;
+                            prepareDone = false;
+                            MainActivity.this.runOnUiThread(()->{
+                                ImageView imageViewBtn = findViewById(R.id.btn_open);
+                                imageViewBtn.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
+                            });
+                        }
+
                     });
                     thread.start();
                     TextView textView = findViewById(R.id.msg);
@@ -723,10 +764,19 @@ public class MainActivity extends SlideBackActivity {
                 ProgressBar pb_lyrics = findViewById(R.id.pb_lyrics);
                 while (true){
                     if(prepareDone){
-                        pb_main.setMax(mediaPlayer.getDuration());
-                        pb_main.setProgress(mediaPlayer.getCurrentPosition());
-                        pb_lyrics.setMax(mediaPlayer.getDuration());
-                        pb_lyrics.setProgress(mediaPlayer.getCurrentPosition());
+                        try{
+                            pb_main.setMax(MusicService.getDuration());
+                            pb_main.setProgress(MusicService.getCurrentPosition());
+                            pb_lyrics.setMax(MusicService.getDuration());
+                            pb_lyrics.setProgress(MusicService.getCurrentPosition());
+                        }
+                        catch (Exception e){
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException interruptedException) {
+                                interruptedException.printStackTrace();
+                            }
+                        }
                     }
                 }
             });

@@ -34,10 +34,10 @@ public class SelfActivity extends SlideBackActivity {
         ImageView gi = findViewById(R.id.iv_avatar);
         RequestOptions options = new RequestOptions().circleCropTransform().placeholder(R.drawable.ic_baseline_supervised_user_circle_24).error(R.drawable.ic_baseline_error_24);
         Glide.with(SelfActivity.this).load(avatarUrl).apply(options).into(gi);
-        TextView text = findViewById(R.id.text);
-        text.setText(userName);
-        TextView text3 = findViewById(R.id.tv_id);
-        text3.setText("ID：" + userId);
+        TextView tv_name = findViewById(R.id.tv_name);
+        tv_name.setText(userName);
+        TextView tv_id = findViewById(R.id.tv_id);
+        tv_id.setText("ID：" + userId);
     }
     public void menu(View view){
         Intent intent = new Intent(SelfActivity.this, MenuActivity.class);
