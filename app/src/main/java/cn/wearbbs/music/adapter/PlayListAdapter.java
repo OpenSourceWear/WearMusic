@@ -1,6 +1,5 @@
 package cn.wearbbs.music.adapter;
 
-import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -19,29 +18,24 @@ import java.util.Map;
 
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.api.MVApi;
-import cn.wearbbs.music.api.MusicPanApi;
-import cn.wearbbs.music.api.PlayListApi;
 import cn.wearbbs.music.ui.MainActivity;
-import cn.wearbbs.music.ui.MusicPanActivity;
-import cn.wearbbs.music.ui.SongListActivity;
-import cn.wearbbs.music.util.UserInfoUtil;
 
-public class DefaultAdapter extends BaseAdapter {
+public class PlayListAdapter extends BaseAdapter {
     private Context context;
     private String jsonString;
     private String mvids;
     private int size;
     private String names;
     private int type;
-    int SONGLIST = 0;
-    int MUSICPAN = 1;
-    public DefaultAdapter(String mvids, String idl, int size, String names, Context context,int type){
+    private int musicIndex;
+    public PlayListAdapter(String mvids, String idl, int size, String names, Context context, int type,int musicIndex){
         this.context=context;
         this.jsonString = idl;
         this.mvids = mvids;
         this.size = size;
         this.names = names;
         this.type = type;
+        this.musicIndex = musicIndex;
     }
     @Override
     public int getCount() {
@@ -60,8 +54,6 @@ public class DefaultAdapter extends BaseAdapter {
     }
 
     String mvid;
-    AlertDialog alertDialog;
-    String cookie;
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view;
@@ -73,20 +65,15 @@ public class DefaultAdapter extends BaseAdapter {
             view=convertView;//复用历史缓存对象
         }
         view.findViewById(R.id.iv_mv).setVisibility(View.VISIBLE);
-        mvid = JSON.parseArray(mvids).get(position).toString();
-        if(mvid.equals("0")){
-            view.findViewById(R.id.iv_mv).setVisibility(View.GONE);
+        if(position == musicIndex){
+            view.findViewById(R.id.iv_playing).setVisibility(View.VISIBLE);
         }
-        view.findViewById(R.id.title).setOnClickListener(v -> {
-            Intent intent = new Intent(context, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
-            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-            intent.putExtra("type", "0");
-            intent.putExtra("list", jsonString);
-            intent.putExtra("start", String.valueOf(position));
-            intent.putExtra("mvids",mvids );
-            context.startActivity(intent);
-        });
+        if(mvids!=null){
+            mvid = JSON.parseArray(mvids).get(position).toString();
+            if(!mvid.equals("0")){
+                view.findViewById(R.id.iv_mv).setVisibility(View.VISIBLE);
+            }
+        }
         view.findViewById(R.id.iv_mv).setOnClickListener(v -> {
             Map maps = new HashMap();
             Map detailMaps = new HashMap();
@@ -129,53 +116,16 @@ public class DefaultAdapter extends BaseAdapter {
                 }
             }
         });
-        if(type == SONGLIST){
-            view.findViewById(R.id.title).setOnLongClickListener(v -> {
-                alertDialog = new AlertDialog.Builder(context)
-                        .setMessage("要删除该音乐吗？")
-                        .setPositiveButton("确定", (dialogInterface, i12) -> {
-                            cookie = UserInfoUtil.getUserInfo(context,"cookie");
-                            try {
-                                new PlayListApi().deletePlayListMusic(SongListActivity.ID,SongListActivity.ids.split(",")[position],cookie);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            Toast.makeText(context,"删除成功",Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(context, SongListActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
-                            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-                            context.startActivity(intent);
-                        })
-                        .setNegativeButton("取消", (dialogInterface, i1) -> alertDialog.dismiss())
-                        .create();
-                alertDialog.show();
-                return true;
-            });
-
-        }
-        else{
-            view.findViewById(R.id.title).setOnLongClickListener(v -> {
-                alertDialog = new AlertDialog.Builder(context)
-                        .setMessage("要删除该音乐吗？")
-                        .setPositiveButton("确定", (dialogInterface, i12) -> {
-                            cookie = UserInfoUtil.getUserInfo(context,"cookie");
-                            try {
-                                new MusicPanApi().deletePanMusic(((Map)JSON.parse(JSON.parseArray(jsonString).get(position).toString())).get("id").toString(),cookie);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            Toast.makeText(context,"删除成功",Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(context, MusicPanActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
-                            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-                            context.startActivity(intent);
-                        })
-                        .setNegativeButton("取消", (dialogInterface, i1) -> alertDialog.dismiss())
-                        .create();
-                alertDialog.show();
-                return true;
-            });
-        }
+        view.findViewById(R.id.title).setOnClickListener(v -> {
+            Intent intent = new Intent(context, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
+            intent.putExtra("type", "3");
+            intent.putExtra("list", jsonString);
+            intent.putExtra("start", String.valueOf(position));
+            intent.putExtra("mvids",mvids);
+            context.startActivity(intent);
+        });
         ((TextView)view.findViewById(R.id.title)).setText(Html.fromHtml(namesList.get(position).toString()));
         return view;
     }

@@ -1,6 +1,7 @@
 package cn.wearbbs.music.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -9,10 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.microsoft.appcenter.AppCenter;
-import com.microsoft.appcenter.analytics.Analytics;
-import com.microsoft.appcenter.crashes.Crashes;
 
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerFactory;
@@ -40,9 +37,6 @@ public class AddActivity extends SlideBackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
-        if (!AppCenter.isConfigured()) {
-            AppCenter.start(getApplication(), "9250a12d-0fa9-4292-99fc-9d09dcc32012", Analytics.class, Crashes.class);
-        }
         TextView textView = findViewById(R.id.tv_hintForFtp);
         String temp = "用户名：WearMusic\n密码：WearMusic\n端口：2222\nIP：" + getIpAddress() + "\n连接后默认自动进入音乐储存位置";
         textView.setText(temp);
@@ -56,6 +50,30 @@ public class AddActivity extends SlideBackActivity {
             case R.id.btnSelf:
                 findViewById(R.id.ll_choose).setVisibility(View.GONE);
                 findViewById(R.id.ll_self).setVisibility(View.VISIBLE);
+                break;
+            case R.id.btnPC:
+                findViewById(R.id.ll_choose).setVisibility(View.GONE);
+                findViewById(R.id.ll_PC).setVisibility(View.VISIBLE);
+                break;
+            case R.id.btnAndroid:
+                findViewById(R.id.ll_choose).setVisibility(View.GONE);
+                findViewById(R.id.ll_Android).setVisibility(View.VISIBLE);
+                break;
+            case R.id.btnViewQRCodeAndroid:
+                Intent intent = new Intent(AddActivity.this, QRCodeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
+                intent.putExtra("type","1");
+                intent.putExtra("ly","https://wearbbs.cn/resources/wearmusicftp.343/");
+                startActivity(intent);
+                break;
+            case R.id.btnViewQRCodeWOB:
+                Intent IntentWOB = new Intent(AddActivity.this, QRCodeActivity.class);
+                IntentWOB.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
+                IntentWOB.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
+                IntentWOB.putExtra("type","1");
+                IntentWOB.putExtra("ly","https://wearbbs.cn/resources/wearos-for-windows.10/");
+                startActivity(IntentWOB);
                 break;
         }
     }
@@ -137,5 +155,16 @@ public class AddActivity extends SlideBackActivity {
         ListenerFactory factory = new ListenerFactory();
         factory.setPort(2222); //设置端口号 非ROOT不可使用1024以下的端口
         serverFactory.addListener("default", factory.createListener());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Button btn = findViewById(R.id.btn_open);
+        if (is_start) {
+            server.stop();
+            is_start = false;
+            btn.setText("开启");
+        }
     }
 }

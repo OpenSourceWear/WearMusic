@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/sv_main"
     android:layout_width="match_parent"
@@ -40,7 +41,7 @@
                 android:text="@string/hintForChoose" />
 
             <LinearLayout
-                android:id="@+id/ll_btnGroup"
+                android:id="@+id/ll_btnGroup_1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
@@ -64,6 +65,44 @@
                     android:textColor="#FFFFFF" />
 
                 <Button
+                    android:id="@+id/btnAndroid"
+                    style="?android:attr/buttonStyle"
+                    android:layout_width="74dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="1dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="7dp"
+                    android:background="@drawable/btn_blue"
+                    android:onClick="onClick"
+                    android:text="@string/android"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_btnGroup_2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnPC"
+                    style="?android:attr/buttonStyle"
+                    android:layout_width="74dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="1dp"
+                    android:layout_marginBottom="7dp"
+                    android:background="@drawable/btn_blue"
+                    android:onClick="onClick"
+                    android:text="@string/pc"
+                    android:textColor="#FFFFFF" />
+
+                <Button
                     android:id="@+id/btnSelf"
                     style="?android:attr/buttonStyle"
                     android:layout_width="74dp"
@@ -77,14 +116,6 @@
                     android:text="@string/self"
                     android:textColor="#FFFFFF" />
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/tv_hint"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/hintForPC"
-                android:textSize="12sp" />
 
         </LinearLayout>
 
@@ -101,7 +132,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:text="@string/musicRoot" />
+                android:text="@string/musicRoot"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/tv_lyrics"
@@ -109,7 +141,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:text="@string/lyricsRoot" />
+                android:text="@string/lyricsRoot"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/tv_cover"
@@ -118,7 +151,68 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="35dp"
                 android:gravity="center"
-                android:text="@string/coverRoot" />
+                android:text="@string/coverRoot"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_Android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_hintAndroid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="@string/androidHint" />
+
+            <Button
+                android:id="@+id/btnViewQRCodeAndroid"
+                style="?android:attr/buttonStyle"
+                android:layout_width="130dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginBottom="7dp"
+                android:background="@drawable/btn_blue"
+                android:onClick="onClick"
+                android:text="@string/btnHintDownload"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_PC"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_hintPC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="@string/wobHint" />
+
+            <Button
+                android:id="@+id/btnViewQRCodeWOB"
+                style="?android:attr/buttonStyle"
+                android:layout_width="130dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginBottom="7dp"
+                android:background="@drawable/btn_blue"
+                android:onClick="onClick"
+                android:text="@string/btnHintDownload"
+                android:textColor="#FFFFFF" />
         </LinearLayout>
 
         <LinearLayout

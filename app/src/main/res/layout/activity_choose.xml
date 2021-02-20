@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ll_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,17 +16,40 @@
         android:layout_height="33dp"
         android:background="@color/colorPrimary"
         android:gravity="center"
-        android:onClick="share"
         android:text="@string/chooseLyrics"
         android:textColor="#FFFFFF"
         android:textSize="13sp" />
 
-    <ListView
-        android:id="@+id/lv_choose"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="#FAFAFA"
-        android:dividerHeight="1dp">
+        android:layout_height="match_parent">
 
-    </ListView>
+        <ListView
+            android:id="@+id/lv_choose"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="#FAFAFA"
+            android:dividerHeight="1dp"
+            tools:layout_editor_absoluteY="147dp">
+
+        </ListView>
+
+        <Button
+            android:id="@+id/btn_login3"
+            android:layout_width="80dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/btn_blue"
+            android:gravity="center"
+            android:onClick="share"
+            android:text="@string/share"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </LinearLayout>

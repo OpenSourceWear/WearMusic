@@ -76,7 +76,18 @@ public class ChooseAdapter extends BaseAdapter {
             }else {
                 map.remove(position);
                 positions.remove(Keymap.get(position));
-
+            }
+        });
+        radioText.setOnClickListener(v -> {
+            if (checkBox.isChecked()){
+                map.put(position,true);
+                positions.add(position);
+                Keymap.put(position,positions.size()-1);
+                checkBox.setChecked(false);
+            }else {
+                map.remove(position);
+                positions.remove(Keymap.get(position));
+                checkBox.setChecked(true);
             }
         });
         if(map!=null&&map.containsKey(position)){

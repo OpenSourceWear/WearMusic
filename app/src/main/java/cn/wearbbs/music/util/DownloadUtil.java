@@ -5,9 +5,6 @@ import android.net.Uri;
 import android.util.Log;
 
 public class DownloadUtil {
-    public DownloadUtil(){
-
-    }
     public Long download(String url, String path, String name, DownloadManager downloadManager) {
         //创建下载任务,downloadUrl就是下载链接
         Log.d("WearMusic", "download: " + url);

@@ -15,10 +15,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
-import com.microsoft.appcenter.AppCenter;
-import com.microsoft.appcenter.analytics.Analytics;
-import com.microsoft.appcenter.crashes.Crashes;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -37,9 +33,6 @@ public class LoginActivity extends SlideBackActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        if (!AppCenter.isConfigured()) {
-            AppCenter.start(getApplication(), "9250a12d-0fa9-4292-99fc-9d09dcc32012", Analytics.class, Crashes.class);
-        }
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         cn.wearbbs.music.ui.MainActivity.verifyStoragePermissions(LoginActivity.this);
@@ -52,9 +45,15 @@ public class LoginActivity extends SlideBackActivity {
     }
     public void qr(View view){
         flag = true;
-        refreshQRCode();
         findViewById(R.id.sv_qr).setVisibility(View.VISIBLE);
         findViewById(R.id.sv_pn).setVisibility(View.GONE);
+    }
+    public void refresh(View view){
+        flag = false;
+        flag = true;
+        findViewById(R.id.tv_err).setVisibility(View.GONE);
+        findViewById(R.id.iv_err).setVisibility(View.GONE);
+        refreshQRCode();
     }
     String key;
     public void refreshQRCode(){
@@ -88,6 +87,7 @@ public class LoginActivity extends SlideBackActivity {
                             case "800":
                                 // 二维码过期
                                 LoginActivity.this.runOnUiThread(() -> findViewById(R.id.tv_err).setVisibility(View.VISIBLE));
+                                LoginActivity.this.runOnUiThread(() -> findViewById(R.id.iv_err).setVisibility(View.VISIBLE));
                                 break;
                             case "802":
                                 // 待授权

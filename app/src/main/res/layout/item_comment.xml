@@ -51,7 +51,8 @@
                 android:layout_height="19dp"
                 android:layout_marginRight="5dp"
                 android:layout_toRightOf="@id/like_title"
-                app:srcCompat="@drawable/ic_baseline_favorite_border_24" />
+                app:srcCompat="@drawable/ic_baseline_favorite_border_24"
+                android:contentDescription="TODO" />
 
         </RelativeLayout>
 

@@ -9,10 +9,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.microsoft.appcenter.AppCenter;
-import com.microsoft.appcenter.analytics.Analytics;
-import com.microsoft.appcenter.crashes.Crashes;
-
 import java.io.File;
 
 import cn.wearbbs.music.R;
@@ -23,9 +19,6 @@ public class SelfActivity extends SlideBackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_self);
-        if (!AppCenter.isConfigured()) {
-            AppCenter.start(getApplication(), "9250a12d-0fa9-4292-99fc-9d09dcc32012", Analytics.class, Crashes.class);
-        }
         Intent intent = getIntent();
         String userName = intent.getStringExtra("userName");
         avatarUrl = intent.getStringExtra("avatarUrl");

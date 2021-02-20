@@ -10,10 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
-import com.microsoft.appcenter.AppCenter;
-import com.microsoft.appcenter.analytics.Analytics;
-import com.microsoft.appcenter.crashes.Crashes;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,10 +28,7 @@ public class CommentActivity extends SlideBackActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
         findViewById(R.id.ll_loading).setVisibility(View.VISIBLE);
-        if (!AppCenter.isConfigured()) {
-            AppCenter.start(getApplication(), "9250a12d-0fa9-4292-99fc-9d09dcc32012", Analytics.class, Crashes.class);
-        }
-        Analytics.trackEvent("comment");
+        findViewById(R.id.lv_comments).setVisibility(View.GONE);
         Thread thread = new Thread((Runnable) ()->{
             Intent intent = getIntent();
             id= intent.getStringExtra("id");
@@ -62,7 +55,10 @@ public class CommentActivity extends SlideBackActivity {
                 CommentActivity.this.runOnUiThread(() -> Toast.makeText(this,"加载失败",Toast.LENGTH_SHORT).show());
                 e.printStackTrace();
             }
-            CommentActivity.this.runOnUiThread(() -> findViewById(R.id.ll_loading).setVisibility(View.GONE));
+            CommentActivity.this.runOnUiThread(() -> {
+                findViewById(R.id.ll_loading).setVisibility(View.GONE);
+                findViewById(R.id.lv_comments).setVisibility(View.VISIBLE);
+            });
         });
         thread.start();
     }

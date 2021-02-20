@@ -9,7 +9,7 @@ import cn.wearbbs.music.util.NetWorkUtil;
 public class UpdateApi {
     private String result;
     public Map checkUpdate() throws InterruptedException {
-        Thread tmp = new Thread(() -> result = NetWorkUtil.sendByGetUrl("https://wmu.wearbbs.cn/"));
+        Thread tmp = new Thread(() -> result = NetWorkUtil.sendByGetUrl("https://wearbbs-wearmusic-1253496522.cos.ap-beijing.myqcloud.com/checkUpdate.json"));
         tmp.start();
         tmp.join();
         return (Map)JSON.parse(result);

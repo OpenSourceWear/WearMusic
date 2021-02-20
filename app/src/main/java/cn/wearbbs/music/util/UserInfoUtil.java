@@ -11,9 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UserInfoUtil {
-    public UserInfoUtil(){
-
-    }
     public static boolean saveUserInfo(Context context, String filename, String content) {
         try {
             // 使用Android上下问获取当前项目的路径

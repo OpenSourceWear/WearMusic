@@ -9,9 +9,6 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.microsoft.appcenter.AppCenter;
-import com.microsoft.appcenter.analytics.Analytics;
-import com.microsoft.appcenter.crashes.Crashes;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -30,9 +27,6 @@ public class MenuActivity extends SlideBackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        if (!AppCenter.isConfigured()) {
-            AppCenter.start(getApplication(), "9250a12d-0fa9-4292-99fc-9d09dcc32012", Analytics.class, Crashes.class);
-        }
         File user = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/user.txt");
         if (user.exists()){
             try {
@@ -85,7 +79,7 @@ public class MenuActivity extends SlideBackActivity {
         startActivity(intent2);
     }
     public void onClick_star(View view){
-        Intent intent3 = new Intent(MenuActivity.this, PlayListActivity.class);
+        Intent intent3 = new Intent(MenuActivity.this, MusicListActivity.class);
         intent3.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
         intent3.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
         startActivity(intent3);

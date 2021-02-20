@@ -75,11 +75,11 @@ public class SearchAdapter extends BaseAdapter {
         }else {
             view=convertView;//复用历史缓存对象
         }
-        view.findViewById(R.id.mv_icon).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.iv_mv).setVisibility(View.VISIBLE);
         tmp_song = (Map) JSON.parse(tmp.get(position).toString());
         mvid = tmp_song.get("mvid").toString();
         if(mvid.equals("0")){
-            view.findViewById(R.id.mv_icon).setVisibility(View.GONE);
+            view.findViewById(R.id.iv_mv).setVisibility(View.GONE);
         }
         view.findViewById(R.id.title).setOnClickListener(v -> {
             Intent intent = new Intent(context, MainActivity.class);
@@ -91,7 +91,7 @@ public class SearchAdapter extends BaseAdapter {
             intent.putExtra("mvids", JSON.toJSONString(mvids));
             context.startActivity(intent);
         });
-        view.findViewById(R.id.mv_icon).setOnClickListener(v -> {
+        view.findViewById(R.id.iv_mv).setOnClickListener(v -> {
             tmp_song = (Map) JSON.parse(tmp.get(position).toString());
             mvid = tmp_song.get("mvid").toString();
             if(mvid.equals("0")){

@@ -14,10 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
-import com.microsoft.appcenter.AppCenter;
-import com.microsoft.appcenter.analytics.Analytics;
-import com.microsoft.appcenter.crashes.Crashes;
-
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
@@ -26,15 +22,12 @@ import java.util.List;
 import cn.wearbbs.music.R;
 
 public class LocalMusicActivity extends SlideBackActivity {
-    AlertDialog alertDialog2;
+    AlertDialog alertDialog;
     int im = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_localmusic);
-        if (!AppCenter.isConfigured()) {
-            AppCenter.start(getApplication(), "9250a12d-0fa9-4292-99fc-9d09dcc32012", Analytics.class, Crashes.class);
-        }
         ListView listd = findViewById(R.id.lv_music);
         TextView tv = new TextView(this);
         tv.setText("没有更多了\n\n");
@@ -58,15 +51,12 @@ public class LocalMusicActivity extends SlideBackActivity {
         null_layout.setVisibility(View.GONE);
         listd.setVisibility(View.VISIBLE);
         File dir = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music");
-        File[] arr_temp = dir.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                String name = file.getName();
-                if (name.endsWith(".mp3"))
-                    return true;
-                else
-                    return false;
-            }
+        File[] arr_temp = dir.listFiles(file -> {
+            String name = file.getName();
+            if (name.endsWith(".mp3"))
+                return true;
+            else
+                return false;
         });
         try{
             if(arr_temp.length != 0){
@@ -93,7 +83,7 @@ public class LocalMusicActivity extends SlideBackActivity {
                         im = i;
                         //添加"Yes"按钮
                         //添加取消
-                        alertDialog2 = new AlertDialog.Builder(LocalMusicActivity.this)
+                        alertDialog = new AlertDialog.Builder(LocalMusicActivity.this)
                                 .setTitle("提示")
                                 .setMessage("要删除该文件吗？")
                                 .setPositiveButton("确定", (dialogInterface, i1) -> {
@@ -111,9 +101,9 @@ public class LocalMusicActivity extends SlideBackActivity {
                                     startActivity(intent);
                                 })
 
-                                .setNegativeButton("取消", (dialogInterface, i12) -> alertDialog2.dismiss())
+                                .setNegativeButton("取消", (dialogInterface, i12) -> alertDialog.dismiss())
                                 .create();
-                        alertDialog2.show();
+                        alertDialog.show();
                         return true;
                     }
                 });

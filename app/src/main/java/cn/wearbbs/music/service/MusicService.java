@@ -59,6 +59,7 @@ public class MusicService extends Service {
         mMediaPlayer = MainActivity.getMediaPlayer();
         try {
             mMediaPlayer.prepare();
+            MainActivity.prepareDone = true;
             return true;
         } catch (Exception e) {
             e.printStackTrace();

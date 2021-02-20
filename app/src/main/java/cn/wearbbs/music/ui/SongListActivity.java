@@ -11,10 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
-import com.microsoft.appcenter.AppCenter;
-import com.microsoft.appcenter.analytics.Analytics;
-import com.microsoft.appcenter.crashes.Crashes;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,9 +29,6 @@ public class SongListActivity extends SlideBackActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_songlist);
         findViewById(R.id.ll_loading).setVisibility(View.VISIBLE);
-        if (!AppCenter.isConfigured()) {
-            AppCenter.start(getApplication(), "9250a12d-0fa9-4292-99fc-9d09dcc32012", Analytics.class, Crashes.class);
-        }
         ListView list_gd  = findViewById(R.id.lv_songlist);
         TextView tv = new TextView(this);
         tv.setText("没有更多了\n\n");

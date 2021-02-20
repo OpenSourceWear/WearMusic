@@ -9,9 +9,6 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.microsoft.appcenter.AppCenter;
-import com.microsoft.appcenter.analytics.Analytics;
-import com.microsoft.appcenter.crashes.Crashes;
 import com.xtc.shareapi.share.communication.SendMessageToXTC;
 import com.xtc.shareapi.share.manager.ShareMessageManager;
 import com.xtc.shareapi.share.shareobject.XTCShareMessage;
@@ -39,9 +36,6 @@ public class ChooseActivity extends SlideBackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose);
-        if (!AppCenter.isConfigured()) {
-            AppCenter.start(getApplication(), "9250a12d-0fa9-4292-99fc-9d09dcc32012", Analytics.class, Crashes.class);
-        }
         try{
             Intent intent = getIntent();
             name = intent.getStringExtra("song");
@@ -134,9 +128,9 @@ public class ChooseActivity extends SlideBackActivity {
      * @return counter
      */
     public static int countStr(String str1, String str2) {
-        if (str1.indexOf(str2) == -1) {
+        if (!str1.contains(str2)) {
             return 0;
-        } else if (str1.indexOf(str2) != -1) {
+        } else if (str1.contains(str2)) {
             counter++;
             countStr(str1.substring(str1.indexOf(str2) +
                     str2.length()), str2);

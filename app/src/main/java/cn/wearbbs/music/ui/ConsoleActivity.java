@@ -15,9 +15,6 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
-import com.microsoft.appcenter.AppCenter;
-import com.microsoft.appcenter.analytics.Analytics;
-import com.microsoft.appcenter.crashes.Crashes;
 import com.xtc.shareapi.share.communication.SendMessageToXTC;
 import com.xtc.shareapi.share.manager.ShareMessageManager;
 import com.xtc.shareapi.share.shareobject.XTCAppExtendObject;
@@ -47,17 +44,12 @@ public class ConsoleActivity extends SlideBackActivity {
     String coverurl;
     String comment;
     boolean is_like = false;
-    Map requests_name_map = new HashMap();
     String mvid;
     String cookie;
-    DownloadManager downloadManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_console);
-        if (!AppCenter.isConfigured()) {
-            AppCenter.start(getApplication(), "9250a12d-0fa9-4292-99fc-9d09dcc32012", Analytics.class, Crashes.class);
-        }
         Intent intent = getIntent();
         type = intent.getStringExtra("type");
         if(type.equals("0") || type.equals("3")){
@@ -193,7 +185,6 @@ public class ConsoleActivity extends SlideBackActivity {
             SMM.sendRequestToXTC(request, "");
         }
         else{
-            System.out.println(android.os.Build.BRAND);
             Intent intent = new Intent(ConsoleActivity.this, QRCodeActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复

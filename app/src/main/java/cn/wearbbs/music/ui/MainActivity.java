@@ -13,7 +13,6 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.os.StrictMode;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -31,12 +30,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
-import com.microsoft.appcenter.AppCenter;
-import com.microsoft.appcenter.analytics.Analytics;
-import com.microsoft.appcenter.crashes.Crashes;
-
-import org.apache.log4j.chainsaw.Main;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -60,12 +53,12 @@ import me.wcy.lrcview.LrcView;
 public class MainActivity extends SlideBackActivity {
     public static MediaPlayer mediaPlayer;
     public static boolean playing = false;
-    int now = 0;
+    public static int musicIndex = 0;
     List search_list;
     String url;
     String type;
     static double Version = 2.1;
-    File tl;
+    File lrcFile;
     LrcView lrcView;
     Map lrc_map;
     String id;
@@ -74,16 +67,15 @@ public class MainActivity extends SlideBackActivity {
     Boolean will_next = false;
     List mvids;
     String coverUrl;
-    boolean prepareDone = false;
+    public static boolean prepareDone = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         search_list = new ArrayList();
+        mvids = new ArrayList();
+        prepareDone = false;
         String PERMISSION_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        AppCenter.start(getApplication(), "9250a12d-0fa9-4292-99fc-9d09dcc32012", Analytics.class, Crashes.class);
         HeadSetUtil.getInstance().setOnHeadSetListener(headSetListener);
         HeadSetUtil.getInstance().open(MainActivity.this);
         if (PermissionUtil.checkPermission(this,PERMISSION_STORAGE)) {
@@ -131,12 +123,12 @@ public class MainActivity extends SlideBackActivity {
                     LinearLayout ly = findViewById(R.id.ly_search);
                     sv_main.setVisibility(View.VISIBLE);
                     ly.setVisibility(View.GONE);
-                    if (!(start == null)) {
+                    if (start != null) {
                         search_list = JSONObject.parseArray(get_music.getStringExtra("list"));
-                        now = Integer.parseInt(start);
+                        musicIndex = Integer.parseInt(start);
                         type = get_music.getStringExtra("type");
                         if(!MainActivity.this.isFinishing()){
-                            Toast.makeText(MainActivity.this,"点击音乐名查看歌词",Toast.LENGTH_SHORT).show();
+                            
                             will_next = true;
                             TextView msg = findViewById(R.id.msg);
                             msg.setText("加载中");
@@ -247,15 +239,16 @@ public class MainActivity extends SlideBackActivity {
                                                 finish();
                                             }
                                         }
-
-                                        now = 0;
-                                        type = "3";
-                                        if (!MainActivity.this.isFinishing()) {
-                                            Toast.makeText(MainActivity.this, "点击音乐名查看歌词", Toast.LENGTH_SHORT).show();
-                                            will_next = true;
-                                            TextView msg = findViewById(R.id.msg);
-                                            msg.setText("加载中");
+                                        mvids = new ArrayList();
+                                        for (int j = 0;j<search_list.size();j++){
+                                            Map temp = (Map)JSON.parse(search_list.get(j).toString());
+                                            mvids.add(temp.get("mvid").toString());
                                         }
+                                        musicIndex = 0;
+                                        type = "3";
+                                        will_next = true;
+                                        TextView msg = findViewById(R.id.msg);
+                                        msg.setText("加载中");
                                         ImageView imageView = findViewById(R.id.btn_open);
                                         imageView.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
                                     } catch (Exception ea) {
@@ -266,14 +259,11 @@ public class MainActivity extends SlideBackActivity {
                                     }
                                 } else {
                                     search_list = JSONObject.parseArray(get_music.getStringExtra("list"));
-                                    now = Integer.parseInt(start);
+                                    musicIndex = Integer.parseInt(start);
                                     type = get_music.getStringExtra("type");
-                                    if (!MainActivity.this.isFinishing()) {
-                                        Toast.makeText(MainActivity.this, "点击音乐名查看歌词", Toast.LENGTH_SHORT).show();
-                                        will_next = true;
-                                        TextView msg = findViewById(R.id.msg);
-                                        msg.setText("加载中");
-                                    }
+                                    will_next = true;
+                                    TextView msg = findViewById(R.id.msg);
+                                    msg.setText("加载中");
                                 }
                             });
                     builder.create().show();
@@ -349,15 +339,30 @@ public class MainActivity extends SlideBackActivity {
                         }
                         Map maps = new FMApi().FM(cookie);
                         search_list = JSON.parseArray(maps.get("data").toString());
-
-                        now = 0;
-                        type = "3";
-                        if(!MainActivity.this.isFinishing()){
-                            Toast.makeText(MainActivity.this,"点击音乐名查看歌词",Toast.LENGTH_SHORT).show();
-                            will_next = true;
-                            TextView msg = findViewById(R.id.msg);
-                            msg.setText("加载中");
+                        if(search_list.size() == 0){
+                            maps = new FMApi().FM(cookie);
+                            search_list = JSON.parseArray(maps.get("data").toString());
+                            if(search_list.size() == 0){
+                                Log.d("Main","登陆过期");
+                                Toast.makeText(MainActivity.this, "登录过期，请重新登陆", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
+                                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
+                                startActivity(intent);
+                                finish();
+                            }
                         }
+                        mvids = new ArrayList();
+                        for (int j = 0;j<search_list.size();j++){
+                            Map temp = (Map)JSON.parse(search_list.get(j).toString());
+                            mvids.add(temp.get("mvid").toString());
+                        }
+                        musicIndex = 0;
+                        type = "3";
+                        
+                        will_next = true;
+                        TextView msg = findViewById(R.id.msg);
+                        msg.setText("加载中");
                         ImageView imageView = findViewById(R.id.btn_open);
                         imageView.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
                     } catch (Exception ea) {
@@ -369,10 +374,10 @@ public class MainActivity extends SlideBackActivity {
                 }
                 else {
                     search_list = JSONObject.parseArray(get_music.getStringExtra("list"));
-                    now = Integer.parseInt(start);
+                    musicIndex = Integer.parseInt(start);
                     type = get_music.getStringExtra("type");
                     if(!MainActivity.this.isFinishing()){
-                        Toast.makeText(MainActivity.this,"点击音乐名查看歌词",Toast.LENGTH_SHORT).show();
+                        
                         will_next = true;
                         TextView msg = findViewById(R.id.msg);
                         msg.setText("加载中");
@@ -420,7 +425,6 @@ public class MainActivity extends SlideBackActivity {
             will_next=false;
         }
     }
-
     public void relogin() throws Exception {
         File saver = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/saver.txt");
         BufferedReader in = new BufferedReader(new FileReader(saver));
@@ -479,19 +483,14 @@ public class MainActivity extends SlideBackActivity {
     }
     public void init_player(){
         mediaPlayer = new MediaPlayer();
-        mediaPlayer.setOnCompletionListener(mediaPlayer -> {
-            now += 1;
-            nextMusic();
-        });
         mediaPlayer.setOnErrorListener((mediaPlayer, i, i1) -> {
             TextView textView = findViewById(R.id.msg);
             textView.setText("播放出错");
             ((ImageView)findViewById(R.id.imageView11)).setImageResource(R.drawable.ic_baseline_error_24);
             return false;
         });
-
         // 设置设备进入锁状态模式-可在后台播放或者缓冲音乐-CPU一直工作
-        mediaPlayer.setWakeMode(MainActivity.this, PowerManager.PARTIAL_WAKE_LOCK);
+        mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
         // 如果你使用wifi播放流媒体，你还需要持有wifi锁
         WifiManager.WifiLock wifiLock = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL, "wifilock");
         wifiLock.acquire();
@@ -542,12 +541,22 @@ public class MainActivity extends SlideBackActivity {
                 // could not get audio focus.
             }
         }
-
+    }
+    public void playList(View view){
+        Intent intent = new Intent(MainActivity.this, PlayListActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
+        intent.putExtra("mvids",JSON.toJSONString(mvids));
+        intent.putExtra("list", JSON.toJSONString(search_list));
+        intent.putExtra("type",type);
+        intent.putExtra("musicIndex",String.valueOf(musicIndex));
+        startActivity(intent);
     }
     public static MediaPlayer getMediaPlayer(){
         return mediaPlayer;
     }
     public void nextMusic(){
+        prepareDone = false;
         zt = 1;
         ScrollView sv_main = findViewById(R.id.sv_main);
         LinearLayout ly = findViewById(R.id.ly_search);
@@ -565,12 +574,12 @@ public class MainActivity extends SlideBackActivity {
             if(type.equals("0") || type.equals("3")){
                 Map temp_ni;
                 try{
-                    String temp = ((search_list.get(now)).toString());
+                    String temp = ((search_list.get(musicIndex)).toString());
                     temp_ni = (Map) JSON.parse(temp);
                     id = temp_ni.get("id").toString();
                 } catch (Exception e) {
-                    now = 0;
-                    String temp = ((search_list.get(now)).toString());
+                    musicIndex = 0;
+                    String temp = ((search_list.get(musicIndex)).toString());
                     temp_ni = (Map) JSON.parse(temp);
                     id = temp_ni.get("id").toString();
                 }
@@ -612,38 +621,16 @@ public class MainActivity extends SlideBackActivity {
                                             imageViewBtn.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
                                         });
                                     }
-                                    prepareDone = true;
+                                    MainActivity.this.runOnUiThread(()->Toast.makeText(MainActivity.this,"点击音乐名查看歌词",Toast.LENGTH_SHORT).show());
                                 }
                                 else{
-                                    mediaPlayer.release();
-                                    init_player();
-                                    mediaPlayer.reset();
-                                    try {
-                                        mediaPlayer.setDataSource(url);
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                    if(MusicService.prepare()){
-                                        Log.d("MediaPlayer","音乐准备成功");
-                                        if(!type.equals("3")){
-                                            MusicService.startPlaySong();
-                                            playing = true;
-                                        }
-                                        else{
-                                            playing = false;
-                                        }
-                                        prepareDone = true;
-                                    }
-                                    else{
-                                        Log.d("MediaPlayer","音乐准备失败");
-                                        MainActivity.this.runOnUiThread(()->Toast.makeText(MainActivity.this,"音乐准备失败",Toast.LENGTH_SHORT).show());
-                                        prepareDone = false;
-                                        playing = false;
-                                        MainActivity.this.runOnUiThread(()->{
-                                            ImageView imageViewBtn = findViewById(R.id.btn_open);
-                                            imageViewBtn.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
-                                        });
-                                    }
+                                    Log.d("MediaPlayer","音乐准备失败");
+                                    MainActivity.this.runOnUiThread(()->Toast.makeText(MainActivity.this,"音乐准备失败",Toast.LENGTH_SHORT).show());
+                                    playing = false;
+                                    MainActivity.this.runOnUiThread(()->{
+                                        ImageView imageViewBtn = findViewById(R.id.btn_open);
+                                        imageViewBtn.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
+                                    });
                                 }
                             });
                             thread.start();
@@ -686,25 +673,24 @@ public class MainActivity extends SlideBackActivity {
                 }
                 else{
                     Toast.makeText(MainActivity.this,"该音乐暂无版权",Toast.LENGTH_SHORT).show();
-                    now += 1;
+                    musicIndex += 1;
                     nextMusic();
                 }
             }
             else{
                 try{
                     mediaPlayer.reset();
-                    mediaPlayer.setDataSource(search_list.get(now).toString());
+                    mediaPlayer.setDataSource(search_list.get(musicIndex).toString());
                     Thread thread = new Thread(()->{
                         Log.d("MediaPlayer","开始准备音乐");
                         if(MusicService.prepare()){
                             Log.d("MediaPlayer","音乐准备成功");
-                            prepareDone = true;
                             MusicService.startPlaySong();
                             playing = true;
+                            MainActivity.this.runOnUiThread(()->Toast.makeText(MainActivity.this,"点击音乐名查看歌词",Toast.LENGTH_SHORT).show());
                         }
                         else{
                             MainActivity.this.runOnUiThread(() ->Toast.makeText(MainActivity.this,"音乐加载失败",Toast.LENGTH_SHORT).show());
-                            prepareDone = false;
                             playing = false;
                             MainActivity.this.runOnUiThread(()->{
                                 ImageView imageViewBtn = findViewById(R.id.btn_open);
@@ -715,7 +701,7 @@ public class MainActivity extends SlideBackActivity {
                     });
                     thread.start();
                     TextView textView = findViewById(R.id.msg);
-                    String temp = (search_list.get(now).toString().replace("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music/","")).replace(".mp3","");
+                    String temp = (search_list.get(musicIndex).toString().replace("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music/","")).replace(".mp3","");
                     textView.setText(Html.fromHtml(temp));
                     File file = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/download/cover/" + temp + ".jpg");
                     RequestOptions options = new RequestOptions().bitmapTransform(new RoundedCorners(20)).placeholder(R.drawable.ic_baseline_photo_size_select_actual_24).error(R.drawable.ic_baseline_photo_size_select_actual_24);
@@ -723,21 +709,20 @@ public class MainActivity extends SlideBackActivity {
                             .apply(options)
                             .into((ImageView) findViewById(R.id.imageView11));
                 } catch (Exception e) {
-                    now = 0;
+                    musicIndex = 0;
                     mediaPlayer.reset();
-                    mediaPlayer.setDataSource(search_list.get(now).toString());
+                    mediaPlayer.setDataSource(search_list.get(musicIndex).toString());
                     Thread thread = new Thread(()->{
                         Log.d("MediaPlayer","开始准备音乐");
                         if(MusicService.prepare()){
                             Log.d("MediaPlayer","音乐准备完成");
                             MusicService.startPlaySong();
                             playing = true;
-                            prepareDone = true;
+                            MainActivity.this.runOnUiThread(()->Toast.makeText(MainActivity.this,"点击音乐名查看歌词",Toast.LENGTH_SHORT).show());
                         }
                         else {
                             MainActivity.this.runOnUiThread(() ->Toast.makeText(MainActivity.this,"音乐加载失败",Toast.LENGTH_SHORT).show());
                             playing = false;
-                            prepareDone = false;
                             MainActivity.this.runOnUiThread(()->{
                                 ImageView imageViewBtn = findViewById(R.id.btn_open);
                                 imageViewBtn.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
@@ -747,7 +732,7 @@ public class MainActivity extends SlideBackActivity {
                     });
                     thread.start();
                     TextView textView = findViewById(R.id.msg);
-                    String temp = (search_list.get(now).toString().replace("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music/","")).replace(".mp3","");
+                    String temp = (search_list.get(musicIndex).toString().replace("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music/","")).replace(".mp3","");
                     textView.setText(Html.fromHtml(temp));
                     File file = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/download/cover/" + temp + ".jpg");
                     RequestOptions options = new RequestOptions().bitmapTransform(new RoundedCorners(20)).placeholder(R.drawable.ic_baseline_photo_size_select_actual_24).error(R.drawable.ic_baseline_photo_size_select_actual_24);
@@ -764,19 +749,20 @@ public class MainActivity extends SlideBackActivity {
                 ProgressBar pb_lyrics = findViewById(R.id.pb_lyrics);
                 while (true){
                     if(prepareDone){
-                        try{
-                            pb_main.setMax(MusicService.getDuration());
-                            pb_main.setProgress(MusicService.getCurrentPosition());
-                            pb_lyrics.setMax(MusicService.getDuration());
-                            pb_lyrics.setProgress(MusicService.getCurrentPosition());
+                        pb_main.setMax(MusicService.getDuration());
+                        pb_main.setProgress(MusicService.getCurrentPosition());
+                        pb_lyrics.setMax(MusicService.getDuration());
+                        pb_lyrics.setProgress(MusicService.getCurrentPosition());
+                        if(MusicService.getCurrentPosition() >= MusicService.getDuration()){
+                            prepareDone = false;
+                            pb_main.setProgress(0);
+                            pb_lyrics.setProgress(0);
+                            MainActivity.this.runOnUiThread(()->right(null));
+                            c(null);
                         }
-                        catch (Exception e){
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException interruptedException) {
-                                interruptedException.printStackTrace();
-                            }
-                        }
+                    }
+                    else{
+                        Log.d("MediaService","进度条等待更新中");
                     }
                 }
             });
@@ -810,13 +796,13 @@ public class MainActivity extends SlideBackActivity {
         }
     }
     public void right(View view){
-        now += 1;
+        musicIndex += 1;
         prepareDone = false;
         nextMusic();
         c(null);
     }
     public void left(View view){
-        now -= 1;
+        musicIndex -= 1;
         prepareDone = false;
         nextMusic();
         c(null);
@@ -854,24 +840,24 @@ public class MainActivity extends SlideBackActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
         intent.putExtra("type",type);
         if (type.equals("0")){
-            String temp = ((search_list.get(now)).toString());
+            String temp = ((search_list.get(musicIndex)).toString());
             Map temp_ni = (Map) JSON.parse(temp);
             intent.putExtra("id",temp_ni.get("id").toString());
             intent.putExtra("name",temp_ni.get("name").toString());
             intent.putExtra("artists",temp_ni.get("artists").toString());
             intent.putExtra("song",temp_ni.get("name").toString() + " - " + temp_ni.get("artists").toString());
             intent.putExtra("url",url);
-            intent.putExtra("comment",temp_ni.get("comment").toString());
+            if(temp_ni.get("comment")!=null) intent.putExtra("comment",temp_ni.get("comment").toString());
             intent.putExtra("coverUrl",coverUrl);
             try {
-                intent.putExtra("mvid",mvids.get(now).toString());
+                intent.putExtra("mvid", mvids.get(musicIndex).toString());
             }
             catch (Exception e){
                 intent.putExtra("mvid","");
             }
         }
         else if(type.equals("3")){
-            String temp = ((search_list.get(now)).toString());
+            String temp = ((search_list.get(musicIndex)).toString());
             Map temp_ni = (Map) JSON.parse(temp);
             List temp_1 = JSON.parseArray(temp_ni.get("artists").toString());
             Map temp_2 = (Map)JSON.parse(temp_1.get(0).toString());
@@ -898,30 +884,29 @@ public class MainActivity extends SlideBackActivity {
                 lrc_map = (Map) JSON.parse(maps.get("lrc").toString());
                 File dir = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/temp/");
                 dir.mkdirs();
-                tl = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/temp/temp.lrc");
-                tl.createNewFile();
+                lrcFile = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/temp/temp.lrc");
+                lrcFile.createNewFile();
                 FileOutputStream outputStream;
-                outputStream = new FileOutputStream(tl);
+                outputStream = new FileOutputStream(lrcFile);
                 outputStream.write(lrc_map.get("lyric").toString().getBytes());
                 outputStream.close();
             } catch (Exception e) {
                 File dir = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/temp/");
                 dir.mkdirs();
-                tl = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/temp/temp.lrc");
-                tl.createNewFile();
+                lrcFile = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/temp/temp.lrc");
+                lrcFile.createNewFile();
                 FileOutputStream outputStream;
-                outputStream = new FileOutputStream(tl);
+                outputStream = new FileOutputStream(lrcFile);
                 outputStream.write("[00:00.00]无歌词".getBytes());
                 outputStream.close();
                 e.printStackTrace();
             }
         }
         else{
-            String temp = ((search_list.get(now)).toString());
-            tl = new File((temp.replace("/music/","/lrc/")).replace(".mp3",".lrc"));
+            String temp = ((search_list.get(musicIndex)).toString());
+            lrcFile = new File((temp.replace("/music/","/lrc/")).replace(".mp3",".lrc"));
         }
         lrcView = findViewById(R.id.lv_main);
-        File lrcFile = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/temp/temp.lrc");
         lrcView.loadLrc(lrcFile);
         new Thread(()->{
             while (true){
@@ -961,7 +946,7 @@ public class MainActivity extends SlideBackActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
             intent.putExtra("type", type);
             if (type.equals("3")){
-                String temp = ((search_list.get(now)).toString());
+                String temp = ((search_list.get(musicIndex)).toString());
                 Map temp_ni = (Map) JSON.parse(temp);
                 List temp_1 = JSON.parseArray(temp_ni.get("artists").toString());
                 Map temp_2 = (Map)JSON.parse(temp_1.get(0).toString());
@@ -969,12 +954,12 @@ public class MainActivity extends SlideBackActivity {
                 intent.putExtra("pic",coverUrl);
             }
             if(type.equals("1")){
-                String tmp = search_list.get(now).toString().replace("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music/","");
+                String tmp = search_list.get(musicIndex).toString().replace("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music/","");
                 intent.putExtra("song",tmp);
                 intent.putExtra("pic",coverUrl);
             }
             if(type.equals("0")){
-                String temp = ((search_list.get(now)).toString());
+                String temp = ((search_list.get(musicIndex)).toString());
                 Map temp_ni = (Map) JSON.parse(temp);
                 intent.putExtra("song",temp_ni.get("name").toString() + " - " + temp_ni.get("artists").toString());
                 intent.putExtra("pic",coverUrl);

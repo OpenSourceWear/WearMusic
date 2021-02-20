@@ -94,6 +94,7 @@ public class CommentAdapter extends BaseAdapter {
         });
         ((ExpandableTextView)view.findViewById(R.id.title)).setText(listText.get(position).toString());
         ((TextView)view.findViewById(R.id.name)).setText(arr_name.get(position).toString());
+        ((ImageView)view.findViewById(R.id.like_icon)).setImageResource(R.drawable.ic_baseline_favorite_border_24);
         return view;
     }
 }

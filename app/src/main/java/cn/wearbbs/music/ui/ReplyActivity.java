@@ -7,11 +7,6 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 import cn.wearbbs.music.R;
-
-import com.microsoft.appcenter.AppCenter;
-import com.microsoft.appcenter.analytics.Analytics;
-import com.microsoft.appcenter.crashes.Crashes;
-
 import java.util.Map;
 
 import cn.wearbbs.music.api.CommentApi;
@@ -25,9 +20,6 @@ public class ReplyActivity extends SlideBackActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reply);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        if (!AppCenter.isConfigured()) {
-            AppCenter.start(getApplication(), "9250a12d-0fa9-4292-99fc-9d09dcc32012", Analytics.class, Crashes.class);
-        }
         Intent intent = getIntent();
         id = intent.getStringExtra("id");
     }
