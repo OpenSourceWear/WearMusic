@@ -58,7 +58,7 @@
 ## 关于
 
 - 哔哩哔哩：@JackuXL
-- 软件交流群：1050643053
+- 软件交流群：133636679
 
 WearMusic 是完全开源且免费的。同时，维护后台的[API服务器](https://music.wearbbs.cn)和[更新服务器](https://wmu.wearbbs.cn)需要投入大量的资金，您可以自愿捐助我们，保证WearMusic 的正常更新、运行。
 
