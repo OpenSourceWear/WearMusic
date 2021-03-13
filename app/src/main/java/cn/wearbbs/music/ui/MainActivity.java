@@ -1,6 +1,7 @@
 package cn.wearbbs.music.ui;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -12,6 +13,7 @@ import android.media.MediaPlayer;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.PowerManager;
 import android.text.Html;
 import android.util.Log;
@@ -44,7 +46,6 @@ import cn.wearbbs.music.api.FMApi;
 import cn.wearbbs.music.api.MusicApi;
 import cn.wearbbs.music.api.UpdateApi;
 import cn.wearbbs.music.api.UserApi;
-import cn.wearbbs.music.service.MusicService;
 import cn.wearbbs.music.util.HeadSetUtil;
 import cn.wearbbs.music.util.PermissionUtil;
 import cn.wearbbs.music.util.UserInfoUtil;
@@ -426,12 +427,8 @@ public class MainActivity extends SlideBackActivity {
         }
     }
     public void relogin() throws Exception {
-        File saver = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/saver.txt");
-        BufferedReader in = new BufferedReader(new FileReader(saver));
-        String temp = in.readLine();
-        Map maps2 = (Map) JSON.parse(temp);
-        String check = maps2.get("first").toString();
-        Map map = new UserApi().Login(this,check, maps2.get("second").toString());
+        String check = UserInfoUtil.getUserInfo(this,"account");
+        Map map = new UserApi().Login(this,check, UserInfoUtil.getUserInfo(this,"password"));
         if(map.containsKey("error")){
             //请求失败
             Toast.makeText(MainActivity.this,"登录过期，请重新登录",Toast.LENGTH_SHORT).show();
@@ -441,6 +438,7 @@ public class MainActivity extends SlideBackActivity {
             startActivity(intent);
             finish();
         }
+        Log.d("relogin",check);
     }
 
     public void menu(View view){
@@ -482,13 +480,11 @@ public class MainActivity extends SlideBackActivity {
         }
     }
     public void init_player(){
+        if(mediaPlayer!=null){
+            mediaPlayer.reset();
+            mediaPlayer.release();
+        }
         mediaPlayer = new MediaPlayer();
-        mediaPlayer.setOnErrorListener((mediaPlayer, i, i1) -> {
-            TextView textView = findViewById(R.id.msg);
-            textView.setText("播放出错");
-            ((ImageView)findViewById(R.id.imageView11)).setImageResource(R.drawable.ic_baseline_error_24);
-            return false;
-        });
         // 设置设备进入锁状态模式-可在后台播放或者缓冲音乐-CPU一直工作
         mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
         // 如果你使用wifi播放流媒体，你还需要持有wifi锁
@@ -534,13 +530,8 @@ public class MainActivity extends SlideBackActivity {
                     .setOnAudioFocusChangeListener(focusChangeListener).build();
             audioFocusRequest.acceptsDelayedFocusGain();
             audioManager.requestAudioFocus(audioFocusRequest);
-        } else {
-            // 小于Android 8.0
-            int result = audioManager.requestAudioFocus(focusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-            if (result != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-                // could not get audio focus.
-            }
         }
+        
     }
     public void playList(View view){
         Intent intent = new Intent(MainActivity.this, PlayListActivity.class);
@@ -555,24 +546,24 @@ public class MainActivity extends SlideBackActivity {
     public static MediaPlayer getMediaPlayer(){
         return mediaPlayer;
     }
+    String tmp_name;
     public void nextMusic(){
         prepareDone = false;
         zt = 1;
-        ScrollView sv_main = findViewById(R.id.sv_main);
-        LinearLayout ly = findViewById(R.id.ly_search);
-        sv_main.setVisibility(View.VISIBLE);
-        ly.setVisibility(View.GONE);
-        ImageView imageView = findViewById(R.id.btn_open);
-        imageView.setImageResource(R.drawable.ic_baseline_pause_circle_filled_24);
+        MainActivity.this.runOnUiThread(()->{
+            ScrollView sv_main = findViewById(R.id.sv_main);
+            LinearLayout ly = findViewById(R.id.ly_search);
+            sv_main.setVisibility(View.VISIBLE);
+            ly.setVisibility(View.GONE);
+        });
         //有音乐
         try {
-            if (mediaPlayer == null){
-                init_player();
-            }
+            if (mediaPlayer == null) init_player();
+            mediaPlayer.reset();
             //开始播放
             String text;
             if(type.equals("0") || type.equals("3")){
-                Map temp_ni;
+
                 try{
                     String temp = ((search_list.get(musicIndex)).toString());
                     temp_ni = (Map) JSON.parse(temp);
@@ -588,9 +579,11 @@ public class MainActivity extends SlideBackActivity {
                     maps_yz = new MusicApi().checkMusic(cookie,id);
                 }
                 if(maps_yz == null){
-                    TextView textView = findViewById(R.id.msg);
-                    textView.setText("播放出错（请求失败）");
-                    ((ImageView)findViewById(R.id.imageView11)).setImageResource(R.drawable.ic_baseline_error_24);
+                    MainActivity.this.runOnUiThread(()->{
+                        TextView textView = findViewById(R.id.msg);
+                        textView.setText("播放出错（请求失败）");
+                        ((ImageView)findViewById(R.id.imageView11)).setImageResource(R.drawable.ic_baseline_error_24);
+                    });
                 }
                 else if(maps_yz.get("success").toString().equals("true")){
                     Map maps = new MusicApi().getMusicUrl(cookie,id);
@@ -598,46 +591,43 @@ public class MainActivity extends SlideBackActivity {
                         System.out.println(maps);
                         Map data = (Map)JSON.parse(maps.get("data").toString().replace("[","").replace("]",""));
                         if(data.get("url").toString().equals("null")){
-                            TextView textView = findViewById(R.id.msg);
-                            textView.setText("播放出错（链接无效）");
-                            ((ImageView)findViewById(R.id.imageView11)).setImageResource(R.drawable.ic_baseline_error_24);
+                            MainActivity.this.runOnUiThread(()->{
+                                TextView textView = findViewById(R.id.msg);
+                                textView.setText("播放出错（链接无效）");
+                                ((ImageView)findViewById(R.id.imageView11)).setImageResource(R.drawable.ic_baseline_error_24);});
                         }
                         else{
                             url = data.get("url").toString();
-                            mediaPlayer.reset();
-                            mediaPlayer.setDataSource(url);
                             Thread thread = new Thread(()->{
                                 Log.d("MediaPlayer","开始准备音乐");
-                                if(MusicService.prepare()){
+                                try {
+                                    mediaPlayer.setDataSource(url);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                try{
+                                    mediaPlayer.prepare();
+                                    prepareDone = true;
                                     Log.d("MediaPlayer","音乐准备成功");
                                     if(!type.equals("3")){
-                                        MusicService.startPlaySong();
+                                        mediaPlayer.start();
                                         playing = true;
                                     }
                                     else{
                                         playing = false;
-                                        MainActivity.this.runOnUiThread(()->{
-                                            ImageView imageViewBtn = findViewById(R.id.btn_open);
-                                            imageViewBtn.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
-                                        });
                                     }
                                     MainActivity.this.runOnUiThread(()->Toast.makeText(MainActivity.this,"点击音乐名查看歌词",Toast.LENGTH_SHORT).show());
                                 }
-                                else{
+                                catch(Exception e){
                                     Log.d("MediaPlayer","音乐准备失败");
                                     MainActivity.this.runOnUiThread(()->Toast.makeText(MainActivity.this,"音乐准备失败",Toast.LENGTH_SHORT).show());
                                     playing = false;
-                                    MainActivity.this.runOnUiThread(()->{
-                                        ImageView imageViewBtn = findViewById(R.id.btn_open);
-                                        imageViewBtn.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
-                                    });
                                 }
                             });
                             thread.start();
-                            TextView textView = findViewById(R.id.msg);
-                            String temp;
+
                             if(type.equals("0")){
-                                temp = "<font color='#2A2B2C'>" + temp_ni.get("name").toString() +  "</font> - " + "<font color='#999999'>" + temp_ni.get("artists").toString() + "</font>";
+                                tmp_name = "<font color='#2A2B2C'>" + temp_ni.get("name").toString() +  "</font> - " + "<font color='#999999'>" + temp_ni.get("artists").toString() + "</font>";
                                 RequestOptions options = new RequestOptions().bitmapTransform(new RoundedCorners(20)).placeholder(R.drawable.ic_baseline_photo_size_select_actual_24).error(R.drawable.ic_baseline_photo_size_select_actual_24);
                                 if(temp_ni.containsKey("picUrl")){
                                     coverUrl = temp_ni.get("picUrl").toString();
@@ -646,87 +636,99 @@ public class MainActivity extends SlideBackActivity {
                                     System.out.println(temp_ni);
                                     coverUrl = new MusicApi().getMusicCover(String.valueOf(temp_ni.get("albumId")));
                                 }
-                                Glide.with(getApplicationContext()).load(coverUrl)
-                                        .apply(options)
-                                        .into((ImageView) findViewById(R.id.imageView11));
+                                MainActivity.this.runOnUiThread(()->Glide.with(getApplicationContext()).load(coverUrl).apply(options).into((ImageView) findViewById(R.id.imageView11)));
                             }
                             else{
-                                List temp_1 = JSON.parseArray(temp_ni.get("artists").toString());
-                                Map temp_2 = (Map)JSON.parse(temp_1.get(0).toString());
-                                Map temp_3 = (Map)JSON.parse(temp_ni.get("album").toString());
-                                temp = "<font color='#2A2B2C'>" + temp_ni.get("name").toString() +  "</font> - " + "<font color='#999999'>" + temp_2.get("name") + "</font>";
-                                RequestOptions options = new RequestOptions().bitmapTransform(new RoundedCorners(20)).placeholder(R.drawable.ic_baseline_photo_size_select_actual_24).error(R.drawable.ic_baseline_photo_size_select_actual_24);
-                                coverUrl = new MusicApi().getMusicCover(String.valueOf(temp_3.get("id")));
-                                Glide.with(getApplicationContext()).load(coverUrl)
-                                        .apply(options)
-                                        .into((ImageView) findViewById(R.id.imageView11));
+                                MainActivity.this.runOnUiThread(()->{
+                                    List temp_1 = JSON.parseArray(temp_ni.get("artists").toString());
+                                    Map temp_2 = (Map)JSON.parse(temp_1.get(0).toString());
+                                    Map temp_3 = (Map)JSON.parse(temp_ni.get("album").toString());
+                                    tmp_name = "<font color='#2A2B2C'>" + temp_ni.get("name").toString() +  "</font> - " + "<font color='#999999'>" + temp_2.get("name") + "</font>";
+                                    RequestOptions options = new RequestOptions().bitmapTransform(new RoundedCorners(20)).placeholder(R.drawable.ic_baseline_photo_size_select_actual_24).error(R.drawable.ic_baseline_photo_size_select_actual_24);
+                                    try {
+                                        coverUrl = new MusicApi().getMusicCover(String.valueOf(temp_3.get("id")));
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    Glide.with(getApplicationContext()).load(coverUrl)
+                                            .apply(options)
+                                            .into((ImageView) findViewById(R.id.imageView11));});
                             }
-                            textView.setText(Html.fromHtml(temp));
+                            MainActivity.this.runOnUiThread(()->{
+                                TextView textView = findViewById(R.id.msg);
+                                textView.setText(Html.fromHtml(tmp_name));
+                            });
                         }
                     }
                     else{
                         //播放出错
-                        TextView textView = findViewById(R.id.msg);
-                        textView.setText("播放出错（请求失败）");
+                        MainActivity.this.runOnUiThread(()->{
+                            TextView textView = findViewById(R.id.msg);
+                            textView.setText("播放出错（请求失败）");});
                         ((ImageView)findViewById(R.id.imageView11)).setImageResource(R.drawable.ic_baseline_error_24);
                     }
                 }
                 else{
-                    Toast.makeText(MainActivity.this,"该音乐暂无版权",Toast.LENGTH_SHORT).show();
+                    MainActivity.this.runOnUiThread(()->Toast.makeText(MainActivity.this,"该音乐暂无版权",Toast.LENGTH_SHORT).show());
                     musicIndex += 1;
                     nextMusic();
                 }
+
             }
             else{
                 try{
-                    mediaPlayer.reset();
-                    mediaPlayer.setDataSource(search_list.get(musicIndex).toString());
                     Thread thread = new Thread(()->{
                         Log.d("MediaPlayer","开始准备音乐");
-                        if(MusicService.prepare()){
+                        try {
+                            mediaPlayer.setDataSource(search_list.get(musicIndex).toString());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        try{
+                            mediaPlayer.prepare();
+                            prepareDone = true;
                             Log.d("MediaPlayer","音乐准备成功");
-                            MusicService.startPlaySong();
+                            mediaPlayer.start();
                             playing = true;
                             MainActivity.this.runOnUiThread(()->Toast.makeText(MainActivity.this,"点击音乐名查看歌词",Toast.LENGTH_SHORT).show());
                         }
-                        else{
+                        catch(Exception e){
                             MainActivity.this.runOnUiThread(() ->Toast.makeText(MainActivity.this,"音乐加载失败",Toast.LENGTH_SHORT).show());
                             playing = false;
-                            MainActivity.this.runOnUiThread(()->{
-                                ImageView imageViewBtn = findViewById(R.id.btn_open);
-                                imageViewBtn.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
-                            });
                         }
                         Log.d("MediaPlayer","音乐准备完成");
                     });
                     thread.start();
-                    TextView textView = findViewById(R.id.msg);
-                    String temp = (search_list.get(musicIndex).toString().replace("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music/","")).replace(".mp3","");
-                    textView.setText(Html.fromHtml(temp));
-                    File file = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/download/cover/" + temp + ".jpg");
-                    RequestOptions options = new RequestOptions().bitmapTransform(new RoundedCorners(20)).placeholder(R.drawable.ic_baseline_photo_size_select_actual_24).error(R.drawable.ic_baseline_photo_size_select_actual_24);
-                    Glide.with(getApplicationContext()).load(file)
-                            .apply(options)
-                            .into((ImageView) findViewById(R.id.imageView11));
+                    MainActivity.this.runOnUiThread(()->{
+                        TextView textView = findViewById(R.id.msg);
+                                String temp = (search_list.get(musicIndex).toString().replace("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music/","")).replace(".mp3","");
+                        textView.setText(Html.fromHtml(temp));
+                        File file = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/download/cover/" + temp + ".jpg");
+                        RequestOptions options = new RequestOptions().bitmapTransform(new RoundedCorners(20)).placeholder(R.drawable.ic_baseline_photo_size_select_actual_24).error(R.drawable.ic_baseline_photo_size_select_actual_24);
+                        Glide.with(getApplicationContext()).load(file)
+                                .apply(options)
+                                .into((ImageView) findViewById(R.id.imageView11));
+                    });
                 } catch (Exception e) {
                     musicIndex = 0;
-                    mediaPlayer.reset();
-                    mediaPlayer.setDataSource(search_list.get(musicIndex).toString());
                     Thread thread = new Thread(()->{
                         Log.d("MediaPlayer","开始准备音乐");
-                        if(MusicService.prepare()){
+                        try {
+                            mediaPlayer.setDataSource(search_list.get(musicIndex).toString());
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                        try{
+                            mediaPlayer.prepare();
+                            prepareDone = true;
                             Log.d("MediaPlayer","音乐准备完成");
-                            MusicService.startPlaySong();
+                            mediaPlayer.start();
                             playing = true;
                             MainActivity.this.runOnUiThread(()->Toast.makeText(MainActivity.this,"点击音乐名查看歌词",Toast.LENGTH_SHORT).show());
                         }
-                        else {
+                        catch (Exception es){
                             MainActivity.this.runOnUiThread(() ->Toast.makeText(MainActivity.this,"音乐加载失败",Toast.LENGTH_SHORT).show());
                             playing = false;
-                            MainActivity.this.runOnUiThread(()->{
-                                ImageView imageViewBtn = findViewById(R.id.btn_open);
-                                imageViewBtn.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
-                            });
                         }
 
                     });
@@ -741,71 +743,105 @@ public class MainActivity extends SlideBackActivity {
                             .into((ImageView) findViewById(R.id.imageView11));
                 }
             }
-            Intent intent=new Intent(this, MusicService.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startService(intent);
-            Thread pbThread = new Thread(()->{
-                ProgressBar pb_main = findViewById(R.id.pb_main);
-                ProgressBar pb_lyrics = findViewById(R.id.pb_lyrics);
-                while (true){
-                    if(prepareDone){
-                        pb_main.setMax(MusicService.getDuration());
-                        pb_main.setProgress(MusicService.getCurrentPosition());
-                        pb_lyrics.setMax(MusicService.getDuration());
-                        pb_lyrics.setProgress(MusicService.getCurrentPosition());
-                        if(MusicService.getCurrentPosition() >= MusicService.getDuration()){
-                            prepareDone = false;
-                            pb_main.setProgress(0);
-                            pb_lyrics.setProgress(0);
-                            MainActivity.this.runOnUiThread(()->right(null));
-                            c(null);
-                        }
-                    }
-                    else{
-                        Log.d("MediaService","进度条等待更新中");
-                    }
+            new Thread(){
+                @Override
+                public void run() {
+                    super.run();
+                    //间隔时间
+                    handler.sendEmptyMessageDelayed(1, 1000);
                 }
-            });
-            pbThread.start();
+            }.start();
         } catch (Exception e) {
             //播放出错
-            TextView textView = findViewById(R.id.msg);
-            textView.setText("播放出错（" + e + "）");
-            ((ImageView)findViewById(R.id.imageView11)).setImageResource(R.drawable.ic_baseline_error_24);
+            MainActivity.this.runOnUiThread(()->{
+                TextView textView = findViewById(R.id.msg);
+                textView.setText("播放出错（" + e + "）");
+                ((ImageView)findViewById(R.id.imageView11)).setImageResource(R.drawable.ic_baseline_error_24);
+            });
             e.printStackTrace();
         }
-
     }
-    public void c(View view){
-        if(prepareDone){
-            if(MusicService.isPlaying()){
-                MusicService.stopPlaySong();
-                playing = false;
-                ImageView imageView = findViewById(R.id.btn_open);
-                imageView.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
+    @SuppressLint("HandlerLeak")
+    Handler handler=new Handler(){
+        public void handleMessage(android.os.Message msg) {
+            ProgressBar pb_main = findViewById(R.id.pb_main);
+            ProgressBar pb_lyrics = findViewById(R.id.pb_lyrics);
+            if(prepareDone){
+                if(pb_main.isIndeterminate()) pb_main.setIndeterminate(false);
+                if(pb_lyrics.isIndeterminate()) pb_lyrics.setIndeterminate(false);
+                if(playing){
+                    pb_main.setMax(mediaPlayer.getDuration());
+                    pb_main.setProgress(mediaPlayer.getCurrentPosition());
+                    pb_lyrics.setMax(mediaPlayer.getDuration());
+                    pb_lyrics.setProgress(mediaPlayer.getCurrentPosition());
+                    if(mediaPlayer.getCurrentPosition() >= mediaPlayer.getDuration()){
+                        pb_main.setProgress(0);
+                        pb_lyrics.setProgress(0);
+                        right(null);
+                    }
+                }
+                // 防止控件与 MediaPlayer 不同步
+                ImageView imageViewBtn = findViewById(R.id.btn_open);
+                if(mediaPlayer.isPlaying()) imageViewBtn.setImageResource(R.drawable.ic_baseline_pause_circle_filled_24);
+                else imageViewBtn.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
             }
             else{
-                MusicService.startPlaySong();
-                playing = true;
-                ImageView imageView = findViewById(R.id.btn_open);
-                imageView.setImageResource(R.drawable.ic_baseline_pause_circle_filled_24);
+                if(!pb_main.isIndeterminate()) pb_main.setIndeterminate(true);
+                if(!pb_lyrics.isIndeterminate()) pb_lyrics.setIndeterminate(true);
+            }
+            //调取子线程
+            handler.sendEmptyMessageDelayed(0, 1000);
+        }
+    };
+    public void c(View view){
+        if(prepareDone){
+            if(playing){
+                pause();
+            }
+            else{
+                start();
             }
         }
         else{
             if(view!=null) Toast.makeText(MainActivity.this,"音乐准备中",Toast.LENGTH_SHORT).show();
         }
     }
+    public void pause(){
+        mediaPlayer.pause();
+        playing = false;
+        MainActivity.this.runOnUiThread(()->((ImageView)findViewById(R.id.btn_open)).setImageResource(R.drawable.ic_baseline_play_circle_filled_24));
+    }
+    public void start(){
+        mediaPlayer.start();
+        playing = true;
+        MainActivity.this.runOnUiThread(()->((ImageView)findViewById(R.id.btn_open)).setImageResource(R.drawable.ic_baseline_pause_circle_filled_24));
+    }
     public void right(View view){
+        mediaPlayer.reset();
+        if(mediaPlayer.isPlaying()) pause();
         musicIndex += 1;
-        prepareDone = false;
-        nextMusic();
-        c(null);
+        ((TextView)findViewById(R.id.msg)).setText("加载中");
+        ((ImageView)findViewById(R.id.imageView11)).setImageResource(R.drawable.ic_baseline_photo_size_select_actual_24);
+        Thread thread = new Thread(()-> {
+            nextMusic();
+            start();
+            MainActivity.this.runOnUiThread(()->((ImageView)findViewById(R.id.btn_open)).setImageResource(R.drawable.ic_baseline_pause_circle_filled_24));
+        });
+        thread.start();
     }
     public void left(View view){
+        mediaPlayer.reset();
+        
+        if(mediaPlayer.isPlaying()) pause();
         musicIndex -= 1;
-        prepareDone = false;
-        nextMusic();
-        c(null);
+        ((TextView)findViewById(R.id.msg)).setText("加载中");
+        ((ImageView)findViewById(R.id.imageView11)).setImageResource(R.drawable.ic_baseline_photo_size_select_actual_24);
+        Thread thread = new Thread(()-> {
+            nextMusic();
+            start();
+            MainActivity.this.runOnUiThread(()->((ImageView)findViewById(R.id.btn_open)).setImageResource(R.drawable.ic_baseline_pause_circle_filled_24));
+        });
+        thread.start();
     }
     /**
      * 取两个文本之间的文本值
@@ -915,9 +951,15 @@ public class MainActivity extends SlideBackActivity {
         }).start();
         lrcView.setDraggable(true, (view, time) -> {
             try{
-                MusicService.seek((int) time);
+                mediaPlayer.seekTo((int) time);
+                ProgressBar pb_main = findViewById(R.id.pb_main);
+                ProgressBar pb_lyrics = findViewById(R.id.pb_lyrics);
+                pb_main.setMax(mediaPlayer.getDuration());
+                pb_main.setProgress(mediaPlayer.getCurrentPosition());
+                pb_lyrics.setMax(mediaPlayer.getDuration());
+                pb_lyrics.setProgress(mediaPlayer.getCurrentPosition());
             }
-            catch (Exception e){
+            catch (Exception ignored){
             }
             return true;
         } );
@@ -931,6 +973,7 @@ public class MainActivity extends SlideBackActivity {
         sv_main.setVisibility(View.VISIBLE);
         ly1.setVisibility(View.GONE);
     }
+    Map temp_ni;
     public void share_ly(View view) {
         String lrcResult = "";
         try {
@@ -947,7 +990,7 @@ public class MainActivity extends SlideBackActivity {
             intent.putExtra("type", type);
             if (type.equals("3")){
                 String temp = ((search_list.get(musicIndex)).toString());
-                Map temp_ni = (Map) JSON.parse(temp);
+                temp_ni = (Map) JSON.parse(temp);
                 List temp_1 = JSON.parseArray(temp_ni.get("artists").toString());
                 Map temp_2 = (Map)JSON.parse(temp_1.get(0).toString());
                 intent.putExtra("song",temp_ni.get("name").toString() + " - " + temp_2.get("name").toString());

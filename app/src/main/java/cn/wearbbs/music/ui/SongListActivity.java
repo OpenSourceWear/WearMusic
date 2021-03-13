@@ -18,24 +18,19 @@ import java.util.Map;
 
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.adapter.DefaultAdapter;
+import cn.wearbbs.music.api.HitokotoApi;
 import cn.wearbbs.music.api.PlayListApi;
 import cn.wearbbs.music.util.UserInfoUtil;
 
 public class SongListActivity extends SlideBackActivity {
     String cookie;
     public static String ID;
+    String text = "没有更多了";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_songlist);
         findViewById(R.id.ll_loading).setVisibility(View.VISIBLE);
-        ListView list_gd  = findViewById(R.id.lv_songlist);
-        TextView tv = new TextView(this);
-        tv.setText("没有更多了\n\n");
-        tv.setTextColor(Color.parseColor("#999999"));
-        tv.setGravity(Gravity.CENTER);
-        tv.setTextSize(12);
-        list_gd.addFooterView(tv,null,false);
         cookie = UserInfoUtil.getUserInfo(this,"cookie");
         Thread thread = new Thread(()->{
             try {
@@ -45,6 +40,7 @@ public class SongListActivity extends SlideBackActivity {
                 TextView title = findViewById(R.id.title);
                 title.setText(cs.get("name").toString());
                 Map maps = new PlayListApi().getPlayListDetail(cs.get("id").toString(),cookie);
+                text = new HitokotoApi().getHitokoto();
                 SongListActivity.this.runOnUiThread(()-> {
                     try {
                         init_view(maps);
@@ -120,6 +116,12 @@ public class SongListActivity extends SlideBackActivity {
 
         String jsonString = JSON.toJSONString(search_list);
         DefaultAdapter adapter = new DefaultAdapter(JSON.toJSONString(mvids),jsonString,search_list.size(),JSON.toJSONString(names),this,0);
+        TextView tv = new TextView(this);
+        tv.setText(text+"\n\n");
+        tv.setTextColor(Color.parseColor("#999999"));
+        tv.setGravity(Gravity.CENTER);
+        tv.setTextSize(12);
+        list_gd.addFooterView(tv,null,false);
         list_gd.setAdapter(adapter);
         if(names.size() == 0){
             LinearLayout null_layout = findViewById(R.id.ll_noMusic);
@@ -131,5 +133,6 @@ public class SongListActivity extends SlideBackActivity {
             null_layout.setVisibility(View.GONE);
             list_gd.setVisibility(View.VISIBLE);
         }
+
     }
 }

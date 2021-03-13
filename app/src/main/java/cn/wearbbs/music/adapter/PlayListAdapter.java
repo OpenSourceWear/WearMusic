@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -70,8 +71,8 @@ public class PlayListAdapter extends BaseAdapter {
         }
         if(mvids!=null){
             mvid = JSON.parseArray(mvids).get(position).toString();
-            if(!mvid.equals("0")){
-                view.findViewById(R.id.iv_mv).setVisibility(View.VISIBLE);
+            if(mvid.equals("0")){
+                view.findViewById(R.id.iv_mv).setVisibility(View.GONE);
             }
         }
         view.findViewById(R.id.iv_mv).setOnClickListener(v -> {

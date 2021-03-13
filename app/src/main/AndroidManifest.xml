@@ -24,11 +24,6 @@
         tools:replace="android:label">
         <activity android:name=".ui.PlayListActivity" />
 
-        <service
-            android:name=".service.MusicService"
-            android:enabled="true"
-            android:exported="true"
-            android:process="system" />
 
         <receiver android:name=".receiver.MediaButtonReceiver">
             <intent-filter android:priority="1000">

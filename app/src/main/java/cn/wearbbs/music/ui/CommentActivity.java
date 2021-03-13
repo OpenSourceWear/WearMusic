@@ -17,19 +17,21 @@ import java.util.Map;
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.adapter.CommentAdapter;
 import cn.wearbbs.music.api.CommentApi;
+import cn.wearbbs.music.api.HitokotoApi;
 
 public class CommentActivity extends SlideBackActivity {
     List arr_re = new ArrayList();
     List arr_name;
     String id;
     Map maps;
+    String text = "没有更多了";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
         findViewById(R.id.ll_loading).setVisibility(View.VISIBLE);
         findViewById(R.id.lv_comments).setVisibility(View.GONE);
-        Thread thread = new Thread((Runnable) ()->{
+        Thread thread = new Thread(()->{
             Intent intent = getIntent();
             id= intent.getStringExtra("id");
             String temp = "[]";
@@ -39,6 +41,7 @@ public class CommentActivity extends SlideBackActivity {
                 if(maps == null){
                     maps = new CommentApi().getComment(id);
                 }
+                text = new HitokotoApi().getHitokoto();
                 if(maps == null){
                     CommentActivity.this.runOnUiThread(() -> Toast.makeText(CommentActivity.this,"加载失败（无网络）",Toast.LENGTH_SHORT).show());
                 }
@@ -76,7 +79,7 @@ public class CommentActivity extends SlideBackActivity {
             }
             CommentAdapter adapter = new CommentAdapter(arr_re,arr_name,id,id_list,this);
             TextView tv = new TextView(this);
-            tv.setText("没有更多了\n\n");
+            tv.setText(text+"\n\n");
             tv.setTextColor(Color.parseColor("#999999"));
             tv.setGravity(Gravity.CENTER);
             tv.setTextSize(12);

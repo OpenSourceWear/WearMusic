@@ -20,17 +20,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.wearbbs.music.R;
+import cn.wearbbs.music.api.HitokotoApi;
 
 public class LocalMusicActivity extends SlideBackActivity {
     AlertDialog alertDialog;
     int im = 0;
+    String text = "没有更多了";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_localmusic);
         ListView listd = findViewById(R.id.lv_music);
         TextView tv = new TextView(this);
-        tv.setText("没有更多了\n\n");
+        Thread thread = new Thread(()->{
+            try {
+                text = new HitokotoApi().getHitokoto();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            LocalMusicActivity.this.runOnUiThread(()->tv.setText(text+"\n\n"));
+        });
+        thread.start();
         tv.setTextColor(Color.parseColor("#999999"));
         tv.setGravity(Gravity.CENTER);
         tv.setTextSize(12);

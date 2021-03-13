@@ -17,7 +17,7 @@ import cn.wearbbs.music.util.UserInfoUtil;
 public class UserApi {
     private String result;
     public Map checkLogin(String cookie) throws InterruptedException {
-        Thread tmp = new Thread((Runnable)() -> {
+        Thread tmp = new Thread(() -> {
             result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/login/status" + "?cookie=" + cookie);
         });
         tmp.start();
@@ -37,8 +37,6 @@ public class UserApi {
                 dir.mkdirs();
                 File user = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/user.txt");
                 user.createNewFile();
-                File saver = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/saver.txt");
-                saver.createNewFile();
 
                 FileOutputStream outputStream;
                 outputStream = new FileOutputStream(user);
@@ -46,13 +44,8 @@ public class UserApi {
                 outputStream.write(profile.toString().getBytes());
                 outputStream.close();
 
-
-                FileOutputStream outputStream_2;
-                outputStream_2 = new FileOutputStream(saver);
-                String temp = "{first:\"" + name + "\"" + ",second:\"" + password + "\"}";
-                outputStream_2.write(temp.getBytes());
-                outputStream_2.close();
-
+                UserInfoUtil.saveUserInfo(context,"account",name);
+                UserInfoUtil.saveUserInfo(context,"password",password);
                 UserInfoUtil.saveUserInfo(context,"cookie",maps.get("cookie").toString());
                 return maps;
             }
@@ -77,8 +70,6 @@ public class UserApi {
                 dir.mkdirs();
                 File user = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/user.txt");
                 user.createNewFile();
-                File saver = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/saver.txt");
-                saver.createNewFile();
 
                 FileOutputStream outputStream;
                 outputStream = new FileOutputStream(user);
@@ -87,12 +78,8 @@ public class UserApi {
                 outputStream.close();
 
 
-                FileOutputStream outputStream_2;
-                outputStream_2 = new FileOutputStream(saver);
-                String temp = "{first:\"" +name + "\"" + ",second:\"" + password + "\"}";
-                outputStream_2.write(temp.getBytes());
-                outputStream_2.close();
-
+                UserInfoUtil.saveUserInfo(context,"account",name);
+                UserInfoUtil.saveUserInfo(context,"password",password);
                 UserInfoUtil.saveUserInfo(context,"cookie",maps.get("cookie").toString());
                 return maps;
             }
@@ -114,12 +101,12 @@ public class UserApi {
     /**
      * 验证邮箱
      *
-     * @param email
-     * @return
+     * @param email 邮箱
+     * @return 验证结果
      */
 
     public static boolean checkEmail(String email) {
-        boolean flag = false;
+        boolean flag;
         try {
             String check = "^([a-z0-9A-Z]+[-|_|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
             Pattern regex = Pattern.compile(check);
@@ -133,8 +120,8 @@ public class UserApi {
 
     /**
      * 验证手机号码，11位数字，1开通，第二位数必须是3456789这些数字之一 *
-     * @param mobileNumber
-     * @return
+     * @param mobileNumber 手机号
+     * @return 验证结果
      */
     public static boolean checkMobileNumber(String mobileNumber) {
         boolean flag = false;

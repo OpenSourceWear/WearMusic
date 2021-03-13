@@ -25,16 +25,17 @@ import java.util.Map;
 
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.adapter.SearchAdapter;
+import cn.wearbbs.music.api.HitokotoApi;
 import cn.wearbbs.music.api.HotApi;
 import cn.wearbbs.music.api.SearchApi;
 import cn.wearbbs.music.util.UserInfoUtil;
 
 public class SearchActivity extends SlideBackActivity {
     List arr;
-    String temp_hl;
     List tmp;
     String cookie;
     EditText editText;
+    String text = "没有更多了";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +75,11 @@ public class SearchActivity extends SlideBackActivity {
             for (int i = 0; i<10;i++){
                 hot_list[i] = ((Map)JSON.parse(hots.get(i).toString())).get("first").toString();
             }
+            try {
+                text = new HitokotoApi().getHitokoto();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             SearchActivity.this.runOnUiThread(()->{
                 search_page_flowlayout.setAdapter(new TagAdapter<String>(hot_list)
                 {
@@ -92,7 +98,7 @@ public class SearchActivity extends SlideBackActivity {
                     search(null);
                     return true;
                 });
-                tv.setText("没有更多了");
+                tv.setText(text+"\n\n");
             });
         });
         thread.start();

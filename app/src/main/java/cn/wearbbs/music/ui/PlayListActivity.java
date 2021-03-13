@@ -18,9 +18,10 @@ import java.util.Map;
 
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.adapter.PlayListAdapter;
+import cn.wearbbs.music.api.HitokotoApi;
 
 public class PlayListActivity extends AppCompatActivity {
-
+    String text = "没有更多了";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +53,15 @@ public class PlayListActivity extends AppCompatActivity {
         ListView lv_playlist = findViewById(R.id.lv_playlist);
         lv_playlist.setAdapter(adapter);
         TextView tv = new TextView(this);
-        tv.setText("没有更多了\n\n");
+        Thread thread = new Thread(()->{
+            try {
+                text = new HitokotoApi().getHitokoto();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            PlayListActivity.this.runOnUiThread(()->tv.setText(text+"\n\n"));
+        });
+        thread.start();
         tv.setTextColor(Color.parseColor("#999999"));
         tv.setGravity(Gravity.CENTER);
         tv.setTextSize(12);

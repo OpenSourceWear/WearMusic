@@ -79,7 +79,6 @@ public class ChooseActivity extends SlideBackActivity {
         ListView lrcs = findViewById(R.id.lv_choose);
         adapter = new ChooseAdapter(arr,this);
         lrcs.setAdapter(adapter);
-        Toast.makeText(this,"点击标题栏分享歌词",Toast.LENGTH_SHORT).show();
     }
     public void share(View view){
         List choose = adapter.getChoose();

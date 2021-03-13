@@ -64,6 +64,7 @@
                     android:layout_height="3dp"
                     android:visibility="visible" />
 
+
                 <ImageView
                     android:id="@+id/imageView11"
                     android:layout_width="match_parent"
@@ -111,13 +112,13 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
                         android:background="?android:attr/selectableItemBackgroundBorderless"
                         android:contentDescription="@string/todo"
                         android:onClick="left"
+                        android:rotationY="-180"
                         android:scaleType="center"
-                        android:theme="@style/RippleWhite"
-                        app:srcCompat="@drawable/ic_baseline_arrow_back_ios_24" />
+                        android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+                        android:theme="@style/RippleWhite" />
 
                     <ImageView
                         android:id="@+id/btn_open"
@@ -133,7 +134,7 @@
 
                     <ImageView
                         android:id="@+id/btn_right"
-                        android:layout_width="25dp"
+                        android:layout_width="20dp"
                         android:layout_height="25dp"
                         android:layout_gravity="center"
                         android:background="?android:attr/selectableItemBackgroundBorderless"
@@ -142,7 +143,6 @@
                         android:scaleType="center"
                         android:src="@drawable/ic_baseline_arrow_forward_ios_24"
                         android:theme="@style/RippleWhite" />
-
                     <ImageView
                         android:id="@+id/imageView15"
                         android:layout_width="25dp"

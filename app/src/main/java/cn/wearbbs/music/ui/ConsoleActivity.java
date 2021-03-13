@@ -275,7 +275,7 @@ public class ConsoleActivity extends SlideBackActivity {
                     Toast.makeText(ConsoleActivity.this,maps.get("msg").toString(),Toast.LENGTH_SHORT).show();
                 }
                 new DownloadUtil().download(coverurl,"/Android/data/cn.wearbbs.music/download/cover/",song + ".jpg", (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE));
-                Toast.makeText(this,"下载完成",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"开始下载",Toast.LENGTH_SHORT).show();
             }
             else{
                 Toast.makeText(this,"已下载",Toast.LENGTH_SHORT).show();

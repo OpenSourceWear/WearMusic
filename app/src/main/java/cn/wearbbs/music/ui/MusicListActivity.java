@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.wearbbs.music.R;
+import cn.wearbbs.music.api.HitokotoApi;
 import cn.wearbbs.music.api.PlayListApi;
 import cn.wearbbs.music.util.UserInfoUtil;
 
@@ -29,18 +30,12 @@ public class MusicListActivity extends SlideBackActivity {
     int im = 0;
     String cookie;
     Map maps;
+    String text = "没有更多了";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_musiclist);
         findViewById(R.id.ll_loading).setVisibility(View.VISIBLE);
-        ListView list_gds = findViewById(R.id.lv_playlist);
-        TextView tv = new TextView(this);
-        tv.setText("没有更多了\n\n");
-        tv.setTextColor(Color.parseColor("#999999"));
-        tv.setGravity(Gravity.CENTER);
-        tv.setTextSize(12);
-        list_gds.addFooterView(tv,null,false);
         Thread thread = new Thread(()->{
             try {
                 File user = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/user.txt");
@@ -53,11 +48,17 @@ public class MusicListActivity extends SlideBackActivity {
                 e.printStackTrace();
             }
             try {
+                text = new HitokotoApi().getHitokoto();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            try {
                 MusicListActivity.this.runOnUiThread(()-> init_list(maps));
             } catch (Exception e) {
                 MusicListActivity.this.runOnUiThread(()-> Toast.makeText(this,"获取失败",Toast.LENGTH_SHORT).show());
             }
             MusicListActivity.this.runOnUiThread(()-> findViewById(R.id.ll_loading).setVisibility(View.GONE));
+
         });
         thread.start();
     }
@@ -104,6 +105,12 @@ public class MusicListActivity extends SlideBackActivity {
             alertDialog.show();
             return true;
         });
+        TextView tv = new TextView(this);
+        tv.setText(text+"\n\n");
+        tv.setTextColor(Color.parseColor("#999999"));
+        tv.setGravity(Gravity.CENTER);
+        tv.setTextSize(12);
+        list_gds.addFooterView(tv,null,false);
         list_gds.setAdapter(adapter);
     }
 }

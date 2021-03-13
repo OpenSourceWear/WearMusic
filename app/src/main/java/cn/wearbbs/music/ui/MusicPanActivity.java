@@ -18,27 +18,23 @@ import java.util.Map;
 
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.adapter.DefaultAdapter;
+import cn.wearbbs.music.api.HitokotoApi;
 import cn.wearbbs.music.api.MusicPanApi;
 import cn.wearbbs.music.util.UserInfoUtil;
 
 public class MusicPanActivity extends SlideBackActivity {
     String cookie;
+    String text = "没有更多了";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_musicpan);
         findViewById(R.id.ll_loading).setVisibility(View.VISIBLE);
-        ListView list_pan  = findViewById(R.id.list_pan);
-        TextView tv = new TextView(this);
-        tv.setText("没有更多了\n\n");
-        tv.setTextColor(Color.parseColor("#999999"));
-        tv.setGravity(Gravity.CENTER);
-        tv.setTextSize(12);
-        list_pan.addFooterView(tv,null,false);
         cookie = UserInfoUtil.getUserInfo(this,"cookie");
         Thread thread = new Thread(()->{
             try {
                 Map maps = new MusicPanApi().getPanList(cookie);
+                text = new HitokotoApi().getHitokoto();
                 MusicPanActivity.this.runOnUiThread(()-> {
                     init_view(maps);
                 });
@@ -46,6 +42,7 @@ public class MusicPanActivity extends SlideBackActivity {
                 MusicPanActivity.this.runOnUiThread(()-> Toast.makeText(this,"获取失败",Toast.LENGTH_SHORT).show());
             }
             MusicPanActivity.this.runOnUiThread(()-> findViewById(R.id.ll_loading).setVisibility(View.GONE));
+
         });
         thread.start();
     }
@@ -89,6 +86,12 @@ public class MusicPanActivity extends SlideBackActivity {
         }
         String jsonString = JSON.toJSONString(search_list);
         DefaultAdapter adapter = new DefaultAdapter(JSON.toJSONString(mvids),jsonString,search_list.size(),JSON.toJSONString(names),this,1);
+        TextView tv = new TextView(this);
+        tv.setText(text+"\n\n");
+        tv.setTextColor(Color.parseColor("#999999"));
+        tv.setGravity(Gravity.CENTER);
+        tv.setTextSize(12);
+        list_pan.addFooterView(tv,null,false);
         list_pan.setAdapter(adapter);
         if(names.size() == 0){
             LinearLayout null_layout = findViewById(R.id.ll_noMusic);
