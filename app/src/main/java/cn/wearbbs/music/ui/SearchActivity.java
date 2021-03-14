@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -54,18 +55,15 @@ public class SearchActivity extends SlideBackActivity {
         String temp = "[]";
         arr = JSON.parseArray(temp);
         cookie = UserInfoUtil.getUserInfo(this,"cookie");
-        TextView tv = new TextView(this);
+        TextView tv = findViewById(R.id.tv_nomore);
         tv.setText("加载中\n\n");
-        tv.setTextColor(Color.parseColor("#999999"));
-        tv.setGravity(Gravity.CENTER);
-        tv.setTextSize(12);
-        ((ListView)findViewById(R.id.list)).addFooterView(tv,null,false);
         TagFlowLayout search_page_flowlayout = findViewById(R.id.id_flowlayout);
         final LayoutInflater mInflater = LayoutInflater.from(SearchActivity.this);
         Thread thread = new Thread(()->{
             Map map = null;
             try {
                 map = new HotApi().getHotSearch();
+                text = new HitokotoApi().getHitokoto();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -75,21 +73,16 @@ public class SearchActivity extends SlideBackActivity {
             for (int i = 0; i<10;i++){
                 hot_list[i] = ((Map)JSON.parse(hots.get(i).toString())).get("first").toString();
             }
-            try {
-                text = new HitokotoApi().getHitokoto();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             SearchActivity.this.runOnUiThread(()->{
                 search_page_flowlayout.setAdapter(new TagAdapter<String>(hot_list)
                 {
                     @Override
                     public View getView(FlowLayout parent, int position, String s)
                     {
-                        TextView tv = (TextView) mInflater.inflate(R.layout.item_hot,
+                        TextView tv_fl = (TextView) mInflater.inflate(R.layout.item_hot,
                                 search_page_flowlayout, false);
-                        tv.setText(s);
-                        return tv;
+                        tv_fl.setText(s);
+                        return tv_fl;
                     }
                 });
                 search_page_flowlayout.setOnTagClickListener((view, position, parent) -> {
@@ -117,7 +110,10 @@ public class SearchActivity extends SlideBackActivity {
     LinearLayout list_layout;
     public void search(View view) {
         if(editText.getText().toString().contains("少爷")){
-            ((TextView)findViewById(R.id.tv_loading)).setText("欢迎洛府人 (*/ω＼*)");
+            ((TextView)findViewById(R.id.tv_loading)).setText("欢迎洛府子弟 (*/ω＼*)");
+        }
+        else{
+            ((TextView)findViewById(R.id.tv_loading)).setText("加载中...");
         }
         t = editText.getText().toString();
         list_layout = findViewById(R.id.ll_list);
