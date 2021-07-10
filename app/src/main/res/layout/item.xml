@@ -24,23 +24,22 @@
     <ImageView
         android:id="@+id/iv_mv"
         android:layout_width="30dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:background="#FAFAFA"
         android:contentDescription="@string/todo"
         android:onClick="mv"
         android:scaleType="centerInside"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:theme="@style/RippleWhite"
         android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_music_video_24" />
 
     <ImageView
         android:id="@+id/iv_playing"
         android:layout_width="20dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
         android:background="#FAFAFA"
         android:contentDescription="@string/todo"
         android:scaleType="centerInside"

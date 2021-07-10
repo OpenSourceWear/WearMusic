@@ -55,12 +55,24 @@ public class MusicListActivity extends SlideBackActivity {
             try {
                 MusicListActivity.this.runOnUiThread(()-> init_list(maps));
             } catch (Exception e) {
-                MusicListActivity.this.runOnUiThread(()-> Toast.makeText(this,"获取失败",Toast.LENGTH_SHORT).show());
+                showFailedMessage();
             }
             MusicListActivity.this.runOnUiThread(()-> findViewById(R.id.ll_loading).setVisibility(View.GONE));
 
         });
         thread.start();
+    }
+    public void showFailedMessage(){
+        runOnUiThread(()->{
+            findViewById(R.id.ll_loading).setVisibility(View.GONE);
+            findViewById(R.id.ll_failed).setVisibility(View.VISIBLE);
+        });
+    }
+    public void reload(View view) {
+        Intent intent = getIntent();
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
+        startActivity(intent);
     }
     public void init_list(Map maps) {
         List play_list = JSON.parseArray(maps.get("playlist").toString());

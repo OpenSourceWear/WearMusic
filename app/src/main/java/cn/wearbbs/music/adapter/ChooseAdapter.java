@@ -57,12 +57,7 @@ public class ChooseAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view;
-        if (convertView==null){
-            //通过一个打气筒 inflate 可以把一个布局转换成一个view对象
-            view=View.inflate(context,R.layout.item_choose,null);
-        }else {
-            view=convertView;//复用历史缓存对象
-        }
+        view=View.inflate(context,R.layout.item_choose,null);
         //单选按钮的文字
         TextView radioText= view.findViewById(R.id.tv_check_text);
         radioText.setText(listText.get(position));

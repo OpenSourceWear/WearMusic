@@ -28,6 +28,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 import cn.wearbbs.music.R;
+import cn.wearbbs.music.detail.Data;
 
 public class AddActivity extends SlideBackActivity {
     Boolean is_start = false;
@@ -63,7 +64,7 @@ public class AddActivity extends SlideBackActivity {
                 Intent intent = new Intent(AddActivity.this, QRCodeActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-                intent.putExtra("type","1");
+                intent.putExtra("type", Data.localMode);
                 intent.putExtra("ly","https://wearbbs.cn/resources/wearmusicftp.343/");
                 startActivity(intent);
                 break;
@@ -71,10 +72,12 @@ public class AddActivity extends SlideBackActivity {
                 Intent IntentWOB = new Intent(AddActivity.this, QRCodeActivity.class);
                 IntentWOB.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
                 IntentWOB.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-                IntentWOB.putExtra("type","1");
+                IntentWOB.putExtra("type",Data.localMode);
                 IntentWOB.putExtra("ly","https://wearbbs.cn/resources/wearos-for-windows.10/");
                 startActivity(IntentWOB);
                 break;
+            default:
+
         }
     }
     public static String getIpAddress() {

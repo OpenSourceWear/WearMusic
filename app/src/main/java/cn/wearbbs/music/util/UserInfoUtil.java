@@ -10,6 +10,9 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author JackuXL
+ */
 public class UserInfoUtil {
     public static boolean saveUserInfo(Context context, String filename, String content) {
         try {
@@ -28,12 +31,14 @@ public class UserInfoUtil {
     }
     public static String getUserInfo(Context context, String filename) {
         try {
-            // 创建FIle对象
+            // 创建File对象
             File file = new File(context.getFilesDir(), filename + ".txt");
             // 创建FileInputStream对象
             FileInputStream fis = new FileInputStream(file);
+            // 创建InputStreamReader对象
+            InputStreamReader isr = new InputStreamReader(fis);
             // 创建BufferedReader对象
-            BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+            BufferedReader br = new BufferedReader(isr);
             // 获取文件中的内容
             String content = br.readLine();
             // 关闭流对象

@@ -21,6 +21,7 @@ import cn.wearbbs.music.R;
 import cn.wearbbs.music.api.MVApi;
 import cn.wearbbs.music.api.MusicPanApi;
 import cn.wearbbs.music.api.PlayListApi;
+import cn.wearbbs.music.detail.Data;
 import cn.wearbbs.music.ui.MainActivity;
 import cn.wearbbs.music.ui.MusicPanActivity;
 import cn.wearbbs.music.ui.SongListActivity;
@@ -33,8 +34,6 @@ public class DefaultAdapter extends BaseAdapter {
     private int size;
     private String names;
     private int type;
-    int SONGLIST = 0;
-    int MUSICPAN = 1;
     public DefaultAdapter(String mvids, String idl, int size, String names, Context context,int type){
         this.context=context;
         this.jsonString = idl;
@@ -66,12 +65,7 @@ public class DefaultAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view;
         List namesList = JSON.parseArray(names);
-        if (convertView==null){
-            //通过一个打气筒 inflate 可以把一个布局转换成一个view对象
-            view=View.inflate(context,R.layout.item,null);
-        }else {
-            view=convertView;//复用历史缓存对象
-        }
+        view=View.inflate(context,R.layout.item,null);
         view.findViewById(R.id.iv_mv).setVisibility(View.VISIBLE);
         mvid = JSON.parseArray(mvids).get(position).toString();
         if(mvid.equals("0")){
@@ -81,7 +75,7 @@ public class DefaultAdapter extends BaseAdapter {
             Intent intent = new Intent(context, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-            intent.putExtra("type", "0");
+            intent.putExtra("type", Data.defaultMode);
             intent.putExtra("list", jsonString);
             intent.putExtra("start", String.valueOf(position));
             intent.putExtra("mvids",mvids );
@@ -91,8 +85,8 @@ public class DefaultAdapter extends BaseAdapter {
             Map maps = new HashMap();
             Map detailMaps = new HashMap();
             try {
-                maps = new MVApi().getMVUrl(JSON.parseArray(mvids).get(position).toString());
-                detailMaps = new MVApi().getMVDetail(JSON.parseArray(mvids).get(position).toString());
+                maps = new MVApi().getMVUrl(JSON.parseArray(mvids).get(position).toString(),cookie);
+                detailMaps = new MVApi().getMVDetail(JSON.parseArray(mvids).get(position).toString(),cookie);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -129,7 +123,7 @@ public class DefaultAdapter extends BaseAdapter {
                 }
             }
         });
-        if(type == SONGLIST){
+        if(type == Data.defaultMode){
             view.findViewById(R.id.title).setOnLongClickListener(v -> {
                 alertDialog = new AlertDialog.Builder(context)
                         .setMessage("要删除该音乐吗？")

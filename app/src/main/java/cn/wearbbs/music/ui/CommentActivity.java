@@ -9,77 +9,89 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.adapter.CommentAdapter;
 import cn.wearbbs.music.api.CommentApi;
 import cn.wearbbs.music.api.HitokotoApi;
+import cn.wearbbs.music.detail.Data;
+import cn.wearbbs.music.util.UserInfoUtil;
 
+/**
+ * @author JackuXL
+ */
 public class CommentActivity extends SlideBackActivity {
-    List arr_re = new ArrayList();
-    List arr_name;
+    List<String> contentList = new ArrayList<>();
+    List<String> nameList = new ArrayList<>();
     String id;
-    Map maps;
     String text = "没有更多了";
+    CommentApi api;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
         findViewById(R.id.ll_loading).setVisibility(View.VISIBLE);
         findViewById(R.id.lv_comments).setVisibility(View.GONE);
-        Thread thread = new Thread(()->{
-            Intent intent = getIntent();
-            id= intent.getStringExtra("id");
-            String temp = "[]";
-            arr_name = JSON.parseArray(temp);
+        Intent intent = getIntent();
+        id= intent.getStringExtra("id");
+        api = new CommentApi(id,UserInfoUtil.getUserInfo(this,"cookie"));
+        new Thread(()->{
             try {
-                maps = new CommentApi().getComment(id);
-                if(maps == null){
-                    maps = new CommentApi().getComment(id);
-                }
                 text = new HitokotoApi().getHitokoto();
-                if(maps == null){
-                    CommentActivity.this.runOnUiThread(() -> Toast.makeText(CommentActivity.this,"加载失败（无网络）",Toast.LENGTH_SHORT).show());
+                JSONObject tmp = api.getComment();
+                if(tmp==null){
+                    showFailedMessage();
                 }
                 else{
                     CommentActivity.this.runOnUiThread(() -> {
                         try {
-                            init_message(maps);
+                            initMessage(tmp);
                         } catch (Exception e) {
-                            CommentActivity.this.runOnUiThread(() -> Toast.makeText(this,"加载失败",Toast.LENGTH_SHORT).show());
+                            showFailedMessage();
                         }
                     });
                 }
             } catch (Exception e) {
-                CommentActivity.this.runOnUiThread(() -> Toast.makeText(this,"加载失败",Toast.LENGTH_SHORT).show());
+                showFailedMessage();
                 e.printStackTrace();
             }
-            CommentActivity.this.runOnUiThread(() -> {
-                findViewById(R.id.ll_loading).setVisibility(View.GONE);
-                findViewById(R.id.lv_comments).setVisibility(View.VISIBLE);
-            });
-        });
-        thread.start();
+        }).start();
     }
-    public void init_message(Map maps) {
+    public void reload(View view) {
+        Intent intent = getIntent();
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
+        startActivity(intent);
+    }
+    public void showFailedMessage(){
+        runOnUiThread(()->{
+            findViewById(R.id.ll_loading).setVisibility(View.GONE);
+            findViewById(R.id.ll_failed).setVisibility(View.VISIBLE);
+        });
+    }
+    public void initMessage(JSONObject comment) {
         ListView messages = findViewById(R.id.lv_comments);
-        if (maps.get("code").toString().equals("200")){
-            List Hot = JSON.parseArray(maps.get("hotComments").toString());
-            List id_list = new ArrayList();
-            for (int i = 0; i < Hot.size(); i++ ) {
-                Map maps_temp = (Map)JSON.parse(Hot.get(i).toString());
-                Map user_temp = (Map)JSON.parse(maps_temp.get("user").toString());
-                arr_re.add(maps_temp.get("content").toString());
-                arr_name.add(user_temp.get("nickname").toString());
-                id_list.add(maps_temp.get("commentId").toString());
+        if (comment.getInteger("code")==Data.successCode){
+            JSONArray hotComments = comment.getJSONArray("hotComments");
+            List<String> idList = new ArrayList<>();
+            List<String> avatarList = new ArrayList<>();
+            List<Boolean> liked = new ArrayList<>();
+            for (int i = 0; i < hotComments.size(); i++ ) {
+                contentList.add(hotComments.getJSONObject(i).getString("content"));
+                nameList.add(hotComments.getJSONObject(i).getJSONObject("user").getString("nickname"));
+                idList.add(hotComments.getJSONObject(i).getString("commentId"));
+                liked.add(hotComments.getJSONObject(i).getBoolean("liked"));
+                avatarList.add(hotComments.getJSONObject(i).getJSONObject("user").getString("avatarUrl"));
             }
-            CommentAdapter adapter = new CommentAdapter(arr_re,arr_name,id,id_list,this);
+            CommentAdapter adapter = new CommentAdapter(contentList, nameList,idList,api,liked,avatarList);
+            String content = text + "\n\n";
             TextView tv = new TextView(this);
-            tv.setText(text+"\n\n");
+            tv.setText(content);
             tv.setTextColor(Color.parseColor("#999999"));
             tv.setGravity(Gravity.CENTER);
             tv.setTextSize(12);
@@ -87,14 +99,16 @@ public class CommentActivity extends SlideBackActivity {
             messages.setAdapter(adapter);
         }
         else{
-            Toast.makeText(this,maps.get("msg").toString(),Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,comment.getString("msg"),Toast.LENGTH_SHORT).show();
         }
+        findViewById(R.id.ll_loading).setVisibility(View.GONE);
+        findViewById(R.id.lv_comments).setVisibility(View.VISIBLE);
     }
     public void message(View view){
         Intent intent = new Intent(CommentActivity.this, ReplyActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-        intent.putExtra("id",id);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        intent.putExtra("api", api);
         startActivity(intent);
     }
 }

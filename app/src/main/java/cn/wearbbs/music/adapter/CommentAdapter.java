@@ -1,47 +1,55 @@
 package cn.wearbbs.music.adapter;
 
-import android.content.Context;
+import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import com.alibaba.fastjson.JSONObject;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.List;
-import java.util.Map;
 
 import cn.carbs.android.expandabletextview.library.ExpandableTextView;
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.api.CommentApi;
+import cn.wearbbs.music.application.MyApplication;
+import cn.wearbbs.music.detail.Data;
 import cn.wearbbs.music.util.UserInfoUtil;
 
+/**
+ * @author JackuXL
+ */
 public class CommentAdapter extends BaseAdapter {
-    private List listText;
-    private Context context;
-    private List arr_name;
-    private String id;
-    private List id_list;
-    private List liked_items;
-    Map map = new HashMap();
+    private final List<String> contentList,nameList,idList;
+    private final CommentApi api;
+    private final List<Boolean> liked;
+    private final List<String> avatarList;
     String cookie;
-    public CommentAdapter(List listText, List arr_name,String id,List id_list,Context context){
-        this.listText=listText;
-        this.context=context;
-        this.arr_name=arr_name;
-        this.id=id;
-        this.id_list=id_list;
-        this.liked_items = new ArrayList();
+
+    /**
+     * 评论列表 Adapter
+     * @param contentList 评论内容列表
+     * @param nameList 昵称列表
+     * @param idList 评论ID列表
+     * @param api 评论API对象
+     */
+    public CommentAdapter(List<String> contentList, List<String> nameList,List<String> idList,CommentApi api,List<Boolean> liked,List<String> avatarList){
+        this.contentList=contentList;
+        this.nameList=nameList;
+        this.idList=idList;
+        this.api = api;
+        this.liked = liked;
+        this.avatarList = avatarList;
     }
     @Override
     public int getCount() {
         //return返回的是int类型，也就是页面要显示的数量。
-        return listText.size();
+        return contentList.size();
     }
 
     @Override
@@ -54,47 +62,50 @@ public class CommentAdapter extends BaseAdapter {
         return 0;
     }
 
-
+    JSONObject result;
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view;
-        if (convertView==null){
-            //通过一个打气筒 inflate 可以把一个布局转换成一个view对象
-            view=View.inflate(context,R.layout.item_comment,null);
-        }else {
-            view=convertView;//复用历史缓存对象
-        }
-        view.findViewById(R.id.like).setOnClickListener(v -> {
-            cookie = UserInfoUtil.getUserInfo(context,cookie);
-            if(liked_items.contains(position)){
-                Thread thread = new Thread(()-> {
+        view=View.inflate(MyApplication.getContext(),R.layout.item_comment,null);
+        view.findViewById(R.id.iv_thumb).setOnClickListener(v -> {
+            cookie = UserInfoUtil.getUserInfo(MyApplication.getContext(),"cookie");
+            if(liked.get(position)){
+                new Thread(()-> {
                     try {
-                        new CommentApi().dislikeComment(id,id_list.get(position).toString(),cookie);
+                        result = api.likeComment(idList.get(position), Data.dislikeMode);
+                        if(result.getInteger("code")!=Data.successCode){
+                            Looper.prepare();
+                            Toast.makeText(MyApplication.getContext(),"未知错误",Toast.LENGTH_SHORT).show();
+                            Looper.loop();
+                        }
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                });
-                thread.start();
-                ((ImageView)view.findViewById(R.id.like_icon)).setImageResource(R.drawable.ic_baseline_favorite_border_24);
-                liked_items.remove(map.get(position));
+                }).start();
+                ((ImageView)view.findViewById(R.id.iv_thumb)).setImageResource(R.drawable.ic_outline_thumb_up_24);
             }
             else{
-                Thread thread = new Thread(()-> {
+                new Thread(()-> {
                     try {
-                        new CommentApi().likeComment(id,id_list.get(position).toString(),cookie);
+                        api.likeComment(idList.get(position),Data.likeMode);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                });
-                thread.start();
-                ((ImageView)view.findViewById(R.id.like_icon)).setImageResource(R.drawable.ic_baseline_favorite_24);
-                liked_items.add(position);
-                map.put(position,liked_items.size()-1);
+                }).start();
+                ((ImageView)view.findViewById(R.id.iv_thumb)).setImageResource(R.drawable.ic_baseline_thumb_up_24);
             }
         });
-        ((ExpandableTextView)view.findViewById(R.id.title)).setText(listText.get(position).toString());
-        ((TextView)view.findViewById(R.id.name)).setText(arr_name.get(position).toString());
-        ((ImageView)view.findViewById(R.id.like_icon)).setImageResource(R.drawable.ic_baseline_favorite_border_24);
+        ((ExpandableTextView)view.findViewById(R.id.et_content)).setText(contentList.get(position));
+        ((TextView)view.findViewById(R.id.tv_name)).setText(nameList.get(position));
+        if(liked.get(position)){
+            ((ImageView)view.findViewById(R.id.iv_thumb)).setImageResource(R.drawable.ic_baseline_thumb_up_24);
+        }
+        else{
+            ((ImageView)view.findViewById(R.id.iv_thumb)).setImageResource(R.drawable.ic_outline_thumb_up_24);
+        }
+        ImageView iv_avatar = view.findViewById(R.id.iv_avatar);
+        RequestOptions options = RequestOptions.circleCropTransform().placeholder(R.drawable.ic_baseline_supervised_user_circle_24);
+        Glide.with(MyApplication.getContext()).load(avatarList.get(position)).apply(options).into(iv_avatar);
         return view;
     }
 }

@@ -143,7 +143,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="5dp"
                     android:background="@drawable/btn_blue"
-                    android:onClick="download_update"
+                    android:onClick="downloadUpdate"
                     android:text="@string/downloadUpdate"
                     android:textColor="#FFFFFF" />
 

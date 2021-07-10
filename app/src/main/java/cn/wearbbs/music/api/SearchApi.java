@@ -10,7 +10,7 @@ public class SearchApi {
     private String result;
     public Map Search(String keyword,String cookie) throws InterruptedException {
         Thread tmp = new Thread(() -> {
-            result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/search?keywords=" + keyword + "&cookie=" + cookie + "&timestamp=" + System.currentTimeMillis());
+            result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/search?keywords=" + keyword + "&timestamp=" + System.currentTimeMillis(),cookie);
         });
         tmp.start();
         tmp.join();

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,11 +26,12 @@ import java.util.Map;
 
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.api.UpdateApi;
+import cn.wearbbs.music.detail.Data;
 import cn.wearbbs.music.util.DownloadUtil;
 
 public class UpdateActivity extends SlideBackActivity {
     private static final String TAG = "UpdateService";
-    Map data;
+    JSONObject data;
     DownloadManager dm;
     Long mTaskId;
     @Override
@@ -37,40 +39,29 @@ public class UpdateActivity extends SlideBackActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update);
         try{
-            if(getIntent().getStringExtra("data") != null){
-                data = (Map) JSON.parse(getIntent().getStringExtra("data"));
-            }
-            else{
-                data = new UpdateApi().checkUpdate();
-            }
-
+            data = new UpdateApi().checkUpdate();
             findViewById(R.id.ll_loading).setVisibility(View.GONE);
-            LinearLayout no_layout = findViewById(R.id.no_layout);
-            ScrollView yes_scroll = findViewById(R.id.yes_scroll);
-            TextView tv_no = findViewById(R.id.tv_no_hint);
-            TextView tv_yes = findViewById(R.id.tv_yes_hint);
-            if(MainActivity.Version >= Double.parseDouble(data.get("version").toString())){
-                no_layout.setVisibility(View.VISIBLE);
-                yes_scroll.setVisibility(View.GONE);
-                tv_no.setText(tv_no.getText().toString().replace("Unknown",Double.toString(MainActivity.Version)));
-                System.out.println(2);
+            TextView tvNo = findViewById(R.id.tv_no_hint);
+            TextView tvYes = findViewById(R.id.tv_yes_hint);
+            if(Data.version >= data.getDouble(Data.versionText)){
+                findViewById(R.id.no_layout).setVisibility(View.VISIBLE);
+                findViewById(R.id.yes_scroll).setVisibility(View.GONE);
+                tvNo.setText(tvNo.getText().toString().replace("Unknown",Double.toString(Data.version)));
             }
             else{
-                no_layout.setVisibility(View.GONE);
-                yes_scroll.setVisibility(View.VISIBLE);
-                tv_yes.setText(tv_yes.getText().toString().replace("oldUnknown",Double.toString(MainActivity.Version)).replace("newUnknown",data.get("version").toString()));
-                System.out.println(3);
+                findViewById(R.id.no_layout).setVisibility(View.GONE);
+                findViewById(R.id.yes_scroll).setVisibility(View.VISIBLE);
+                tvYes.setText(tvYes.getText().toString().replace("oldUnknown",Double.toString(Data.version)).replace("newUnknown",data.getString("version")));
             }
-            System.out.println(1);
         }
         catch (Exception e){
             e.printStackTrace();
         }
     }
-    public void download_update(View view) throws Exception {
+    public void downloadUpdate(View view) throws Exception {
         new File("/storage/emulated/0/Android/data/cn.wearbbs.music/temp").mkdirs();
         dm = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-        mTaskId = new DownloadUtil().download(data.get("link").toString(),"/Android/data/cn.wearbbs.music/temp",data.get("version").toString() + ".apk", dm);
+        mTaskId = new DownloadUtil().download(data.getString("link"),"/Android/data/cn.wearbbs.music/temp",data.getString("version") + ".apk", dm);
         Toast.makeText(this,"开始下载，请不要离开此界面",Toast.LENGTH_SHORT).show();
         Thread thread = new Thread((Runnable)() -> {
             while(true){
@@ -82,7 +73,7 @@ public class UpdateActivity extends SlideBackActivity {
         thread.start();
         thread.join();
         Toast.makeText(this,"开始安装",Toast.LENGTH_SHORT).show();
-        int status = install("/storage/emulated/0/Android/data/cn.wearbbs.music/temp/" + data.get("version").toString() + ".apk");
+        int status = install("/storage/emulated/0/Android/data/cn.wearbbs.music/temp/" + data.getString("version") + ".apk");
         if(status == 0){
             Toast.makeText(this,"安装成功",Toast.LENGTH_SHORT).show();
         }

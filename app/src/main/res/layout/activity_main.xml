@@ -54,6 +54,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:orientation="vertical"
                 android:visibility="visible">
 
@@ -65,47 +66,69 @@
                     android:visibility="visible" />
 
 
-                <ImageView
-                    android:id="@+id/imageView11"
-                    android:layout_width="match_parent"
-                    android:layout_height="75dp"
-                    android:layout_marginTop="5dp"
-                    android:contentDescription="@string/todo"
-                    android:onClick="onImgClick"
-                    app:srcCompat="@drawable/ic_baseline_photo_size_select_actual_24" />
-
-                <TextView
-                    android:id="@+id/msg"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginRight="10dp"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:onClick="lyr"
-                    android:singleLine="false"
-                    android:text="@string/noMusic"
-                    android:textColor="#999999"
-                    android:textSize="12sp" />
-
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_marginTop="1dp"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/btn_left"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
-                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:id="@+id/imageView11"
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
                         android:contentDescription="@string/todo"
-                        android:onClick="playList"
-                        android:theme="@style/RippleWhite"
-                        app:srcCompat="@drawable/ic_baseline_playlist_play_24" />
+                        android:onClick="onImgClick"
+                        app:srcCompat="@drawable/ic_baseline_photo_size_select_actual_24" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/msg"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="3dp"
+                            android:layout_marginRight="10dp"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:onClick="lyr"
+                            android:singleLine="false"
+                            android:text="@string/noMusic"
+                            android:textColor="#2175F3"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/author"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="3dp"
+                            android:layout_marginRight="10dp"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:onClick="lyr"
+                            android:singleLine="false"
+                            android:text="未知"
+                            android:textColor="#999999"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_ctrl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="2dp"
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:id="@+id/btn_left2"
@@ -143,18 +166,6 @@
                         android:scaleType="center"
                         android:src="@drawable/ic_baseline_arrow_forward_ios_24"
                         android:theme="@style/RippleWhite" />
-                    <ImageView
-                        android:id="@+id/imageView15"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="5dp"
-                        android:layout_weight="1"
-                        android:background="?android:attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/todo"
-                        android:onClick="console"
-                        android:theme="@style/RippleWhite"
-                        app:srcCompat="@drawable/ic_baseline_more_horiz_24" />
 
                 </LinearLayout>
 
@@ -283,6 +294,7 @@
             app:lrcAnimationDuration="1000"
             app:lrcCurrentTextColor="@color/colorPrimary"
             app:lrcDividerHeight="20dp"
+            app:lrcLabel="加载中"
             app:lrcNormalTextColor="#999999"
             app:lrcNormalTextSize="12dp"
             app:lrcPadding="16dp"

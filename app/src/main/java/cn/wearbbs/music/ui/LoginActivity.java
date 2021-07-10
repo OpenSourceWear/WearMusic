@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Looper;
 import android.os.StrictMode;
 import android.text.InputType;
 import android.util.Base64;
@@ -15,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -23,18 +26,18 @@ import java.util.Map;
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.api.QRCodeApi;
 import cn.wearbbs.music.api.UserApi;
+import cn.wearbbs.music.detail.Data;
 import cn.wearbbs.music.util.UserInfoUtil;
 
 public class LoginActivity extends SlideBackActivity {
     int type = 0;
     boolean flag = true;
+    QRCodeApi api;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
         cn.wearbbs.music.ui.MainActivity.verifyStoragePermissions(LoginActivity.this);
         refreshQRCode();
     }
@@ -55,20 +58,23 @@ public class LoginActivity extends SlideBackActivity {
         findViewById(R.id.iv_err).setVisibility(View.GONE);
         refreshQRCode();
     }
-    String key;
+    boolean __flag = true;
     public void refreshQRCode(){
         Thread thread = new Thread(()->{
             String qrimg = null;
             try {
-                key = ((Map) JSON.parse((new QRCodeApi().getKey()).get("data").toString())).get("unikey").toString();
-                qrimg = ((Map)JSON.parse((new QRCodeApi().createQRCode(key)).get("data").toString())).get("qrimg").toString();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                api = new QRCodeApi();
+                __flag = api.getKey();
+                if(__flag) {
+                    qrimg = api.createQRCode().getJSONObject("data").getString("qrimg");
+                    String pureBase64Encoded = qrimg.substring(qrimg.indexOf(",")  + 1);
+                    byte[] decodedString = Base64.decode(pureBase64Encoded, Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    LoginActivity.this.runOnUiThread(()-> ((ImageView)findViewById(R.id.iv_qrcode)).setImageBitmap(decodedByte));
+                }
+            } catch (Exception e) {
+                __flag = false;
             }
-            String pureBase64Encoded = qrimg.substring(qrimg.indexOf(",")  + 1);
-            byte[] decodedString = Base64.decode(pureBase64Encoded, Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            LoginActivity.this.runOnUiThread(()-> ((ImageView)findViewById(R.id.iv_qrcode)).setImageBitmap(decodedByte));
         });
         thread.start();
         Thread tmp = new Thread(() -> {
@@ -77,28 +83,27 @@ public class LoginActivity extends SlideBackActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            try {
+            if(__flag){
                 Boolean ex = true;
                 while(ex & flag){
-                    Map Status = new QRCodeApi().checkStatus(key);
-                    if(Status!=null){
-                        String code = Status.get("code").toString();
+                    int code;
+                    try {
+                        code = api.checkStatus();
                         switch (code){
-                            case "800":
+                            case 800:
                                 // 二维码过期
                                 LoginActivity.this.runOnUiThread(() -> findViewById(R.id.tv_err).setVisibility(View.VISIBLE));
                                 LoginActivity.this.runOnUiThread(() -> findViewById(R.id.iv_err).setVisibility(View.VISIBLE));
                                 break;
-                            case "802":
+                            case 802:
                                 // 待授权
                                 LoginActivity.this.runOnUiThread(() -> findViewById(R.id.tv_wait).setVisibility(View.VISIBLE));
                                 break;
-                            case "803":
+                            case 803:
                                 // 授权成功
-                                Map maps = null;
+                                JSONObject data = null;
                                 try {
-                                    maps = new UserApi().checkLogin(Status.get("cookie").toString());
-                                    maps = (Map)JSON.parse(maps.get("data").toString());
+                                    data = new UserApi().checkLogin(api.getCookie()).getJSONObject("data");
                                 } catch (InterruptedException ea) {
                                     LoginActivity.this.runOnUiThread(() -> Toast.makeText(this,"登录失败",Toast.LENGTH_SHORT).show());
                                     Intent intent = new Intent(LoginActivity.this,LoginActivity.class);
@@ -106,7 +111,8 @@ public class LoginActivity extends SlideBackActivity {
                                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
                                     ea.printStackTrace();
                                 }
-                                if (maps.get("code").toString().equals("200")) {
+                                assert data != null;
+                                if (data.getInteger("code") == Data.successCode) {
                                     try {
                                         File dir = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/");
                                         dir.mkdir();
@@ -114,11 +120,11 @@ public class LoginActivity extends SlideBackActivity {
                                         us.createNewFile();
                                         FileOutputStream outputStream;
                                         outputStream = new FileOutputStream(us);
-                                        Map profile = (Map) JSON.parse(maps.get("profile").toString());
+                                        JSONObject profile = data.getJSONObject("profile");
                                         outputStream.write(profile.toString().getBytes());
                                         outputStream.close();
 
-                                        UserInfoUtil.saveUserInfo(this,"cookie",Status.get("cookie").toString());
+                                        UserInfoUtil.saveUserInfo(this,"cookie",api.getCookie());
 
                                         LoginActivity.this.runOnUiThread(() -> Toast.makeText(this,"登录成功！",Toast.LENGTH_SHORT).show());
                                         Intent intent = new Intent(LoginActivity.this,MainActivity.class);
@@ -141,17 +147,25 @@ public class LoginActivity extends SlideBackActivity {
                                 }
                                 ex = false;
                                 break;
+                            default:
+                                break;
                         }
+                        try {
+                            Thread.sleep(3000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (Exception e) {
+                        Looper.prepare();
+                        Toast.makeText(this,"请求失败，请检查网络",Toast.LENGTH_SHORT).show();
+                        Looper.loop();
                     }
-                    else{
-                        Log.d("Login","获取登陆状态失败");
-                    }
-                    Thread.sleep(3000);
                 }
-
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            }
+            else{
+                Looper.prepare();
+                Toast.makeText(this,"请求失败，请检查网络",Toast.LENGTH_SHORT).show();
+                Looper.loop();
             }
         });
         tmp.start();
@@ -162,15 +176,15 @@ public class LoginActivity extends SlideBackActivity {
         ImageView iv_eye = findViewById(R.id.iv_eye);
         switch(view.getId()){
             case R.id.btn_login:
-                Map map = new UserApi().Login(this,pe.getText().toString(), pw.getText().toString());
-                if(map.containsKey("error")){
-                    Toast.makeText(this,map.get("error").toString(),Toast.LENGTH_SHORT).show();
+                JSONObject loginResult = new UserApi().Login(this,pe.getText().toString(), pw.getText().toString());
+                if(loginResult.containsKey("error")){
+                    Toast.makeText(this,loginResult.get("error").toString(),Toast.LENGTH_SHORT).show();
                 }
-                else if(map.containsKey("msg")){
-                    Toast.makeText(this,map.get("msg").toString(),Toast.LENGTH_SHORT).show();
+                else if(loginResult.containsKey("msg")){
+                    Toast.makeText(this,loginResult.get("msg").toString(),Toast.LENGTH_SHORT).show();
                 }
-                else if(map.containsKey("message")){
-                    Toast.makeText(this,map.get("message").toString(),Toast.LENGTH_SHORT).show();
+                else if(loginResult.containsKey("message")){
+                    Toast.makeText(this,loginResult.get("message").toString(),Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Toast.makeText(this,"登录成功！",Toast.LENGTH_SHORT).show();
@@ -193,9 +207,8 @@ public class LoginActivity extends SlideBackActivity {
                     type = 0;
                 }
                 break;
-
+            default:
+                break;
         }
-
-
     }
 }

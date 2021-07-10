@@ -1,5 +1,6 @@
 package cn.wearbbs.music.ui;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,12 +40,24 @@ public class MusicPanActivity extends SlideBackActivity {
                     init_view(maps);
                 });
             } catch (Exception e) {
-                MusicPanActivity.this.runOnUiThread(()-> Toast.makeText(this,"获取失败",Toast.LENGTH_SHORT).show());
+                showFailedMessage();
             }
             MusicPanActivity.this.runOnUiThread(()-> findViewById(R.id.ll_loading).setVisibility(View.GONE));
 
         });
         thread.start();
+    }
+    public void showFailedMessage(){
+        runOnUiThread(()->{
+            findViewById(R.id.ll_loading).setVisibility(View.GONE);
+            findViewById(R.id.ll_failed).setVisibility(View.VISIBLE);
+        });
+    }
+    public void reload(View view) {
+        Intent intent = getIntent();
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
+        startActivity(intent);
     }
     public void init_view(Map maps) {
         List mvids = new ArrayList();

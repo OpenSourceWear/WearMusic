@@ -6,11 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
@@ -31,6 +33,7 @@ import java.util.Map;
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.api.MVApi;
 import cn.wearbbs.music.api.MusicApi;
+import cn.wearbbs.music.detail.Data;
 import cn.wearbbs.music.util.DownloadUtil;
 import cn.wearbbs.music.util.UserInfoUtil;
 
@@ -40,7 +43,7 @@ public class ConsoleActivity extends SlideBackActivity {
     String artists;
     String song;
     String url;
-    String type;
+    int type;
     String coverurl;
     String comment;
     boolean is_like = false;
@@ -51,8 +54,12 @@ public class ConsoleActivity extends SlideBackActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_console);
         Intent intent = getIntent();
-        type = intent.getStringExtra("type");
-        if(type.equals("0") || type.equals("3")){
+        type = intent.getIntExtra("type",Data.fmMode);
+        if(getIntent().getBooleanExtra("repeatOne",false)){
+            ImageView iv_repeat = findViewById(R.id.iv_repeat);
+            iv_repeat.setImageResource(R.drawable.icon_repeat_one);
+        }
+        if(type== Data.defaultMode || type==Data.fmMode){
             id = intent.getStringExtra("id");
             name = intent.getStringExtra("name");
             artists = intent.getStringExtra("artists");
@@ -65,18 +72,18 @@ public class ConsoleActivity extends SlideBackActivity {
             ll_second.setVisibility(View.VISIBLE);
             LinearLayout l3 = findViewById(R.id.ll_third);
             l3.setVisibility(View.VISIBLE);
-            if(mvid.equals("")){
+            if("".equals(mvid)){
                 ll_second.setVisibility(View.GONE);
                 l3.setVisibility(View.GONE);
             }
             if(comment!=null){
-                if(comment.equals("true")){
+                if("true".equals(comment)){
                     ll_second.setVisibility(View.VISIBLE);
                     l3.setVisibility(View.VISIBLE);
                 }
             }
         }
-        if(type.equals("1")){
+        if(type==Data.localMode){
             LinearLayout l2 = findViewById(R.id.ll_second);
             l2.setVisibility(View.GONE);
             LinearLayout l3 = findViewById(R.id.ll_third);
@@ -109,13 +116,25 @@ public class ConsoleActivity extends SlideBackActivity {
             }
         });
         thread.start();
-        if(mvid.equals("0")){
-            findViewById(R.id.mv_view).setVisibility(View.GONE);
+    }
+    public void repeat(View view){
+        Intent intent = new Intent();
+        ImageView iv_repeat = findViewById(R.id.iv_repeat);
+        if(getIntent().getBooleanExtra("repeatOne",false)){
+            // 处于单曲循环模式
+            intent.putExtra("repeatOne",false);
+            iv_repeat.setImageResource(R.drawable.icon_repeat);
         }
+        else{
+            // 处于顺序播放模式
+            intent.putExtra("repeatOne",true);
+            iv_repeat.setImageResource(R.drawable.icon_repeat_one);
+        }
+        setResult(RESULT_OK,intent);
     }
     public void voice_up(View view){
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        int max = audioManager.getStreamMaxVolume(audioManager.STREAM_MUSIC);
+        int max = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         int value = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         if(value == max){
             Toast.makeText(this,"媒体音量已到最高",Toast.LENGTH_SHORT).show();
@@ -145,7 +164,7 @@ public class ConsoleActivity extends SlideBackActivity {
     }
     Bitmap bitmap;
     public void share(View view) throws InterruptedException {
-        if (Build.MANUFACTURER.equals("XTC")) {
+        if ("XTC".equals(Build.MANUFACTURER)) {
             //第一步：创建XTCAppExtendObject对象
             XTCAppExtendObject xtcAppExtendObject = new XTCAppExtendObject();
             //设置点击分享的内容启动的页面
@@ -154,6 +173,7 @@ public class ConsoleActivity extends SlideBackActivity {
             xtcAppExtendObject.setExtInfo(id);
             //第二步: 音乐封面转BitMap
             Thread t = new Thread() {
+                @Override
                 public void run() {
                     try {
                         Bitmap myBitmap = Glide.with(ConsoleActivity.this)
@@ -188,41 +208,38 @@ public class ConsoleActivity extends SlideBackActivity {
             Intent intent = new Intent(ConsoleActivity.this, QRCodeActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-            intent.putExtra("type","0");
+            intent.putExtra("type",Data.defaultMode);
             intent.putExtra("id",id);
             startActivity(intent);
         }
     }
+    public void playList(View view){
+        Intent intent = new Intent(ConsoleActivity.this, PlayListActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
+        intent.putExtra("mvids",getIntent().getStringExtra("mvids"));
+        intent.putExtra("list", getIntent().getStringExtra("list"));
+        intent.putExtra("type",type);
+        intent.putExtra("musicIndex",getIntent().getStringExtra("musicIndex"));
+        startActivity(intent);
+    }
     public void mv(View view){
-        if(mvid.equals("0")){
-            Toast.makeText(ConsoleActivity.this, "该视频没有对应MV", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Map maps = null;
-            try {
-                maps = (Map) new MVApi().getMVUrl(mvid);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        if(mvid!=null) {
+            if("0".equals(mvid)){
+                Toast.makeText(ConsoleActivity.this, "该视频没有对应MV", Toast.LENGTH_SHORT).show();
             }
-            Map data = (Map) JSON.parse(maps.get("data").toString());
-            try
-            {
-                Intent intent = new Intent();
-                intent.setComponent(new ComponentName("cn.luern0313.wristvideoplayer", "cn.luern0313.wristvideoplayer.ui.PlayerActivity"));
-                intent.putExtra("mode", 1);
-                intent.putExtra("url", data.get("url").toString());
-                intent.putExtra("url_backup", data.get("url").toString());
-                intent.putExtra("title", name);
-                intent.putExtra("identity_name", getString(R.string.appName));
-                startActivityForResult(intent, 0);
-            }
-            catch(Exception e)
-            {
-                e.printStackTrace();
+            else{
+                Map maps = null;
+                try {
+                    maps = (Map) new MVApi().getMVUrl(mvid,UserInfoUtil.getUserInfo(this,"cookie"));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Map data = (Map) JSON.parse(maps.get("data").toString());
                 try
                 {
                     Intent intent = new Intent();
-                    intent.setComponent(new ComponentName("cn.luern0313.wristvideoplayer_free", "cn.luern0313.wristvideoplayer_free.ui.PlayerActivity"));
+                    intent.setComponent(new ComponentName("cn.luern0313.wristvideoplayer", "cn.luern0313.wristvideoplayer.ui.PlayerActivity"));
                     intent.putExtra("mode", 1);
                     intent.putExtra("url", data.get("url").toString());
                     intent.putExtra("url_backup", data.get("url").toString());
@@ -230,16 +247,31 @@ public class ConsoleActivity extends SlideBackActivity {
                     intent.putExtra("identity_name", getString(R.string.appName));
                     startActivityForResult(intent, 0);
                 }
-                catch(Exception ee)
+                catch(Exception e)
                 {
-                    Toast.makeText(ConsoleActivity.this, "你没有安装配套视频软件：腕上视频，请先前往应用商店下载！", Toast.LENGTH_LONG).show();
-                    ee.printStackTrace();
+                    e.printStackTrace();
+                    try
+                    {
+                        Intent intent = new Intent();
+                        intent.setComponent(new ComponentName("cn.luern0313.wristvideoplayer_free", "cn.luern0313.wristvideoplayer_free.ui.PlayerActivity"));
+                        intent.putExtra("mode", 1);
+                        intent.putExtra("url", data.get("url").toString());
+                        intent.putExtra("url_backup", data.get("url").toString());
+                        intent.putExtra("title", name);
+                        intent.putExtra("identity_name", getString(R.string.appName));
+                        startActivityForResult(intent, 0);
+                    }
+                    catch(Exception ee)
+                    {
+                        Toast.makeText(ConsoleActivity.this, "你没有安装配套视频软件：腕上视频，请先前往应用商店下载！", Toast.LENGTH_LONG).show();
+                        ee.printStackTrace();
+                    }
                 }
             }
         }
     }
     public void download(View view) throws Exception {
-        if(!type.equals("1")){
+        if(!"1".equals(type)){
             File temp = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music/" + song + ".mp3");
             if(!temp.exists()){
                 if (url.contains("http://")){
@@ -249,7 +281,7 @@ public class ConsoleActivity extends SlideBackActivity {
                 String text;
                 Map lrc_map;
                 Map maps = new MusicApi().getMusicLrc(cookie,id);
-                if(maps.get("code").toString().equals("200")) {
+                if("200".equals(maps.get("code").toString())) {
                     if(maps.get("lrc") != null){
                         lrc_map = (Map) JSON.parse(maps.get("lrc").toString());
                         File dir = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/download/lrc");
@@ -275,7 +307,7 @@ public class ConsoleActivity extends SlideBackActivity {
                     Toast.makeText(ConsoleActivity.this,maps.get("msg").toString(),Toast.LENGTH_SHORT).show();
                 }
                 new DownloadUtil().download(coverurl,"/Android/data/cn.wearbbs.music/download/cover/",song + ".jpg", (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE));
-                Toast.makeText(this,"开始下载",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"已加入下载列表",Toast.LENGTH_SHORT).show();
             }
             else{
                 Toast.makeText(this,"已下载",Toast.LENGTH_SHORT).show();
@@ -289,7 +321,7 @@ public class ConsoleActivity extends SlideBackActivity {
         ImageView like_view = findViewById(R.id.iv_like);
         if(!is_like){
             Map maps = new MusicApi().likeMusic(id,cookie);
-            if(maps.get("code").toString().equals("200")){
+            if("200".equals(maps.get("code").toString())){
                 like_view.setImageResource(R.drawable.ic_baseline_favorite_24);
                 Toast.makeText(this,"收藏成功！",Toast.LENGTH_SHORT).show();
                 is_like = true;
@@ -300,7 +332,7 @@ public class ConsoleActivity extends SlideBackActivity {
         }
         else{
             Map maps = new MusicApi().dislikeMusic(id,cookie);
-            if(maps.get("code").toString().equals("200")){
+            if("200".equals(maps.get("code").toString())){
                 like_view.setImageResource(R.drawable.ic_baseline_favorite_border_24);
                 Toast.makeText(this,"取消收藏成功！",Toast.LENGTH_SHORT).show();
                 is_like = false;

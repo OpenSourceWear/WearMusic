@@ -18,7 +18,9 @@ import java.util.Map;
 
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.api.MVApi;
+import cn.wearbbs.music.detail.Data;
 import cn.wearbbs.music.ui.MainActivity;
+import cn.wearbbs.music.util.UserInfoUtil;
 
 public class SearchAdapter extends BaseAdapter {
     private List listText;
@@ -69,12 +71,7 @@ public class SearchAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view;
-        if (convertView==null){
-            //通过一个打气筒 inflate 可以把一个布局转换成一个view对象
-            view=View.inflate(context,R.layout.item,null);
-        }else {
-            view=convertView;//复用历史缓存对象
-        }
+        view=View.inflate(context,R.layout.item,null);
         view.findViewById(R.id.iv_mv).setVisibility(View.VISIBLE);
         tmp_song = (Map) JSON.parse(tmp.get(position).toString());
         mvid = tmp_song.get("mvid").toString();
@@ -85,7 +82,7 @@ public class SearchAdapter extends BaseAdapter {
             Intent intent = new Intent(context, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-            intent.putExtra("type", "0");
+            intent.putExtra("type", Data.defaultMode);
             intent.putExtra("list", idl);
             intent.putExtra("start", String.valueOf(position));
             intent.putExtra("mvids", JSON.toJSONString(mvids));
@@ -100,7 +97,7 @@ public class SearchAdapter extends BaseAdapter {
             else{
                 Map maps = null;
                 try {
-                    maps = new MVApi().getMVUrl(mvid);
+                    maps = new MVApi().getMVUrl(mvid, UserInfoUtil.getUserInfo(context,"cookie"));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

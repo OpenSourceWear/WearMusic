@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_comment"
     android:layout_width="match_parent"
@@ -53,9 +54,38 @@
         android:layout_marginTop="3dp"
         android:divider="#FAFAFA"
         android:dividerHeight="1dp"
-        android:visibility="visible">
+        android:visibility="gone">
 
     </ListView>
+
+    <LinearLayout
+        android:id="@+id/ll_failed"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/iv_failed"
+            android:layout_width="match_parent"
+            android:layout_height="63dp"
+            android:contentDescription="@string/todo"
+            android:onClick="reload"
+            app:srcCompat="@drawable/ic_baseline_refresh_24" />
+
+        <TextView
+            android:id="@+id/tv_failed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="@string/loading_failed"
+            android:textColor="#2a2b2c"
+            android:textSize="15sp" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_loading"
@@ -64,7 +94,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ProgressBar
             android:id="@+id/pb_loading"

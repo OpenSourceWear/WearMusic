@@ -62,7 +62,7 @@ public class SearchActivity extends SlideBackActivity {
         Thread thread = new Thread(()->{
             Map map = null;
             try {
-                map = new HotApi().getHotSearch();
+                map = new HotApi().getHotSearch(cookie);
                 text = new HitokotoApi().getHitokoto();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -92,6 +92,7 @@ public class SearchActivity extends SlideBackActivity {
                     return true;
                 });
                 tv.setText(text+"\n\n");
+
             });
         });
         thread.start();
@@ -195,6 +196,12 @@ public class SearchActivity extends SlideBackActivity {
     public void refresh_list(final List search_list, final String idl, List idi) {
         SearchAdapter adapter = new SearchAdapter(search_list,idl,idi,tmp,this);
         ListView list = findViewById(R.id.list);
+        TextView tv = new TextView(this);
+        tv.setText(text+"\n\n");
+        tv.setTextColor(Color.parseColor("#999999"));
+        tv.setGravity(Gravity.CENTER);
+        tv.setTextSize(12);
+        list.addFooterView(tv,null,false);
         list.setAdapter(adapter);
     }
 }

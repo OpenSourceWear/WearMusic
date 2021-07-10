@@ -10,15 +10,15 @@
     <string name="qqQunQRCode">官方群二维码</string>
     <string name="contactAuthor">联系作者</string>
     <string name="checkUpdate">检查更新</string>
-    <string name="aboutContent">第三方网易云客户端 v2.1\n作者： JackuXL 出品：WearBBS\n官方QQ群：133636679\n官网：https://wmusic.wearbbs.cn\n论坛：https://wearbbs.cn\n使用【网易云API】开发\n特别感谢：@luern0313</string>
+    <string name="aboutContent">第三方网易云客户端 v2.2\n作者： JackuXL 出品：WearBBS\n官方QQ群：133636679\n官网：https://wmusic.wearbbs.cn\n论坛：https://wearbbs.cn\n使用【网易云API】开发\n特别感谢：@luern0313</string>
     <string name="addMusic">导入音乐</string>
     <string name="hintForChoose">请选择导入方式</string>
     <string name="ftp">FTP</string>
     <string name="self">手动</string>
     <string name="hintForPC">*若您使用的是 PC 端，请前往 WearBBS 下载 WearOS 工具箱，使用文件管理跳转导入。</string>
-    <string name="musicRoot">音乐储存位置：\n/storage/emulated/0/Android/data/cn.wearbbs.music/download/music</string>
-    <string name="lyricsRoot">歌词储存位置：\n/storage/emulated/0/Android/data/cn.wearbbs.music/download/lrc</string>
-    <string name="coverRoot">封面储存位置：\n/storage/emulated/0/Android/data/cn.wearbbs.music/download/cover</string>
+    <string name="musicRoot">音乐储存位置：\n/storage/emulated/0/Android/data/cn.wearbbs.music/download/music/</string>
+    <string name="lyricsRoot">歌词储存位置：\n/storage/emulated/0/Android/data/cn.wearbbs.music/download/lrc/</string>
+    <string name="coverRoot">封面储存位置：\n/storage/emulated/0/Android/data/cn.wearbbs.music/download/cover/</string>
     <string name="hintForFtp">用户名：WearMusic\n密码：WearMusic\n端口：2222\nIP：Unknown\n连接后默认自动进入音乐储存位置\nAndroid 用户可前往官网下载手机端传输工具</string>
     <string name="open">开启</string>
     <string name="chooseLyrics">选择歌词</string>
@@ -69,4 +69,14 @@
     <string name="android">Android</string>
     <string name="pc">PC</string>
     <string name="androidHint">下载 WearMusicFtp\n在手表端 WearMusic 启用“导入音乐”中的FTP\n打开 WearMusicFtp，输入IP连接\n导入音乐即可</string>
+    <string name="loading_failed">加载失败</string>
+    <string name="sl_detail">歌单详情</string>
+    <string name="musicList">音乐列表</string>
+    <string name="setting">设置</string>
+    <string name="savePic">保存图片</string>
+    <string name="back">返回上一级</string>
+    <string name="checkFM">启动时检索FM</string>
+    <string name="tips">使用提示</string>
+    <string name="tip">·打开歌词：点击音乐名称，即可切换到歌词页面。\n\n·打开控制台：播放音乐时，长按标题栏即可进入音乐控制台，解锁评论、播放列表等更多功能。</string>
+    <string name="known">我知道了</string>
 </resources>

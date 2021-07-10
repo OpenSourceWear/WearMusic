@@ -1,5 +1,6 @@
 package cn.wearbbs.music.adapter;
 
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +22,11 @@ import java.util.Map;
 
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.api.MVApi;
+import cn.wearbbs.music.api.MusicPanApi;
+import cn.wearbbs.music.detail.Data;
 import cn.wearbbs.music.ui.MainActivity;
+import cn.wearbbs.music.ui.MusicPanActivity;
+import cn.wearbbs.music.util.UserInfoUtil;
 
 public class PlayListAdapter extends BaseAdapter {
     private Context context;
@@ -29,7 +36,9 @@ public class PlayListAdapter extends BaseAdapter {
     private String names;
     private int type;
     private int musicIndex;
-    public PlayListAdapter(String mvids, String idl, int size, String names, Context context, int type,int musicIndex){
+    private Intent intent;
+    AlertDialog alertDialog;
+    public PlayListAdapter(String mvids, String idl, int size, String names, Context context, int type,int musicIndex,Intent intent){
         this.context=context;
         this.jsonString = idl;
         this.mvids = mvids;
@@ -37,6 +46,7 @@ public class PlayListAdapter extends BaseAdapter {
         this.names = names;
         this.type = type;
         this.musicIndex = musicIndex;
+        this.intent = intent;
     }
     @Override
     public int getCount() {
@@ -59,12 +69,7 @@ public class PlayListAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view;
         List namesList = JSON.parseArray(names);
-        if (convertView==null){
-            //通过一个打气筒 inflate 可以把一个布局转换成一个view对象
-            view=View.inflate(context,R.layout.item,null);
-        }else {
-            view=convertView;//复用历史缓存对象
-        }
+        view=View.inflate(context,R.layout.item,null);
         view.findViewById(R.id.iv_mv).setVisibility(View.VISIBLE);
         if(position == musicIndex){
             view.findViewById(R.id.iv_playing).setVisibility(View.VISIBLE);
@@ -79,8 +84,8 @@ public class PlayListAdapter extends BaseAdapter {
             Map maps = new HashMap();
             Map detailMaps = new HashMap();
             try {
-                maps = new MVApi().getMVUrl(JSON.parseArray(mvids).get(position).toString());
-                detailMaps = new MVApi().getMVDetail(JSON.parseArray(mvids).get(position).toString());
+                maps = new MVApi().getMVUrl(JSON.parseArray(mvids).get(position).toString(), UserInfoUtil.getUserInfo(context,"cookie"));
+                detailMaps = new MVApi().getMVDetail(JSON.parseArray(mvids).get(position).toString(),UserInfoUtil.getUserInfo(context,"cookie"));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -121,11 +126,23 @@ public class PlayListAdapter extends BaseAdapter {
             Intent intent = new Intent(context, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-            intent.putExtra("type", "3");
+            intent.putExtra("type", type);
             intent.putExtra("list", jsonString);
             intent.putExtra("start", String.valueOf(position));
             intent.putExtra("mvids",mvids);
             context.startActivity(intent);
+        });
+        view.findViewById(R.id.title).setOnLongClickListener(v -> {
+            alertDialog = new AlertDialog.Builder(context)
+                    .setMessage("要删除该音乐吗？")
+                    .setPositiveButton("确定", (dialogInterface, i12) -> {
+                        JSONArray ja = JSONObject.parseArray(JSON.parseArray(jsonString).remove(position).toString());
+                        intent.putExtra("list",JSONArray.toJSONString(ja));
+                    })
+                    .setNegativeButton("取消", (dialogInterface, i1) -> alertDialog.dismiss())
+                    .create();
+            alertDialog.show();
+            return true;
         });
         ((TextView)view.findViewById(R.id.title)).setText(Html.fromHtml(namesList.get(position).toString()));
         return view;

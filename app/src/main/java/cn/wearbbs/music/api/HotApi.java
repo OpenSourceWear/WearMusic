@@ -8,9 +8,9 @@ import cn.wearbbs.music.util.NetWorkUtil;
 
 public class HotApi {
     private String result;
-    public Map getHotSearch() throws InterruptedException {
+    public Map getHotSearch(String cookie) throws InterruptedException {
         Thread tmp = new Thread((Runnable) () -> {
-            result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/search/hot");
+            result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/search/hot",cookie);
         });
         tmp.start();
         tmp.join();

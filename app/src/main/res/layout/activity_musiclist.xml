@@ -8,6 +8,36 @@
     tools:context=".ui.MusicListActivity">
 
     <LinearLayout
+        android:id="@+id/ll_failed"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/iv_failed"
+            android:layout_width="match_parent"
+            android:layout_height="63dp"
+            android:contentDescription="@string/todo"
+            android:onClick="reload"
+            app:srcCompat="@drawable/ic_baseline_refresh_24" />
+
+        <TextView
+            android:id="@+id/tv_failed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:text="@string/loading_failed"
+            android:textColor="#2a2b2c"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/ll_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

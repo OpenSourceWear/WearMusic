@@ -228,7 +228,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/menu_about"
+            android:id="@+id/menu_setting"
             android:layout_width="match_parent"
             android:layout_height="46dp"
             android:layout_marginBottom="20dp"
@@ -236,26 +236,26 @@
             android:clickable="true"
             android:focusable="true"
             android:gravity="center_vertical"
-            android:onClick="onClick_about"
+            android:onClick="onClick_setting"
             android:orientation="horizontal"
             android:paddingLeft="30dp"
             android:paddingRight="30dp">
 
             <ImageView
-                android:id="@+id/iv_about"
+                android:id="@+id/iv_setting"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginEnd="6dp"
                 android:background="@drawable/ic_baseline_brightness_1_24"
                 android:contentDescription="@string/todo"
                 android:padding="7dp"
-                app:srcCompat="@drawable/ic_baseline_info_24" />
+                app:srcCompat="@drawable/ic_baseline_settings_24" />
 
             <TextView
-                android:id="@+id/tv_about"
+                android:id="@+id/tv_setting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/aboutApp"
+                android:text="@string/setting"
                 android:textColor="#FAFAFA" />
 
         </LinearLayout>

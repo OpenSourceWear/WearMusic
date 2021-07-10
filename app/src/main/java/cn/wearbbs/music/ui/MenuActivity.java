@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import cn.wearbbs.music.R;
+import cn.wearbbs.music.detail.Data;
 
 public class MenuActivity extends SlideBackActivity {
     int type;
@@ -68,6 +69,7 @@ public class MenuActivity extends SlideBackActivity {
     }
     public void onClick_fm(View view){
         Intent intent = new Intent(MenuActivity.this, MainActivity.class);
+        intent.putExtra("type", Data.fmMode);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
         startActivity(intent);
@@ -90,16 +92,16 @@ public class MenuActivity extends SlideBackActivity {
         intent4.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
         startActivity(intent4);
     }
-    public void onClick_about(View view){
-        Intent intent5 = new Intent(MenuActivity.this, AboutActivity.class);
-        intent5.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
-        intent5.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-        startActivity(intent5);
-    }
     public void onClick_cloud(View view){
         Intent intent6 = new Intent(MenuActivity.this, MusicPanActivity.class);
         intent6.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
         intent6.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
         startActivity(intent6);
+    }
+    public void onClick_setting(View view){
+        Intent intent = new Intent(MenuActivity.this, SettingActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
     }
 }

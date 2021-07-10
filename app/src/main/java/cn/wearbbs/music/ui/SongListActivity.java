@@ -1,68 +1,100 @@
 package cn.wearbbs.music.ui;
 
+import android.app.Application;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.carbs.android.expandabletextview.library.ExpandableTextView;
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.adapter.DefaultAdapter;
 import cn.wearbbs.music.api.HitokotoApi;
 import cn.wearbbs.music.api.PlayListApi;
+import cn.wearbbs.music.application.MyApplication;
 import cn.wearbbs.music.util.UserInfoUtil;
 
+/**
+ * @author JackuXL
+ */
 public class SongListActivity extends SlideBackActivity {
     String cookie;
     public static String ID;
     String text = "没有更多了";
+    Map cs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_songlist);
         findViewById(R.id.ll_loading).setVisibility(View.VISIBLE);
         cookie = UserInfoUtil.getUserInfo(this,"cookie");
+
+        Intent intent = getIntent();
+        cs = (Map)JSON.parse(intent.getStringExtra("cs"));
+        ID = cs.get("id").toString();
+
         Thread thread = new Thread(()->{
             try {
-                Intent intent = getIntent();
-                Map cs = (Map)JSON.parse(intent.getStringExtra("cs"));
-                ID = cs.get("id").toString();
-                TextView title = findViewById(R.id.title);
-                title.setText(cs.get("name").toString());
-                Map maps = new PlayListApi().getPlayListDetail(cs.get("id").toString(),cookie);
+                JSONObject info = new PlayListApi().getPlayListDetail(cs.get("id").toString(),cookie);
                 text = new HitokotoApi().getHitokoto();
-                SongListActivity.this.runOnUiThread(()-> {
-                    try {
-                        init_view(maps);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                });
+                if(info==null) {
+                    showFailedMessage();
+                }
+                else{
+                    SongListActivity.this.runOnUiThread(()-> {
+                        try {
+                            init_view(info);
+                        } catch (Exception e) {
+                            showFailedMessage();
+                        }
+                    });
+                }
             } catch (Exception e) {
-                SongListActivity.this.runOnUiThread(()-> Toast.makeText(SongListActivity.this,"获取失败",Toast.LENGTH_SHORT).show());
-                e.printStackTrace();
+                showFailedMessage();
             }
             SongListActivity.this.runOnUiThread(()-> findViewById(R.id.ll_loading).setVisibility(View.GONE));
         });
         thread.start();
     }
-
+    public void reload(View view) {
+        Intent intent = getIntent();
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
+        startActivity(intent);
+    }
+    public void showFailedMessage(){
+        runOnUiThread(()->{
+            findViewById(R.id.ll_loading).setVisibility(View.GONE);
+            findViewById(R.id.ll_failed).setVisibility(View.VISIBLE);
+        });
+    }
     public static String ids;
-    public void init_view(Map maps) throws InterruptedException {
+    public void init_view(JSONObject info) throws InterruptedException {
         List mvids = new ArrayList();
         ListView list_gd  = findViewById(R.id.lv_songlist);
-        Map play_list = (Map) JSON.parse(maps.get("playlist").toString());
-        List tracks = JSON.parseArray(play_list.get("trackIds").toString());
+        JSONObject playList = info.getJSONObject("playlist");
+        JSONArray tracks = playList.getJSONArray("trackIds");
         List names = new ArrayList();
         List search_list = new ArrayList();
         ids = "";
@@ -122,14 +154,32 @@ public class SongListActivity extends SlideBackActivity {
         tv.setGravity(Gravity.CENTER);
         tv.setTextSize(12);
         list_gd.addFooterView(tv,null,false);
+
+        View header = View.inflate(this,R.layout.sl_header,null);
+        ((TextView)header.findViewById(R.id.tv_name)).setText(playList.getString("name"));
+        ((TextView)header.findViewById(R.id.tv_author)).setText(playList.getJSONObject("creator").getString("nickname"));
+        ((ExpandableTextView)header.findViewById(R.id.etv_text)).setText(playList.getString("description"));
+        header.findViewById(R.id.iv_cover).setOnClickListener(v -> {
+            Intent intent = new Intent(SongListActivity.this, PicActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
+            intent.putExtra("url",playList.getString("coverImgUrl"));
+            startActivity(intent);
+        });
+        RequestOptions options = RequestOptions.bitmapTransform(new RoundedCorners(20)).placeholder(R.drawable.ic_baseline_photo_size_select_actual_24).error(R.drawable.ic_baseline_photo_size_select_actual_24);
+        Glide.with(getApplicationContext()).load(playList.getString("coverImgUrl"))
+                .apply(options)
+                .into((ImageView) header.findViewById(R.id.iv_cover));
+        list_gd.addHeaderView(header,null,false);
+
         list_gd.setAdapter(adapter);
+
+        LinearLayout null_layout = findViewById(R.id.ll_noMusic);
         if(names.size() == 0){
-            LinearLayout null_layout = findViewById(R.id.ll_noMusic);
             null_layout.setVisibility(View.VISIBLE);
             list_gd.setVisibility(View.GONE);
         }
         else{
-            LinearLayout null_layout = findViewById(R.id.ll_noMusic);
             null_layout.setVisibility(View.GONE);
             list_gd.setVisibility(View.VISIBLE);
         }

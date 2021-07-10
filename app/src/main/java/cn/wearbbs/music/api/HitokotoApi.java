@@ -10,10 +10,17 @@ public class HitokotoApi {
     private String result;
     public String getHitokoto() throws InterruptedException {
         Thread tmp = new Thread(() -> {
-            result = NetWorkUtil.sendByGetUrl("https://v1.hitokoto.cn/?max_length=10");
+            result = NetWorkUtil.sendByGetUrl("https://v1.hitokoto.cn/?max_length=10","");
         });
         tmp.start();
         tmp.join();
-        return ((Map)JSON.parse(result)).get("hitokoto").toString();
+        String s;
+        try{
+            s=((Map)JSON.parse(result)).get("hitokoto").toString();
+        }
+        catch (Exception e){
+            s="没有更多了";
+        }
+        return s;
     }
 }

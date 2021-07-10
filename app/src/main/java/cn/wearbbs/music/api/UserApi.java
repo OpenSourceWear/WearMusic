@@ -3,99 +3,68 @@ package cn.wearbbs.music.api;
 import android.content.Context;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cn.wearbbs.music.detail.Data;
 import cn.wearbbs.music.util.NetWorkUtil;
 import cn.wearbbs.music.util.UserInfoUtil;
 
 public class UserApi {
     private String result;
-    public Map checkLogin(String cookie) throws InterruptedException {
+    public JSONObject checkLogin(String cookie) throws InterruptedException {
         Thread tmp = new Thread(() -> {
-            result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/login/status" + "?cookie=" + cookie);
+            result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/login/status" ,cookie);
         });
         tmp.start();
         tmp.join();
-        return (Map)JSON.parse(result);
+        return JSON.parseObject(result);
     }
-    public Map Login(Context context,String name,String password) throws IOException {
-        String text;
+    public JSONObject Login(Context context,String name,String password) throws IOException {
+        JSONObject loginInfo;
         if (checkEmail(name)){
-            text = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/login?email=" + name + "&password=" + password + "&timestamp=" + System.currentTimeMillis());
-            Map maps = (Map)JSON.parse(text);
-            if(maps.containsKey("error") || maps.containsKey("msg") || maps.containsKey("message")){
-                return maps;
-            }
-            else if (maps.get("code").toString().equals("200")){
-                File dir = new File("/storage/emulated/0/Android/data/cn.wearbbs.music");
-                dir.mkdirs();
-                File user = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/user.txt");
-                user.createNewFile();
-
-                FileOutputStream outputStream;
-                outputStream = new FileOutputStream(user);
-                Map profile = (Map)JSON.parse(maps.get("profile").toString());
-                outputStream.write(profile.toString().getBytes());
-                outputStream.close();
-
-                UserInfoUtil.saveUserInfo(context,"account",name);
-                UserInfoUtil.saveUserInfo(context,"password",password);
-                UserInfoUtil.saveUserInfo(context,"cookie",maps.get("cookie").toString());
-                return maps;
-            }
-            else{
-                if(maps.get("code").toString().equals("400")){
-                    result = "{\"error\":\"请填写手机号/邮箱\"}";
-                    return (Map)JSON.parse(result);
-                }
-                else{
-                    return (Map)JSON.parse("{\"error\":\"" + maps.get("msg").toString() + "\"");
-                }
-            }
+            loginInfo = JSON.parseObject(NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/login?email=" + name + "&password=" + password + "&timestamp=" + System.currentTimeMillis(),""));
         }
         else if(checkMobileNumber(name)){
-            text = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/login/cellphone?phone=" + name + "&password=" + password + "&timestamp=" + System.currentTimeMillis());
-            Map maps = (Map)JSON.parse(text);
-            if(maps.containsKey("error") || maps.containsKey("msg") || maps.containsKey("message")){
-                return maps;
-            }
-            else if (maps.get("code").toString().equals("200")){
-                File dir = new File("/storage/emulated/0/Android/data/cn.wearbbs.music");
-                dir.mkdirs();
-                File user = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/user.txt");
-                user.createNewFile();
-
-                FileOutputStream outputStream;
-                outputStream = new FileOutputStream(user);
-                Map profile = (Map)JSON.parse(maps.get("profile").toString());
-                outputStream.write(profile.toString().getBytes());
-                outputStream.close();
-
-
-                UserInfoUtil.saveUserInfo(context,"account",name);
-                UserInfoUtil.saveUserInfo(context,"password",password);
-                UserInfoUtil.saveUserInfo(context,"cookie",maps.get("cookie").toString());
-                return maps;
-            }
-            else{
-                if(maps.get("code").toString().equals("400")){
-                    result = "{\"error\":\"请填写手机号/邮箱\"}";
-                    return (Map)JSON.parse(result);
-                }
-                else{
-                    return (Map)JSON.parse("{\"error\":\"" + maps.get("msg").toString() + "\"");
-                }
-            }
+            loginInfo = JSON.parseObject(NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/login/cellphone?phone=" + name + "&password=" + password + "&timestamp=" + System.currentTimeMillis(),""));
         }
         else{
-            result = "{\"error\":\"请填写手机号/邮箱\"}";
-            return (Map)JSON.parse(result);
+            return JSON.parseObject("{\"error\":\"请填写手机号/邮箱\"}");
+        }
+
+        if(loginInfo.containsKey("error") || loginInfo.containsKey("msg") || loginInfo.containsKey("message")){
+            return loginInfo;
+        }
+        else if (loginInfo.getInteger("code") == Data.successCode){
+            File dir = new File("/storage/emulated/0/Android/data/cn.wearbbs.music");
+            dir.mkdirs();
+            File user = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/user.txt");
+            user.createNewFile();
+
+            FileOutputStream outputStream;
+            outputStream = new FileOutputStream(user);
+            JSONObject profile = loginInfo.getJSONObject("profile");
+            outputStream.write(profile.toString().getBytes());
+            outputStream.close();
+
+            UserInfoUtil.saveUserInfo(context,"account",name);
+            UserInfoUtil.saveUserInfo(context,"password",password);
+            UserInfoUtil.saveUserInfo(context,"cookie",loginInfo.getString("cookie"));
+            return loginInfo;
+        }
+        else{
+            if(loginInfo.getInteger("code") == Data.errorCode){
+                result = "{\"error\":\"请填写手机号/邮箱\"}";
+                return loginInfo;
+            }
+            else{
+                return JSON.parseObject("{\"error\":\"" + loginInfo.getString("msg") + "\"");
+            }
         }
     }
     /**

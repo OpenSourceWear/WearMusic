@@ -7,10 +7,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.GradientDrawable;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,10 +28,12 @@ import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -44,8 +46,8 @@ import java.util.Map;
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.api.FMApi;
 import cn.wearbbs.music.api.MusicApi;
-import cn.wearbbs.music.api.UpdateApi;
 import cn.wearbbs.music.api.UserApi;
+import cn.wearbbs.music.detail.Data;
 import cn.wearbbs.music.util.HeadSetUtil;
 import cn.wearbbs.music.util.PermissionUtil;
 import cn.wearbbs.music.util.UserInfoUtil;
@@ -55,13 +57,12 @@ public class MainActivity extends SlideBackActivity {
     public static MediaPlayer mediaPlayer;
     public static boolean playing = false;
     public static int musicIndex = 0;
-    List search_list;
+    UserApi userApi = new UserApi();
+    JSONArray musicDetail;
     String url;
-    String type;
-    static double Version = 2.1;
+    int type;
     File lrcFile;
     LrcView lrcView;
-    Map lrc_map;
     String id;
     int zt = 0;
     String cookie;
@@ -69,218 +70,110 @@ public class MainActivity extends SlideBackActivity {
     List mvids;
     String coverUrl;
     public static boolean prepareDone = false;
+    boolean repeatOne = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        search_list = new ArrayList();
-        mvids = new ArrayList();
         prepareDone = false;
         String PERMISSION_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
+        // 布局初始化
+        // 长按菜单栏
+        findViewById(R.id.main_title).setOnLongClickListener(v -> {
+            console();
+            return false;
+        });
+
+        //间距
+        int width = 10;
+        LinearLayout linearLayout = findViewById(R.id.ll_ctrl);
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setSize(width,1);
+        linearLayout.setDividerDrawable(drawable);
+        linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+
+        // 耳机控制监听
         HeadSetUtil.getInstance().setOnHeadSetListener(headSetListener);
         HeadSetUtil.getInstance().open(MainActivity.this);
-        if (PermissionUtil.checkPermission(this,PERMISSION_STORAGE)) {
-            try {
-                File dl = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/deleted.lock");
-                File old_cookie = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/cookie.txt");
-                if(!dl.exists()){
-                    File dir = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/");
-                    dir.delete();
-                    dir.mkdir();
-                    dl.createNewFile();
-                }
-                if(old_cookie.exists()){
-                    old_cookie.delete();
-                }
-                Thread updateThread = new Thread(()->{
-                    Map update_map = null;
-                    try {
-                        update_map = new UpdateApi().checkUpdate();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if(Double.parseDouble(update_map.get("version").toString()) > Version){
-                        Intent intent = new Intent(MainActivity.this, UpdateActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-                        intent.putExtra("data",update_map.toString());
-                        MainActivity.this.runOnUiThread(()->startActivity(intent));
-                        finish();
-                    }
-                });
-                updateThread.start();
-                File ol = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/outline.ini");
-                if(ol.exists()){
-                    ol.delete();
-                }
-            } catch (Exception e) {
-                File ol = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/outline.ini");
-                if(ol.exists()){
-                    type = "1";
-                    Intent get_music = getIntent();
-                    mvids = JSON.parseArray(get_music.getStringExtra("mvids"));
-                    String start = get_music.getStringExtra("start");
-                    ScrollView sv_main = findViewById(R.id.sv_main);
-                    LinearLayout ly = findViewById(R.id.ly_search);
-                    sv_main.setVisibility(View.VISIBLE);
-                    ly.setVisibility(View.GONE);
-                    if (start != null) {
-                        search_list = JSONObject.parseArray(get_music.getStringExtra("list"));
-                        musicIndex = Integer.parseInt(start);
-                        type = get_music.getStringExtra("type");
-                        if(!MainActivity.this.isFinishing()){
-                            
-                            will_next = true;
-                            TextView msg = findViewById(R.id.msg);
-                            msg.setText("加载中");
-                        }
-                    }
-                }
-                else {
-                    try {
-                        ol.createNewFile();
-                    } catch (IOException ioException) {
-                        ioException.printStackTrace();
-                    }
-                    AlertDialog.Builder builder;
-                    builder = new AlertDialog.Builder(MainActivity.this).setTitle("无网络")
-                            .setMessage("似乎没有网络哦~是否进入离线模式？").setPositiveButton("开启", (dialogInterface, i) -> {
-                                dialogInterface.dismiss();
-                                Intent intent = new Intent(MainActivity.this, LocalMusicActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
-                                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-                                startActivity(intent);
-                                finish();
 
-                            }).setNegativeButton("取消", (dialogInterface, i) -> {
-                                dialogInterface.dismiss();
-                                Intent get_music = getIntent();
-                                mvids = JSON.parseArray(get_music.getStringExtra("mvids"));
-                                String start = get_music.getStringExtra("start");
-                                ScrollView sv_main = findViewById(R.id.sv_main);
-                                LinearLayout ly = findViewById(R.id.ly_search);
-                                sv_main.setVisibility(View.VISIBLE);
-                                ly.setVisibility(View.GONE);
-                                File user = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/user.txt");
-                                cookie = UserInfoUtil.getUserInfo(this,"cookie");
-                                if (!user.exists() || cookie == null) {
-                                    Log.d("Main","登陆过期");
-                                    Toast.makeText(MainActivity.this, "登录过期，请重新登陆", Toast.LENGTH_SHORT).show();
-                                    Intent intent_ = new Intent(MainActivity.this, LoginActivity.class);
-                                    intent_.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
-                                    intent_.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-                                    startActivity(intent_);
-                                    finish();
-                                } else {
-                                    Map maps = null;
-                                    try {
-                                        maps = new UserApi().checkLogin(cookie);
-                                    } catch (InterruptedException ea) {
-                                        e.printStackTrace();
-                                    }
-                                    if (maps.get("code").toString().equals("200")) {
-                                        try {
-                                            File us = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/user.txt");
-                                            us.createNewFile();
-                                            FileOutputStream outputStream;
-                                            outputStream = new FileOutputStream(us);
-                                            Map profile = (Map) JSON.parse(maps.get("profile").toString());
-                                            outputStream.write(profile.toString().getBytes());
-                                            outputStream.close();
-                                        } catch (IOException ea) {
-                                            ea.printStackTrace();
-                                        }
-                                    } else {
-                                        try {
-                                            relogin();
-                                        } catch (Exception ea) {
-                                            if (!MainActivity.this.isFinishing()) {
-                                                Toast.makeText(MainActivity.this, "登录过期，请重新登陆", Toast.LENGTH_SHORT).show();
-                                            }
-                                            Intent intentLogin = new Intent(MainActivity.this,LoginActivity.class);
-                                            intentLogin.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
-                                            intentLogin.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-                                            startActivity(intentLogin
-                                            );
-                                            finish();
-                                        }
-                                    }
-                                }
-                                if (start == null) {
-                                    //无音乐
-                                    try {
-                                        //无音乐
-                                        cookie = UserInfoUtil.getUserInfo(this,"cookie");
-                                        if(cookie == null){
-                                            Log.d("Main","登陆过期");
-                                            Toast.makeText(MainActivity.this, "登录过期，请重新登陆", Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(MainActivity.this,LoginActivity.class);
-                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
-                                            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-                                            startActivity(intent);
-                                            finish();
-                                        }
-                                        Map maps = null;
-                                        try {
-                                            maps = new FMApi().FM(cookie);
-                                        } catch (InterruptedException interruptedException) {
-                                            interruptedException.printStackTrace();
-                                        }
-                                        search_list = JSON.parseArray(maps.get("data").toString());
-                                        if(search_list.size() == 0){
-                                            maps = new FMApi().FM(cookie);
-                                            search_list = JSON.parseArray(maps.get("data").toString());
-                                            if(search_list.size() == 0){
-                                                Log.d("Main","登陆过期");
-                                                Toast.makeText(MainActivity.this, "登录过期，请重新登陆", Toast.LENGTH_SHORT).show();
-                                                Intent intent = new Intent(MainActivity.this,LoginActivity.class);
-                                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
-                                                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-                                                startActivity(intent);
-                                                finish();
-                                            }
-                                        }
-                                        mvids = new ArrayList();
-                                        for (int j = 0;j<search_list.size();j++){
-                                            Map temp = (Map)JSON.parse(search_list.get(j).toString());
-                                            mvids.add(temp.get("mvid").toString());
-                                        }
-                                        musicIndex = 0;
-                                        type = "3";
-                                        will_next = true;
-                                        TextView msg = findViewById(R.id.msg);
-                                        msg.setText("加载中");
-                                        ImageView imageView = findViewById(R.id.btn_open);
-                                        imageView.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
-                                    } catch (Exception ea) {
-                                        if (!MainActivity.this.isFinishing()) {
-                                            Toast.makeText(MainActivity.this, "加载失败", Toast.LENGTH_SHORT).show();
-                                        }
-                                        ea.printStackTrace();
-                                    }
-                                } else {
-                                    search_list = JSONObject.parseArray(get_music.getStringExtra("list"));
-                                    musicIndex = Integer.parseInt(start);
-                                    type = get_music.getStringExtra("type");
-                                    will_next = true;
-                                    TextView msg = findViewById(R.id.msg);
-                                    msg.setText("加载中");
-                                }
-                            });
-                    builder.create().show();
-                }
+
+        // 旧版本迁移
+        File dl = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/deleted.lock");
+        File old_cookie = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/cookie.txt");
+        if(!dl.exists()){
+            File dir = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/");
+            try {
+                dir.delete();
+                dir.mkdir();
+                dl.createNewFile();
+            } catch (IOException ignored) { }
+        }
+        if(old_cookie.exists()){
+            old_cookie.delete();
+        }
+
+        if(getIntent().getStringExtra("isOutLine")==null){
+            if (PermissionUtil.checkPermission(this,PERMISSION_STORAGE)) {
+                initPlayer();
             }
-            File ol = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/outline.ini");
-            if(!ol.exists()){
-                Intent get_music = getIntent();
-                mvids = JSON.parseArray(get_music.getStringExtra("mvids"));
-                String start = get_music.getStringExtra("start");
-                ScrollView sv_main = findViewById(R.id.sv_main);
-                LinearLayout ly = findViewById(R.id.ly_search);
-                sv_main.setVisibility(View.VISIBLE);
-                ly.setVisibility(View.GONE);
-                File user = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/user.txt");
-                cookie = UserInfoUtil.getUserInfo(this,"cookie");
+            else {
+                Intent intent = new Intent(MainActivity.this, PermissionActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
+                finish();
+            }
+        }
+        else{
+            Intent get_music = getIntent();
+            mvids = JSON.parseArray(get_music.getStringExtra("mvids"));
+            String start = get_music.getStringExtra("start");
+            ScrollView sv_main = findViewById(R.id.sv_main);
+            LinearLayout ly = findViewById(R.id.ly_search);
+            sv_main.setVisibility(View.VISIBLE);
+            ly.setVisibility(View.GONE);
+            if (start != null) {
+                musicDetail = JSON.parseArray(get_music.getStringExtra("list"));
+                musicIndex = Integer.parseInt(start);
+                type = Integer.parseInt(get_music.getStringExtra("type"));
+                will_next = true;
+                TextView msg = findViewById(R.id.msg);
+                msg.setText("加载中");
+            }
+        }
+        if(!"true".equals(UserInfoUtil.getUserInfo(this,"finishTips"))){
+            Intent intent = new Intent(MainActivity.this, TipsActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(intent);
+        }
+
+    }
+    @Override
+    protected void onActivityResult(int requestCode,int resultCode,Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                repeatOne = data.getBooleanExtra("repeatOne",false);
+            }
+        }
+    }
+    public void initPlayer(){
+        Intent get_music = getIntent();
+        mvids = JSON.parseArray(get_music.getStringExtra("mvids"));
+        String start = get_music.getStringExtra("start");
+        ScrollView sv_main = findViewById(R.id.sv_main);
+        LinearLayout ly = findViewById(R.id.ly_search);
+        sv_main.setVisibility(View.VISIBLE);
+        ly.setVisibility(View.GONE);
+        File user = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/user.txt");
+        cookie = UserInfoUtil.getUserInfo(this,"cookie");
+        String needFM = UserInfoUtil.getUserInfo(this,"needFM");
+        type = get_music.getIntExtra("type",255);
+        if((type==Data.fmMode) || (needFM != null && "true".equals(UserInfoUtil.getUserInfo(this,"needFM")))){
+            if (start == null){
+                //无音乐
                 if (!user.exists() || cookie == null){
                     Log.d("Main","登录过期");
                     Intent intent_ = new Intent(MainActivity.this, LoginActivity.class);
@@ -289,109 +182,100 @@ public class MainActivity extends SlideBackActivity {
                     startActivity(intent_);
                     finish();
                 }
-                else{
-                    Map maps = null;
+                else {
                     try {
-                        maps = new UserApi().checkLogin(cookie);
-                        maps = (Map) maps.get("data");
-                    } catch (InterruptedException ea) {
-                        ea.printStackTrace();
-                    }
-                    if(maps.get("code").toString().equals("200")){
-                        try {
-                            File us = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/user.txt");
-                            us.createNewFile();
-                            FileOutputStream outputStream;
-                            outputStream = new FileOutputStream(us);
-                            Map profile = (Map)JSON.parse(maps.get("profile").toString());
-                            outputStream.write(profile.toString().getBytes());
-                            outputStream.close();
-                        } catch (IOException ea) {
-                            ea.printStackTrace();
-                        }
-                    }
-                    else{
-                        try {
-                            relogin();
-                        } catch (Exception ea) {
-                            if (!MainActivity.this.isFinishing()) {
-                                Toast.makeText(MainActivity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
-                            }
-                            Intent intent = new Intent(MainActivity.this,LoginActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
-                            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-                            startActivity(intent);
-                            finish();
-                        }
-                    }
-                }
-                if (start == null){
-                    //无音乐
-                    try {
-                        //无音乐
-                        cookie = UserInfoUtil.getUserInfo(this,"cookie");
-                        if(cookie == null){
-                            Toast.makeText(MainActivity.this, "登录过期，请重新登陆", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(MainActivity.this,LoginActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
-                            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-                            startActivity(intent);
-                            finish();
-                        }
-                        Map maps = new FMApi().FM(cookie);
-                        search_list = JSON.parseArray(maps.get("data").toString());
-                        if(search_list.size() == 0){
-                            maps = new FMApi().FM(cookie);
-                            search_list = JSON.parseArray(maps.get("data").toString());
-                            if(search_list.size() == 0){
-                                Log.d("Main","登陆过期");
-                                Toast.makeText(MainActivity.this, "登录过期，请重新登陆", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(MainActivity.this,LoginActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
-                                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
+                        JSONObject fmDetail = new FMApi().FM(cookie);
+                        if (fmDetail.getInteger("code") == 301) {
+                            try {
+                                relogin();
+                            } catch (Exception ea) {
+                                if (!MainActivity.this.isFinishing()) {
+                                    Toast.makeText(MainActivity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
+                                }
+                                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                //刷新
+                                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                                //防止重复
                                 startActivity(intent);
                                 finish();
                             }
                         }
-                        mvids = new ArrayList();
-                        for (int j = 0;j<search_list.size();j++){
-                            Map temp = (Map)JSON.parse(search_list.get(j).toString());
-                            mvids.add(temp.get("mvid").toString());
+                        musicDetail = fmDetail.getJSONArray("data");
+                        if (musicDetail.size() == 0) {
+                            Toast.makeText(MainActivity.this, "服务器返回空值", Toast.LENGTH_SHORT).show();
+                        } else {
+                            mvids = new ArrayList();
+                            for (int j = 0; j < musicDetail.size(); j++) {
+                                mvids.add(musicDetail.getJSONObject(j).get("mvid").toString());
+                            }
+                            musicIndex = 0;
+                            type = Data.fmMode;
+
+                            will_next = true;
+                            TextView msg = findViewById(R.id.msg);
+                            msg.setText("加载中");
+                            ImageView imageView = findViewById(R.id.btn_open);
+                            imageView.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
+                            File ol = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/outline.ini");
+                            if (ol.exists()) {
+                                ol.delete();
+                            }
                         }
-                        musicIndex = 0;
-                        type = "3";
-                        
-                        will_next = true;
-                        TextView msg = findViewById(R.id.msg);
-                        msg.setText("加载中");
-                        ImageView imageView = findViewById(R.id.btn_open);
-                        imageView.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
                     } catch (Exception ea) {
-                        if(!MainActivity.this.isFinishing()){
-                            Toast.makeText(MainActivity.this,"加载失败",Toast.LENGTH_SHORT).show();
-                        }
+                        showOutlineMessage();
                         ea.printStackTrace();
                     }
                 }
-                else {
-                    search_list = JSONObject.parseArray(get_music.getStringExtra("list"));
-                    musicIndex = Integer.parseInt(start);
-                    type = get_music.getStringExtra("type");
-                    if(!MainActivity.this.isFinishing()){
-                        
-                        will_next = true;
-                        TextView msg = findViewById(R.id.msg);
-                        msg.setText("加载中");
-                    }
+            }
+            else {
+                musicDetail = JSON.parseArray(get_music.getStringExtra("list"));
+                musicIndex = Integer.parseInt(start);
+                if(!MainActivity.this.isFinishing()){
+                    will_next = true;
+                    TextView msg = findViewById(R.id.msg);
+                    msg.setText("加载中");
                 }
             }
-        }else {
-            Intent intent = new Intent(MainActivity.this, PermissionActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
-            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-            startActivity(intent);
-            finish();
         }
+        else{
+            if(needFM==null) {
+                UserInfoUtil.saveUserInfo(this,"needFM","false");
+            }
+            if(start!=null){
+                musicDetail = JSON.parseArray(get_music.getStringExtra("list"));
+                musicIndex = Integer.parseInt(start);
+                if(!MainActivity.this.isFinishing()){
+                    will_next = true;
+                    TextView msg = findViewById(R.id.msg);
+                    msg.setText("加载中");
+                }
+            }
+        }
+
+    }
+    public void showOutlineMessage(){
+        File ol = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/outline.ini");
+        try {
+            ol.createNewFile();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(MainActivity.this).setTitle("无网络")
+                .setMessage("似乎没有网络哦~是否进入离线模式？").setPositiveButton("开启", (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                    Intent intent = new Intent(MainActivity.this, LocalMusicActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
+                    startActivity(intent);
+                    finish();
+
+                }).setNegativeButton("取消", (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                    finish();
+                });
+        builder.create().show();
     }
     @Override
     protected void onDestroy() {
@@ -417,12 +301,13 @@ public class MainActivity extends SlideBackActivity {
                 left(null);
             }
         }
+
     };
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         if(will_next){
-            nextMusic();
+            playMusic();
             will_next=false;
         }
     }
@@ -479,7 +364,9 @@ public class MainActivity extends SlideBackActivity {
                     REQUEST_EXTERNAL_STORAGE);
         }
     }
-    public void init_player(){
+    public void initMediaPlayer(){
+        ProgressBar pb_main = findViewById(R.id.pb_main);
+        ProgressBar pb_lyrics = findViewById(R.id.pb_lyrics);
         if(mediaPlayer!=null){
             mediaPlayer.reset();
             mediaPlayer.release();
@@ -487,38 +374,55 @@ public class MainActivity extends SlideBackActivity {
         mediaPlayer = new MediaPlayer();
         // 设置设备进入锁状态模式-可在后台播放或者缓冲音乐-CPU一直工作
         mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
-        // 如果你使用wifi播放流媒体，你还需要持有wifi锁
-        WifiManager.WifiLock wifiLock = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL, "wifilock");
-        wifiLock.acquire();
-
+        mediaPlayer.setOnCompletionListener(arg0 -> {
+            if(repeatOne){
+                mediaPlayer.start();
+                mediaPlayer.setLooping(true);
+            }
+            else{
+                if(mediaPlayer.getCurrentPosition() >= mediaPlayer.getDuration()){
+                    pb_main.setProgress(0);
+                    pb_lyrics.setProgress(0);
+                    right(null);
+                }
+                mediaPlayer.setLooping(false);
+                right(null);
+            }
+        });
         AudioManager.OnAudioFocusChangeListener focusChangeListener = focusChange -> {
             switch (focusChange) {
                 case AudioManager.AUDIOFOCUS_GAIN:
                     // 获取audio focus
-                    if (mediaPlayer == null)
-                        init_player();
-                    else if (!mediaPlayer.isPlaying() && playing)
+                    if (mediaPlayer == null) {
+                        initMediaPlayer();
+                    } else if (!mediaPlayer.isPlaying() && playing) {
                         mediaPlayer.start();
+                    }
                     mediaPlayer.setVolume(1.0f, 1.0f);
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS:
                     // 失去audio focus很长一段时间，必须停止所有的audio播放，清理资源
-                    if (mediaPlayer.isPlaying())
+                    if (mediaPlayer.isPlaying()) {
                         mediaPlayer.stop();
+                    }
                     mediaPlayer.release();
                     mediaPlayer = null;
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                     // 暂时失去audio focus，但是很快就会重新获得，在此状态应该暂停所有音频播放，但是不能清除资源
-                    if (mediaPlayer.isPlaying())
+                    if (mediaPlayer.isPlaying()) {
                         mediaPlayer.pause();
+                    }
                         ImageView imageView = findViewById(R.id.btn_open);
                         imageView.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                     // 暂时失去 audio focus，但是允许持续播放音频(以很小的声音)，不需要完全停止播放。
-                    if (mediaPlayer.isPlaying())
+                    if (mediaPlayer.isPlaying()) {
                         mediaPlayer.setVolume(0.1f, 0.1f);
+                    }
+                    break;
+                default:
                     break;
             }
         };
@@ -533,21 +437,8 @@ public class MainActivity extends SlideBackActivity {
         }
         
     }
-    public void playList(View view){
-        Intent intent = new Intent(MainActivity.this, PlayListActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-        intent.putExtra("mvids",JSON.toJSONString(mvids));
-        intent.putExtra("list", JSON.toJSONString(search_list));
-        intent.putExtra("type",type);
-        intent.putExtra("musicIndex",String.valueOf(musicIndex));
-        startActivity(intent);
-    }
-    public static MediaPlayer getMediaPlayer(){
-        return mediaPlayer;
-    }
     String tmp_name;
-    public void nextMusic(){
+    public void playMusic(){
         prepareDone = false;
         zt = 1;
         MainActivity.this.runOnUiThread(()->{
@@ -558,120 +449,100 @@ public class MainActivity extends SlideBackActivity {
         });
         //有音乐
         try {
-            if (mediaPlayer == null) init_player();
+            if (mediaPlayer == null) {
+                initMediaPlayer();
+            }
             mediaPlayer.reset();
             //开始播放
-            String text;
-            if(type.equals("0") || type.equals("3")){
+            if(type==0 || type==3){
 
                 try{
-                    String temp = ((search_list.get(musicIndex)).toString());
-                    temp_ni = (Map) JSON.parse(temp);
-                    id = temp_ni.get("id").toString();
+                    thisMusicDetail = musicDetail.getJSONObject(musicIndex);
+                    id = thisMusicDetail.getString("id");
                 } catch (Exception e) {
                     musicIndex = 0;
-                    String temp = ((search_list.get(musicIndex)).toString());
-                    temp_ni = (Map) JSON.parse(temp);
-                    id = temp_ni.get("id").toString();
+                    thisMusicDetail = musicDetail.getJSONObject(musicIndex);
+                    id = thisMusicDetail.getString("id");
                 }
-                Map maps_yz = new MusicApi().checkMusic(cookie,id);
-                if(maps_yz == null){
-                    maps_yz = new MusicApi().checkMusic(cookie,id);
-                }
-                if(maps_yz == null){
-                    MainActivity.this.runOnUiThread(()->{
-                        TextView textView = findViewById(R.id.msg);
-                        textView.setText("播放出错（请求失败）");
-                        ((ImageView)findViewById(R.id.imageView11)).setImageResource(R.drawable.ic_baseline_error_24);
-                    });
-                }
-                else if(maps_yz.get("success").toString().equals("true")){
-                    Map maps = new MusicApi().getMusicUrl(cookie,id);
-                    if (maps.get("code").toString().equals("200")){
-                        System.out.println(maps);
-                        Map data = (Map)JSON.parse(maps.get("data").toString().replace("[","").replace("]",""));
-                        if(data.get("url").toString().equals("null")){
-                            MainActivity.this.runOnUiThread(()->{
-                                TextView textView = findViewById(R.id.msg);
-                                textView.setText("播放出错（链接无效）");
-                                ((ImageView)findViewById(R.id.imageView11)).setImageResource(R.drawable.ic_baseline_error_24);});
-                        }
-                        else{
-                            url = data.get("url").toString();
-                            Thread thread = new Thread(()->{
-                                Log.d("MediaPlayer","开始准备音乐");
-                                try {
-                                    mediaPlayer.setDataSource(url);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                try{
-                                    mediaPlayer.prepare();
-                                    prepareDone = true;
-                                    Log.d("MediaPlayer","音乐准备成功");
-                                    if(!type.equals("3")){
-                                        mediaPlayer.start();
-                                        playing = true;
-                                    }
-                                    else{
-                                        playing = false;
-                                    }
-                                    MainActivity.this.runOnUiThread(()->Toast.makeText(MainActivity.this,"点击音乐名查看歌词",Toast.LENGTH_SHORT).show());
-                                }
-                                catch(Exception e){
-                                    Log.d("MediaPlayer","音乐准备失败");
-                                    MainActivity.this.runOnUiThread(()->Toast.makeText(MainActivity.this,"音乐准备失败",Toast.LENGTH_SHORT).show());
-                                    playing = false;
-                                }
-                            });
-                            thread.start();
-
-                            if(type.equals("0")){
-                                tmp_name = "<font color='#2A2B2C'>" + temp_ni.get("name").toString() +  "</font> - " + "<font color='#999999'>" + temp_ni.get("artists").toString() + "</font>";
-                                RequestOptions options = new RequestOptions().bitmapTransform(new RoundedCorners(20)).placeholder(R.drawable.ic_baseline_photo_size_select_actual_24).error(R.drawable.ic_baseline_photo_size_select_actual_24);
-                                if(temp_ni.containsKey("picUrl")){
-                                    coverUrl = temp_ni.get("picUrl").toString();
-                                }
-                                else{
-                                    System.out.println(temp_ni);
-                                    coverUrl = new MusicApi().getMusicCover(String.valueOf(temp_ni.get("albumId")));
-                                }
-                                MainActivity.this.runOnUiThread(()->Glide.with(getApplicationContext()).load(coverUrl).apply(options).into((ImageView) findViewById(R.id.imageView11)));
-                            }
-                            else{
-                                MainActivity.this.runOnUiThread(()->{
-                                    List temp_1 = JSON.parseArray(temp_ni.get("artists").toString());
-                                    Map temp_2 = (Map)JSON.parse(temp_1.get(0).toString());
-                                    Map temp_3 = (Map)JSON.parse(temp_ni.get("album").toString());
-                                    tmp_name = "<font color='#2A2B2C'>" + temp_ni.get("name").toString() +  "</font> - " + "<font color='#999999'>" + temp_2.get("name") + "</font>";
-                                    RequestOptions options = new RequestOptions().bitmapTransform(new RoundedCorners(20)).placeholder(R.drawable.ic_baseline_photo_size_select_actual_24).error(R.drawable.ic_baseline_photo_size_select_actual_24);
-                                    try {
-                                        coverUrl = new MusicApi().getMusicCover(String.valueOf(temp_3.get("id")));
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
-                                    Glide.with(getApplicationContext()).load(coverUrl)
-                                            .apply(options)
-                                            .into((ImageView) findViewById(R.id.imageView11));});
-                            }
-                            MainActivity.this.runOnUiThread(()->{
-                                TextView textView = findViewById(R.id.msg);
-                                textView.setText(Html.fromHtml(tmp_name));
-                            });
-                        }
+                JSONObject musicUrl = new MusicApi().getMusicUrl(cookie,id);
+                if (musicUrl.getInteger("code") == Data.successCode){
+                    JSONObject data = musicUrl.getJSONArray("data").getJSONObject(0);
+                    url = data.getString("url");
+                    if(url == null || "null".equals(data.getString("url"))){
+                        MainActivity.this.runOnUiThread(()->Toast.makeText(MainActivity.this,"该音乐暂无版权",Toast.LENGTH_SHORT).show());
+                        musicIndex += 1;
+                        playMusic();
                     }
                     else{
-                        //播放出错
+                        Thread thread = new Thread(()->{
+                            Log.d("MediaPlayer","开始准备音乐");
+                            try {
+                                mediaPlayer.setDataSource(url);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            try{
+                                mediaPlayer.prepare();
+                                prepareDone = true;
+                                Log.d("MediaPlayer","音乐准备成功");
+                                if(type!=3){
+                                    mediaPlayer.start();
+                                    playing = true;
+                                }
+                                else{
+                                    playing = false;
+                                }
+                            }
+                            catch(Exception e){
+                                e.printStackTrace();
+                                Log.d("MediaPlayer","音乐准备失败");
+                                MainActivity.this.runOnUiThread(()->Toast.makeText(MainActivity.this,"音乐准备失败",Toast.LENGTH_SHORT).show());
+                                playing = false;
+                            }
+                        });
+                        thread.start();
+
+                        if(type==0){
+                            RequestOptions options = RequestOptions.bitmapTransform(new RoundedCorners(20)).placeholder(R.drawable.ic_baseline_photo_size_select_actual_24).error(R.drawable.ic_baseline_photo_size_select_actual_24);
+                            if(thisMusicDetail.containsKey("picUrl")){
+                                coverUrl = thisMusicDetail.getString("picUrl");
+                            }
+                            else{
+                                System.out.println(thisMusicDetail);
+                                coverUrl = new MusicApi().getMusicCover(thisMusicDetail.getString("albumId"),cookie);
+                            }
+                            MainActivity.this.runOnUiThread(()->Glide.with(getApplicationContext()).load(coverUrl).apply(options).into((ImageView) findViewById(R.id.imageView11)));
+                        }
+                        else{
+                            MainActivity.this.runOnUiThread(()->{
+                                RequestOptions options = RequestOptions.bitmapTransform(new RoundedCorners(20)).placeholder(R.drawable.ic_baseline_photo_size_select_actual_24).error(R.drawable.ic_baseline_photo_size_select_actual_24);
+                                try {
+                                    coverUrl = new MusicApi().getMusicCover(thisMusicDetail.getJSONObject("album").getString("id"),cookie);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                Glide.with(getApplicationContext()).load(coverUrl)
+                                        .apply(options)
+                                        .into((ImageView) findViewById(R.id.imageView11));
+                            });
+                        }
                         MainActivity.this.runOnUiThread(()->{
-                            TextView textView = findViewById(R.id.msg);
-                            textView.setText("播放出错（请求失败）");});
-                        ((ImageView)findViewById(R.id.imageView11)).setImageResource(R.drawable.ic_baseline_error_24);
+                            TextView msg = findViewById(R.id.msg);
+                            TextView author = findViewById(R.id.author);
+                            msg.setText(Html.fromHtml(thisMusicDetail.getString("name")));
+                            if(type==0){
+                                author.setText(thisMusicDetail.getString("artists"));
+                            }
+                            else{
+                                author.setText(thisMusicDetail.getJSONArray("artists").getJSONObject(0).getString("name"));
+                            }
+                        });
                     }
                 }
                 else{
                     MainActivity.this.runOnUiThread(()->Toast.makeText(MainActivity.this,"该音乐暂无版权",Toast.LENGTH_SHORT).show());
                     musicIndex += 1;
-                    nextMusic();
+                    playMusic();
                 }
 
             }
@@ -680,7 +551,8 @@ public class MainActivity extends SlideBackActivity {
                     Thread thread = new Thread(()->{
                         Log.d("MediaPlayer","开始准备音乐");
                         try {
-                            mediaPlayer.setDataSource(search_list.get(musicIndex).toString());
+                            mediaPlayer.reset();
+                            mediaPlayer.setDataSource(musicDetail.getString(musicIndex));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -690,7 +562,6 @@ public class MainActivity extends SlideBackActivity {
                             Log.d("MediaPlayer","音乐准备成功");
                             mediaPlayer.start();
                             playing = true;
-                            MainActivity.this.runOnUiThread(()->Toast.makeText(MainActivity.this,"点击音乐名查看歌词",Toast.LENGTH_SHORT).show());
                         }
                         catch(Exception e){
                             MainActivity.this.runOnUiThread(() ->Toast.makeText(MainActivity.this,"音乐加载失败",Toast.LENGTH_SHORT).show());
@@ -701,10 +572,12 @@ public class MainActivity extends SlideBackActivity {
                     thread.start();
                     MainActivity.this.runOnUiThread(()->{
                         TextView textView = findViewById(R.id.msg);
-                                String temp = (search_list.get(musicIndex).toString().replace("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music/","")).replace(".mp3","");
-                        textView.setText(Html.fromHtml(temp));
+                        TextView author = findViewById(R.id.author);
+                        String temp = (musicDetail.getString(musicIndex).replace("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music/","")).replace(".mp3","");
+                        textView.setText(temp);
+                        author.setText("未知");
                         File file = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/download/cover/" + temp + ".jpg");
-                        RequestOptions options = new RequestOptions().bitmapTransform(new RoundedCorners(20)).placeholder(R.drawable.ic_baseline_photo_size_select_actual_24).error(R.drawable.ic_baseline_photo_size_select_actual_24);
+                        RequestOptions options = RequestOptions.bitmapTransform(new RoundedCorners(20)).placeholder(R.drawable.ic_baseline_photo_size_select_actual_24).error(R.drawable.ic_baseline_photo_size_select_actual_24);
                         Glide.with(getApplicationContext()).load(file)
                                 .apply(options)
                                 .into((ImageView) findViewById(R.id.imageView11));
@@ -714,7 +587,8 @@ public class MainActivity extends SlideBackActivity {
                     Thread thread = new Thread(()->{
                         Log.d("MediaPlayer","开始准备音乐");
                         try {
-                            mediaPlayer.setDataSource(search_list.get(musicIndex).toString());
+                            mediaPlayer.reset();
+                            mediaPlayer.setDataSource(musicDetail.getString(musicIndex));
                         } catch (IOException ioException) {
                             ioException.printStackTrace();
                         }
@@ -724,7 +598,6 @@ public class MainActivity extends SlideBackActivity {
                             Log.d("MediaPlayer","音乐准备完成");
                             mediaPlayer.start();
                             playing = true;
-                            MainActivity.this.runOnUiThread(()->Toast.makeText(MainActivity.this,"点击音乐名查看歌词",Toast.LENGTH_SHORT).show());
                         }
                         catch (Exception es){
                             MainActivity.this.runOnUiThread(() ->Toast.makeText(MainActivity.this,"音乐加载失败",Toast.LENGTH_SHORT).show());
@@ -734,10 +607,12 @@ public class MainActivity extends SlideBackActivity {
                     });
                     thread.start();
                     TextView textView = findViewById(R.id.msg);
-                    String temp = (search_list.get(musicIndex).toString().replace("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music/","")).replace(".mp3","");
+                    TextView author = findViewById(R.id.author);
+                    String temp = (musicDetail.getString(musicIndex).replace("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music/","")).replace(".mp3","");
                     textView.setText(Html.fromHtml(temp));
+                    author.setText("未知");
                     File file = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/download/cover/" + temp + ".jpg");
-                    RequestOptions options = new RequestOptions().bitmapTransform(new RoundedCorners(20)).placeholder(R.drawable.ic_baseline_photo_size_select_actual_24).error(R.drawable.ic_baseline_photo_size_select_actual_24);
+                    RequestOptions options = RequestOptions.bitmapTransform(new RoundedCorners(20)).placeholder(R.drawable.ic_baseline_photo_size_select_actual_24).error(R.drawable.ic_baseline_photo_size_select_actual_24);
                     Glide.with(getApplicationContext()).load(file)
                             .apply(options)
                             .into((ImageView) findViewById(R.id.imageView11));
@@ -755,7 +630,9 @@ public class MainActivity extends SlideBackActivity {
             //播放出错
             MainActivity.this.runOnUiThread(()->{
                 TextView textView = findViewById(R.id.msg);
+                TextView author = findViewById(R.id.author);
                 textView.setText("播放出错（" + e + "）");
+                author.setText("Error");
                 ((ImageView)findViewById(R.id.imageView11)).setImageResource(R.drawable.ic_baseline_error_24);
             });
             e.printStackTrace();
@@ -763,31 +640,38 @@ public class MainActivity extends SlideBackActivity {
     }
     @SuppressLint("HandlerLeak")
     Handler handler=new Handler(){
+        @Override
         public void handleMessage(android.os.Message msg) {
             ProgressBar pb_main = findViewById(R.id.pb_main);
             ProgressBar pb_lyrics = findViewById(R.id.pb_lyrics);
             if(prepareDone){
-                if(pb_main.isIndeterminate()) pb_main.setIndeterminate(false);
-                if(pb_lyrics.isIndeterminate()) pb_lyrics.setIndeterminate(false);
+                if(pb_main.isIndeterminate()) {
+                    pb_main.setIndeterminate(false);
+                }
+                if(pb_lyrics.isIndeterminate()) {
+                    pb_lyrics.setIndeterminate(false);
+                }
                 if(playing){
                     pb_main.setMax(mediaPlayer.getDuration());
                     pb_main.setProgress(mediaPlayer.getCurrentPosition());
                     pb_lyrics.setMax(mediaPlayer.getDuration());
                     pb_lyrics.setProgress(mediaPlayer.getCurrentPosition());
-                    if(mediaPlayer.getCurrentPosition() >= mediaPlayer.getDuration()){
-                        pb_main.setProgress(0);
-                        pb_lyrics.setProgress(0);
-                        right(null);
-                    }
                 }
                 // 防止控件与 MediaPlayer 不同步
                 ImageView imageViewBtn = findViewById(R.id.btn_open);
-                if(mediaPlayer.isPlaying()) imageViewBtn.setImageResource(R.drawable.ic_baseline_pause_circle_filled_24);
-                else imageViewBtn.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
+                if(mediaPlayer.isPlaying()) {
+                    imageViewBtn.setImageResource(R.drawable.ic_baseline_pause_circle_filled_24);
+                } else {
+                    imageViewBtn.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
+                }
             }
             else{
-                if(!pb_main.isIndeterminate()) pb_main.setIndeterminate(true);
-                if(!pb_lyrics.isIndeterminate()) pb_lyrics.setIndeterminate(true);
+                if(!pb_main.isIndeterminate()) {
+                    pb_main.setIndeterminate(true);
+                }
+                if(!pb_lyrics.isIndeterminate()) {
+                    pb_lyrics.setIndeterminate(true);
+                }
             }
             //调取子线程
             handler.sendEmptyMessageDelayed(0, 1000);
@@ -803,7 +687,10 @@ public class MainActivity extends SlideBackActivity {
             }
         }
         else{
-            if(view!=null) Toast.makeText(MainActivity.this,"音乐准备中",Toast.LENGTH_SHORT).show();
+            TextView msg = findViewById(R.id.msg);
+            if(!msg.getText().equals("无音乐") && view!=null) {
+                Toast.makeText(MainActivity.this,"音乐准备中",Toast.LENGTH_SHORT).show();
+            }
         }
     }
     public void pause(){
@@ -812,34 +699,53 @@ public class MainActivity extends SlideBackActivity {
         MainActivity.this.runOnUiThread(()->((ImageView)findViewById(R.id.btn_open)).setImageResource(R.drawable.ic_baseline_play_circle_filled_24));
     }
     public void start(){
-        mediaPlayer.start();
-        playing = true;
-        MainActivity.this.runOnUiThread(()->((ImageView)findViewById(R.id.btn_open)).setImageResource(R.drawable.ic_baseline_pause_circle_filled_24));
+        if(prepareDone){
+            mediaPlayer.start();
+            playing = true;
+            MainActivity.this.runOnUiThread(()->((ImageView)findViewById(R.id.btn_open)).setImageResource(R.drawable.ic_baseline_pause_circle_filled_24));
+        }
     }
     public void right(View view){
-        mediaPlayer.reset();
-        if(mediaPlayer.isPlaying()) pause();
+        TextView msg = findViewById(R.id.msg);
+        if(msg.getText().equals("无音乐")){
+            return;
+        }
+        if(mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+            playing = false;
+            MainActivity.this.runOnUiThread(()->((ImageView)findViewById(R.id.btn_open)).setImageResource(R.drawable.ic_baseline_play_circle_filled_24));
+        }
+        mediaPlayer.release();
+        mediaPlayer = new MediaPlayer();
+        initMediaPlayer();
         musicIndex += 1;
         ((TextView)findViewById(R.id.msg)).setText("加载中");
         ((ImageView)findViewById(R.id.imageView11)).setImageResource(R.drawable.ic_baseline_photo_size_select_actual_24);
         Thread thread = new Thread(()-> {
-            nextMusic();
+            playMusic();
             start();
-            MainActivity.this.runOnUiThread(()->((ImageView)findViewById(R.id.btn_open)).setImageResource(R.drawable.ic_baseline_pause_circle_filled_24));
         });
         thread.start();
     }
     public void left(View view){
-        mediaPlayer.reset();
-        
-        if(mediaPlayer.isPlaying()) pause();
+        TextView msg = findViewById(R.id.msg);
+        if(msg.getText().equals("无音乐")){
+            return;
+        }
+        if(mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+            playing = false;
+            MainActivity.this.runOnUiThread(()->((ImageView)findViewById(R.id.btn_open)).setImageResource(R.drawable.ic_baseline_play_circle_filled_24));
+        }
+        mediaPlayer.release();
+        mediaPlayer = new MediaPlayer();
+        initMediaPlayer();
         musicIndex -= 1;
         ((TextView)findViewById(R.id.msg)).setText("加载中");
         ((ImageView)findViewById(R.id.imageView11)).setImageResource(R.drawable.ic_baseline_photo_size_select_actual_24);
         Thread thread = new Thread(()-> {
-            nextMusic();
+            playMusic();
             start();
-            MainActivity.this.runOnUiThread(()->((ImageView)findViewById(R.id.btn_open)).setImageResource(R.drawable.ic_baseline_pause_circle_filled_24));
         });
         thread.start();
     }
@@ -870,20 +776,30 @@ public class MainActivity extends SlideBackActivity {
         result = text.substring(zLen, yLen);
         return result;
     }
-    public void console(View view){
+    JSONObject thisMusicDetail;
+    public void console(){
+        TextView msg = findViewById(R.id.msg);
+        if(msg.getText().equals("无音乐")){
+            return;
+        }
         Intent intent = new Intent(MainActivity.this, ConsoleActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
         intent.putExtra("type",type);
-        if (type.equals("0")){
-            String temp = ((search_list.get(musicIndex)).toString());
-            Map temp_ni = (Map) JSON.parse(temp);
-            intent.putExtra("id",temp_ni.get("id").toString());
-            intent.putExtra("name",temp_ni.get("name").toString());
-            intent.putExtra("artists",temp_ni.get("artists").toString());
-            intent.putExtra("song",temp_ni.get("name").toString() + " - " + temp_ni.get("artists").toString());
+        thisMusicDetail = musicDetail.getJSONObject(musicIndex);
+        if (type==0){
+            intent.putExtra("id", thisMusicDetail.getString("id"));
+            intent.putExtra("name", thisMusicDetail.getString("name"));
+            intent.putExtra("artists", thisMusicDetail.getString("artists"));
+            intent.putExtra("song", thisMusicDetail.getString("name") + " - " + thisMusicDetail.getString("artists"));
             intent.putExtra("url",url);
-            if(temp_ni.get("comment")!=null) intent.putExtra("comment",temp_ni.get("comment").toString());
+            intent.putExtra("mvids",JSON.toJSONString(mvids));
+            intent.putExtra("list", JSON.toJSONString(musicDetail));
+            intent.putExtra("musicIndex",musicIndex);
+            intent.putExtra("repeatOne",repeatOne);
+            if(thisMusicDetail.getString("comment")!=null) {
+                intent.putExtra("comment", thisMusicDetail.getString("comment"));
+            }
             intent.putExtra("coverUrl",coverUrl);
             try {
                 intent.putExtra("mvid", mvids.get(musicIndex).toString());
@@ -892,20 +808,16 @@ public class MainActivity extends SlideBackActivity {
                 intent.putExtra("mvid","");
             }
         }
-        else if(type.equals("3")){
-            String temp = ((search_list.get(musicIndex)).toString());
-            Map temp_ni = (Map) JSON.parse(temp);
-            List temp_1 = JSON.parseArray(temp_ni.get("artists").toString());
-            Map temp_2 = (Map)JSON.parse(temp_1.get(0).toString());
-            intent.putExtra("id",temp_ni.get("id").toString());
-            intent.putExtra("mvid",temp_ni.get("mvid").toString());
-            intent.putExtra("name",temp_ni.get("name").toString());
-            intent.putExtra("artists",temp_2.get("name").toString());
-            intent.putExtra("song",temp_ni.get("name").toString() + " - " + temp_2.get("name").toString());
+        else if(type==3){
+            intent.putExtra("id",thisMusicDetail.getString("id"));
+            intent.putExtra("mvid",thisMusicDetail.getString("mvid"));
+            intent.putExtra("name",thisMusicDetail.getString("name"));
+            intent.putExtra("artists", thisMusicDetail.getJSONArray("artists").getJSONObject(0).getString("name"));
+            intent.putExtra("song",thisMusicDetail.getString("name") + " - " + thisMusicDetail.getJSONArray("artists").getJSONObject(0).getString("name"));
             intent.putExtra("url",url);
             intent.putExtra("coverUrl",coverUrl);
         }
-        startActivity(intent);
+        startActivityForResult(intent,1);
     }
     public void init_lyrics() throws Exception {
         zt = 0;
@@ -913,18 +825,16 @@ public class MainActivity extends SlideBackActivity {
         LinearLayout ly_main = findViewById(R.id.ly_search);
         sv_main.setVisibility(View.GONE);
         ly_main.setVisibility(View.VISIBLE);
-        if(!type.equals("1")){
-            Map maps = new MusicApi().getMusicLrc(cookie,id);
-            System.out.println(maps);
+        if(type!=1){
+            JSONObject lrcObject = new MusicApi().getMusicLrc(cookie,id);
             try{
-                lrc_map = (Map) JSON.parse(maps.get("lrc").toString());
                 File dir = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/temp/");
                 dir.mkdirs();
                 lrcFile = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/temp/temp.lrc");
                 lrcFile.createNewFile();
                 FileOutputStream outputStream;
                 outputStream = new FileOutputStream(lrcFile);
-                outputStream.write(lrc_map.get("lyric").toString().getBytes());
+                outputStream.write(lrcObject.getJSONObject("lrc").getString("lyric").getBytes());
                 outputStream.close();
             } catch (Exception e) {
                 File dir = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/temp/");
@@ -939,7 +849,7 @@ public class MainActivity extends SlideBackActivity {
             }
         }
         else{
-            String temp = ((search_list.get(musicIndex)).toString());
+            String temp = musicDetail.getString(musicIndex);
             lrcFile = new File((temp.replace("/music/","/lrc/")).replace(".mp3",".lrc"));
         }
         lrcView = findViewById(R.id.lv_main);
@@ -965,6 +875,10 @@ public class MainActivity extends SlideBackActivity {
         } );
     }
     public void lyr(View view) throws Exception {
+        TextView msg = findViewById(R.id.msg);
+        if(msg.getText().equals("无音乐")){
+            return;
+        }
         init_lyrics();
     }
     public void t(View view){
@@ -973,7 +887,6 @@ public class MainActivity extends SlideBackActivity {
         sv_main.setVisibility(View.VISIBLE);
         ly1.setVisibility(View.GONE);
     }
-    Map temp_ni;
     public void share_ly(View view) {
         String lrcResult = "";
         try {
@@ -983,28 +896,23 @@ public class MainActivity extends SlideBackActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(!lrcResult.equals("[00:00.00]无歌词")){
+        if(!"[00:00.00]无歌词".equals(lrcResult)){
             Intent intent = new Intent(MainActivity.this, ChooseActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
             intent.putExtra("type", type);
-            if (type.equals("3")){
-                String temp = ((search_list.get(musicIndex)).toString());
-                temp_ni = (Map) JSON.parse(temp);
-                List temp_1 = JSON.parseArray(temp_ni.get("artists").toString());
-                Map temp_2 = (Map)JSON.parse(temp_1.get(0).toString());
-                intent.putExtra("song",temp_ni.get("name").toString() + " - " + temp_2.get("name").toString());
+            if (type==Data.playListMode){
+                thisMusicDetail = musicDetail.getJSONObject(musicIndex);
+                intent.putExtra("song", thisMusicDetail.getString("name") + " - " + thisMusicDetail.getJSONArray("artists").getJSONObject(0).getString("name"));
                 intent.putExtra("pic",coverUrl);
             }
-            if(type.equals("1")){
-                String tmp = search_list.get(musicIndex).toString().replace("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music/","");
-                intent.putExtra("song",tmp);
+            if(type==Data.localMode){
+                intent.putExtra("song",musicDetail.getString(musicIndex).replace("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music/",""));
                 intent.putExtra("pic",coverUrl);
             }
-            if(type.equals("0")){
-                String temp = ((search_list.get(musicIndex)).toString());
-                Map temp_ni = (Map) JSON.parse(temp);
-                intent.putExtra("song",temp_ni.get("name").toString() + " - " + temp_ni.get("artists").toString());
+            if(type==Data.defaultMode){
+                thisMusicDetail = musicDetail.getJSONObject(musicIndex);
+                intent.putExtra("song", thisMusicDetail.getString("name") + " - " + thisMusicDetail.getString("artists"));
                 intent.putExtra("pic",coverUrl);
             }
             startActivity(intent);
@@ -1014,10 +922,22 @@ public class MainActivity extends SlideBackActivity {
         }
     }
     public void onImgClick(View view){
+        TextView msg = findViewById(R.id.msg);
+        if(msg.getText().equals("无音乐")){
+            return;
+        }
         Intent intent = new Intent(MainActivity.this, PicActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//刷新
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//防止重复
-        intent.putExtra("url",coverUrl);
+
+        String temp = musicDetail.getString(musicIndex).replace("/storage/emulated/0/Android/data/cn.wearbbs.music/download/music/","").replace(".mp3","");
+
+        if(type==1) {
+            intent.putExtra("url","/storage/emulated/0/Android/data/cn.wearbbs.music/download/cover/" + temp + ".jpg");
+        }
+        else {
+            intent.putExtra("url",coverUrl);
+        }
         startActivity(intent);
     }
 }

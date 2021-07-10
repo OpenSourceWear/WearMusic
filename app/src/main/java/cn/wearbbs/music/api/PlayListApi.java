@@ -1,6 +1,7 @@
 package cn.wearbbs.music.api;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.Map;
 
@@ -10,7 +11,7 @@ public class PlayListApi {
     private String result;
     public Map getPlayList(String user_id,String cookie) throws InterruptedException {
         Thread tmp = new Thread((Runnable)() -> {
-            result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/user/playlist?uid=" + user_id + "&cookie=" + cookie + "&timestamp=" + System.currentTimeMillis());
+            result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/user/playlist?uid=" + user_id  + "&timestamp=" + System.currentTimeMillis(),cookie);
         });
         tmp.start();
         tmp.join();
@@ -18,7 +19,7 @@ public class PlayListApi {
     }
     public Map deletePlayList(String id,String cookie) throws InterruptedException {
         Thread tmp = new Thread(() -> {
-            result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/playlist/delete?id="+ id + "&cookie=" + cookie + "&timestamp=" + System.currentTimeMillis());
+            result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/playlist/delete?id="+ id + "&timestamp=" + System.currentTimeMillis(),cookie);
         });
         tmp.start();
         tmp.join();
@@ -26,23 +27,23 @@ public class PlayListApi {
     }
     public Map deletePlayListMusic(String id,String tracks,String cookie) throws InterruptedException {
         Thread tmp = new Thread(() -> {
-            result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/playlist/tracks?op=del&pid="+ id + "&tracks=" + tracks + "&cookie=" + cookie + "&timestamp=" + System.currentTimeMillis());
+            result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/playlist/tracks?op=del&pid="+ id + "&tracks=" + tracks  + "&timestamp=" + System.currentTimeMillis(),cookie);
         });
         tmp.start();
         tmp.join();
         return (Map)JSON.parse(result);
     }
-    public Map getPlayListDetail(String id,String cookie) throws InterruptedException {
+    public JSONObject getPlayListDetail(String id, String cookie) throws InterruptedException {
         Thread tmp = new Thread(() -> {
-            result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/playlist/detail?id=" + id + "&cookie=" + cookie + "&timestamp=" + System.currentTimeMillis());
+            result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/playlist/detail?id=" + id +  "&timestamp=" + System.currentTimeMillis(),cookie);
         });
         tmp.start();
         tmp.join();
-        return (Map)JSON.parse(result);
+        return JSON.parseObject(result);
     }
     public Map getSongDetail(String ids,String cookie) throws InterruptedException {
         Thread tmp = new Thread((Runnable)() -> {
-            result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/song/detail?ids=" + ids + "&cookie=" + cookie + "&timestamp=" + System.currentTimeMillis());
+            result = NetWorkUtil.sendByGetUrl("https://music.wearbbs.cn/song/detail?ids=" + ids + "&timestamp=" + System.currentTimeMillis(),cookie);
         });
         tmp.start();
         tmp.join();
