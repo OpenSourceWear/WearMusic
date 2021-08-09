@@ -17,7 +17,7 @@
 
 ### 预览图片
 
-![预览图片](https://ae01.alicdn.com/kf/U709cedf0d260414989ab0899f9a24b88g.jpg)
+![预览图片](https://i.loli.net/2021/08/09/PZ8RA1GKEQ7N6rT.png)
 
 
 
@@ -37,7 +37,6 @@
 
 - [官方网站](https://wmusic.wearbbs.cn)
 - [Github Release](https://github.com/JackuXL/WearMusic/releases)
-- [蓝奏云](https://wearbbs.lanzous.com/iMoEHl4ufsd)
 
 > 下载后，请前往 [WearBBS](https://wearbbs.cn) 查看 [ADB 教程](https://wearbbs.cn/threads/adb.110/)，以将其安装至手表。
 
@@ -50,10 +49,7 @@
 
 ## 预览视频
 
-<a href = "https://www.bilibili.com/video/BV1zf4y1672n/ " target="_blank"><img src="https://ae01.alicdn.com/kf/U25829692e6b24c31abaa53afdbe2a9d2L.jpg" width="450"/><br>手表网易云？WearMusic 2.0 - 音乐的力量，听你所想~</a>
-
-## 软件进阶
-- 如何在WearMusic中听其他平台（如QQ音乐）的歌曲，同时可以查看歌词、Cover？
+制作中
 
 ## 关于
 
@@ -62,9 +58,7 @@
 
 WearMusic 是完全开源且免费的。同时，维护后台的[API服务器](https://music.wearbbs.cn)和[更新服务器](https://wmu.wearbbs.cn)需要投入大量的资金，您可以自愿捐助我们，保证WearMusic 的正常更新、运行。
 
-> 收款由 WearBBS 运维代收
-
-<img src="https://ae01.alicdn.com/kf/U0bf11df727e34cb7b7ce0a3009575accV.jpg" width="450"/>
+<img src="https://i.loli.net/2021/06/14/91x6Lf2UT5aqXED.png" width="450"/>
 
 
 ## Licence
