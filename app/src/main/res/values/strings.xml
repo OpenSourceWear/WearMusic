@@ -1,0 +1,89 @@
+<resources>
+
+    <string name="app_name">WearMusic</string>
+    <string name="todo">todo</string>
+    <string name="no_more">没有更多了</string>
+    <string name="musicList">音乐列表</string>
+    <string name="permission_denied">没有储存权限</string>
+    <string name="opensource_content">本项目在Github开源，欢迎Star！\n地址：https://github.com/JackuXL/WearMusic\n\n本项目使用了以下开源项目：\n（排名不分先后）\nExpandableTextView\nby Carbs0126\nApache License 2.0\nhttps://github.com/Carbs0126/ExpandableTextView\n\nNeteaseCloudMusicApi-SDK\nby JackuXL\nMIT License\nhttps://github.com/JackuXL/NeteaseCloudMusicApi-SDK\n\nShareApi\nby imoo\nNo License\n\nGlide\nby bumptech\nUnknown License\nhttps://github.com/bumptech/glide\n\nFastJSON\nby alibaba\nApache-2.0 License\nhttps://github.com/alibaba/fastjson\n\nFlowLayout\nby hongyangAndroid\nApache-2.0 License\nhttps://github.com/hongyangAndroid/FlowLayout\n\nLrcView\nby wangchenyan\nNo License\nhttps://github.com/wangchenyan/lrcview\n\nSketch\nby panpf\nApache License 2.0\nhttps://github.com/panpf/sketch\n\nZXing\nby zxing\nApache-2.0 License\nhttps://github.com/zxing/zxing</string>
+
+    <!-- 菜单标题 -->
+    <string name="musicLibrary">我的歌单</string>
+    <string name="musicPan">音乐云盘</string>
+    <string name="fm">私人FM</string>
+    <string name="setting">设置</string>
+
+    <string name="untitled">未命名</string>
+    <string name="id">ID：Unknown</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- 设置标题 -->
+    <string name="opening">启动时</string>
+    <string name="dark">暗黑模式</string>
+    <string name="about">关于</string>
+    <string name="opensource">开源</string>
+
+    <!-- 页面标题 -->
+    <string name="play">播放</string>
+    <string name="likeList">我喜欢的音乐</string>
+
+    <!-- 登录 -->
+    <string name="login">登录</string>
+    <string name="loginByQR">扫码登录 ></string>
+    <string name="loginByAccount">账号密码登录 ></string>
+    <string name="waitForAuthorize">已扫描，等待授权</string>
+    <string name="loading">加载中</string>
+    <string name="tip_qrcode">打开网易云手机客户端——扫一扫</string>
+    <string name="tip_account">使用网易云账号登录\n您的密码将被MD5加密传输</string>
+    <string name="passwordHint">密码…</string>
+    <string name="phoneHint">手机号/邮箱…</string>
+
+    <!-- 播放器 -->
+    <string name="console">控制台</string>
+    <string name="shareLyrics">分享歌词</string>
+    <string name="msg_noMusic">无音乐</string>
+    <string name="unknown">未知</string>
+    <string name="musicName">音乐名称…</string>
+
+    <!-- 搜索音乐-->
+    <string name="search_music">搜索</string>
+    <string name="hot">热搜榜</string>
+
+    <!-- 图片 -->
+    <string name="savePic">保存图片</string>
+    <string name="back">返回上一级</string>
+
+    <!-- 本地音乐 -->
+    <string name="localMusic">本地音乐</string>
+    <string name="addMusic">导入音乐 ></string>
+
+    <!-- 更新 -->
+    <string name="needUpdate">需要更新</string>
+    <string name="needUpdateHint">当前版本为{oldVersion}\n低于最新版本号{newVersion}</string>
+    <string name="downloadHint">请扫描二维码查看更新</string>
+    <string name="notUpdateHint">当前版本为{version}\n与最新版本号相同</string>
+    <string name="notUpdate">无须更新</string>
+
+    <!-- 关于-->
+    <string name="qqQunQRCode">官方群二维码</string>
+    <string name="feedback">反馈问题</string>
+    <string name="checkUpdate">检查更新</string>
+    <string name="aboutContent">v3.0\n音乐的力量，听你所想。\n作者： JackuXL\n出品：WearBBS\n官方QQ群：133636679\n官网：https://wmusic.wearbbs.cn\n论坛：https://wearbbs.cn\n使用【网易云API】开发\n特别感谢：@luern0313</string>
+    <string name="msg_noLogin">你还没有登录哦</string>
+    <string name="msg_suicide">你不孤单，我们都在。</string>
+    <string name="tip">左滑切换到\n歌词界面</string>
+    <string name="iknow">我知道了</string>
+    <string name="tipForDev">已开启检索测试版本</string>
+    <string name="tip_latest">当前为最新版本</string>
+    <string name="submit">提交</string>
+    <string name="tip_input">请输入内容…</string>
+    <string name="musicLibraryDetail">歌单详情</string>
+    <string name="video_player">默认视频播放器</string>
+    <string name="hotComment">热门评论</string>
+    <string name="sendComment">发送评论</string>
+    <string name="comment">评论</string>
+    <string name="load_failed">加载失败</string>
+    <string name="qrcode">二维码</string>
+    <string name="send">发送</string>
+    <string name="playList">播放列表</string>
+</resources>

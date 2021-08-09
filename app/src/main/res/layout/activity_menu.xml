@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sv_qrcode"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorPrimary"
+    android:scrollbars="none"
+    tools:context=".ui.MenuActivity"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="0dp">
+
+    <LinearLayout
+        android:id="@+id/ll_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/item_user"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/ripple_item_normal"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:onClick="onClick"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <ImageView
+                android:id="@+id/iv_avatar"
+                android:layout_width="62dp"
+                android:layout_height="73dp"
+                android:layout_marginEnd="5dp"
+                android:contentDescription="@string/todo"
+                android:padding="7dp"
+                app:srcCompat="@drawable/ic_baseline_supervised_user_circle_24" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="@string/untitled"
+                    android:textColor="#FAFAFA" />
+
+                <TextView
+                    android:id="@+id/tv_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@string/id"
+                    android:textColor="#CCFAFAFA"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item_fm"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:background="@drawable/ripple_item_normal"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:onClick="onClick"
+            android:orientation="horizontal"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp">
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/ic_baseline_brightness_24"
+                android:contentDescription="@string/todo"
+                android:padding="7dp"
+                app:srcCompat="@drawable/ic_baseline_radio_24" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fm"
+                android:textColor="#FAFAFA" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item_search"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:background="@drawable/ripple_item_normal"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:onClick="onClick"
+            android:orientation="horizontal"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp">
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/ic_baseline_brightness_24"
+                android:contentDescription="@string/todo"
+                android:padding="7dp"
+                app:srcCompat="@drawable/ic_baseline_search_24" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_music"
+                android:textColor="#FAFAFA" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item_likeList"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:background="@drawable/ripple_item_normal"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:onClick="onClick"
+            android:orientation="horizontal"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/ic_baseline_brightness_24"
+                    android:contentDescription="@string/todo"
+                    android:padding="7dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_marginTop="1dp"
+                    android:contentDescription="@string/todo"
+                    android:padding="7dp"
+                    android:scaleType="centerInside"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_baseline_favorite_24" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="@string/likeList"
+                android:textColor="#FAFAFA" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item_musicLibrary"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:background="@drawable/ripple_item_normal"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:onClick="onClick"
+            android:orientation="horizontal"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp">
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/ic_baseline_brightness_24"
+                android:contentDescription="@string/todo"
+                android:padding="7dp"
+                app:srcCompat="@drawable/ic_baseline_star_24" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/musicLibrary"
+                android:textColor="#FAFAFA" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item_musicPan"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:background="@drawable/ripple_item_normal"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:onClick="onClick"
+            android:orientation="horizontal"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/ic_baseline_brightness_24"
+                    android:contentDescription="@string/todo"
+                    android:padding="7dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginBottom="1dp"
+                    android:contentDescription="@string/todo"
+                    android:padding="7dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_baseline_cloud_24" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="@string/musicPan"
+                android:textColor="#FAFAFA" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item_localmusic"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:background="@drawable/ripple_item_normal"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:onClick="onClick"
+            android:orientation="horizontal"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp">
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/ic_baseline_brightness_24"
+                android:contentDescription="@string/todo"
+                android:padding="7dp"
+                app:srcCompat="@drawable/ic_baseline_library_music_24" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/localMusic"
+                android:textColor="#FAFAFA" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item_setting"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/ripple_item_normal"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:onClick="onClick"
+            android:orientation="horizontal"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp">
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/ic_baseline_brightness_24"
+                android:contentDescription="@string/todo"
+                android:padding="7dp"
+                app:srcCompat="@drawable/ic_baseline_settings_24" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/setting"
+                android:textColor="#FAFAFA" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

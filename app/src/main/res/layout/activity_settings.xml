@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/main_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:gravity="center_vertical"
+        android:onClick="onClick"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/iv_extraicon"
+            android:layout_width="12dp"
+            android:layout_height="19dp"
+            android:layout_marginStart="2dp"
+            android:layout_toStartOf="@id/tv_title"
+            android:contentDescription="@string/todo"
+            android:rotation="-270"
+            android:src="@drawable/icon_extra" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            tools:ignore="RelativeOverlap,TextContrastCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/setting"
+            android:textColor="#FAFAFA" />
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/settings"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

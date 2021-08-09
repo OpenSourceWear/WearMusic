@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="cn.wearbbs.music">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.WearMusicPro">
+        <activity
+            android:name=".ui.ReplyActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.OpenSourceActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.PlayListActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.QRCodeActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.CommentActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.ConsoleActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.LocalMusicActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.ViewPictureActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.FeedbackActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.MusicLibraryActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.UpdateActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.MusicListActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.MusicPanActivity"
+            android:exported="true" />
+        <activity android:name=".ui.AboutActivity" />
+        <activity android:name=".ui.SearchActivity" />
+
+        <service
+            android:name=".service.MusicPlayerService"
+            android:enabled="true" />
+
+        <activity android:name=".ui.LoginActivity" />
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:label="@string/title_activity_settings" />
+        <activity android:name=".ui.MenuActivity" />
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

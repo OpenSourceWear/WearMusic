@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorOnPrimary"
+    android:orientation="vertical"
+    tools:context=".ui.UpdateActivity">
+
+    <RelativeLayout
+        android:id="@+id/main_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:gravity="center_vertical"
+        android:onClick="onClick"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/iv_extraicon"
+            android:layout_width="12dp"
+            android:layout_height="19dp"
+            android:layout_marginStart="2dp"
+            android:layout_toStartOf="@id/tv_title"
+            android:contentDescription="@string/todo"
+            android:rotation="-270"
+            android:src="@drawable/icon_extra" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/checkUpdate"
+            android:textColor="#FAFAFA"
+            tools:ignore="RelativeOverlap,TextContrastCheck" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_noUpdate"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_dev_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="@string/tipForDev"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:drawableLeftCompat="@drawable/ic_baseline_check_24" />
+
+        <TextView
+            android:id="@+id/tv_hint_no"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="@string/notUpdateHint"
+            android:textColor="#999999"
+            android:textSize="12sp"
+            tools:ignore="TextContrastCheck" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:text="@string/notUpdate"
+            android:textColor="?attr/colorOnSecondary" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="66dp"
+            android:layout_marginTop="5dp"
+            android:contentDescription="@string/todo"
+            app:srcCompat="@drawable/ic_baseline_assignment_turned_in_24" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/sv_needUpdate"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/tv_dev"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="@string/tipForDev"
+                android:textSize="12sp"
+                android:visibility="gone"
+                app:drawableLeftCompat="@drawable/ic_baseline_check_24" />
+
+            <TextView
+                android:id="@+id/tv_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="@string/needUpdateHint"
+                android:textColor="#999999"
+                android:textSize="12sp"
+                tools:ignore="TextContrastCheck" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="2dp"
+                android:gravity="center"
+                android:text="@string/needUpdate"
+                android:textColor="?attr/colorOnSecondary" />
+
+            <ImageView
+                android:id="@+id/iv_qrcode"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                android:contentDescription="@string/todo"
+                app:srcCompat="@drawable/qrcode_update" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:text="@string/downloadHint"
+                android:textColor="#999999"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <cn.wearbbs.music.view.LoadingView
+        android:id="@+id/lv_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20dp"
+        android:gravity="center" />
+
+</LinearLayout>

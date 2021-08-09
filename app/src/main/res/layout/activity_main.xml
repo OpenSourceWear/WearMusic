@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorOnPrimary"
+    tools:context=".ui.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/main_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:gravity="center_vertical"
+            android:onClick="onClick"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="@string/play"
+                android:textColor="#FAFAFA"
+                tools:ignore="TextContrastCheck,TextContrastCheck" />
+
+            <ImageView
+                android:id="@+id/iv_extraicon"
+                android:layout_width="12dp"
+                android:layout_height="19dp"
+                android:layout_marginStart="2dp"
+                android:layout_toEndOf="@id/tv_title"
+                android:contentDescription="@string/todo"
+                android:src="@drawable/icon_extra"
+                tools:ignore="ImageContrastCheck" />
+
+        </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/pb_main"
+            style="@style/AzureProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:visibility="visible" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_tip_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:background="#9F000000"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/ll_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+
+            android:layout_marginEnd="5dp"
+            android:contentDescription="@string/todo"
+            app:srcCompat="@drawable/icon_tip" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/tip"
+            android:textColor="#FAFAFA"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btn_iknow"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:backgroundTint="#2175F3"
+            android:onClick="onClick"
+            android:text="@string/iknow"
+            android:textSize="12sp"
+            tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

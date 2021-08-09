@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.QRCodeActivity">
+
+    <RelativeLayout
+        android:id="@+id/main_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:gravity="center_vertical"
+        android:onClick="onClick"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/iv_extraicon"
+            android:layout_width="12dp"
+            android:layout_height="19dp"
+            android:layout_marginStart="2dp"
+            android:layout_toStartOf="@id/tv_title"
+            android:contentDescription="@string/todo"
+            android:rotation="-270"
+            android:src="@drawable/icon_extra" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/qrcode"
+            android:textColor="#FAFAFA"
+            tools:ignore="RelativeOverlap,TextContrastCheck" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_qrcode"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        android:contentDescription="@string/todo"
+        app:srcCompat="@drawable/ic_baseline_photo_size_select_actual_24" />
+</LinearLayout>

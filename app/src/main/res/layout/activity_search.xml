@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorOnPrimary"
+    android:orientation="vertical"
+    tools:context=".ui.MainActivity">
+
+  <RelativeLayout
+      android:id="@+id/main_title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="?attr/colorPrimary"
+      android:gravity="center_vertical"
+      android:onClick="onClick"
+      android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/iv_extraicon"
+        android:layout_width="12dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="2dp"
+        android:layout_toStartOf="@id/tv_title"
+        android:contentDescription="@string/todo"
+        android:rotation="-270"
+        android:src="@drawable/icon_extra" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/search_music"
+        android:textColor="#FAFAFA"
+        tools:ignore="RelativeOverlap,TextContrastCheck" />
+
+  </RelativeLayout>
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="28dp"
+      android:layout_marginTop="5dp"
+      android:gravity="center"
+      android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="120dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="2dp"
+        android:background="@drawable/et_blue"
+        android:orientation="horizontal">
+
+      <EditText
+          android:id="@+id/et_search"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_gravity="center"
+          android:layout_marginLeft="4dp"
+          android:layout_marginTop="4dp"
+          android:layout_marginRight="4dp"
+          android:layout_marginBottom="4dp"
+          android:background="?attr/colorOnPrimary"
+          android:ems="10"
+          android:hint="@string/musicName"
+          android:importantForAutofill="no"
+          android:inputType="textPersonName"
+          android:textColor="?attr/colorOnSecondary"
+          android:textColorHint="#999999"
+          android:textSize="12sp"
+          tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_search"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="5dp"
+        android:contentDescription="@string/todo"
+        android:onClick="onClick"
+        app:srcCompat="@drawable/ic_baseline_search_24"
+        tools:ignore="TouchTargetSizeCheck" />
+
+  </LinearLayout>
+
+  <LinearLayout
+      android:id="@+id/ll_hot_main"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginTop="5dp"
+      android:orientation="vertical"
+      android:visibility="visible">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/hot"
+        android:textSize="12sp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical">
+
+        <com.zhy.view.flowlayout.TagFlowLayout
+            android:id="@+id/tfl_hot"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
+
+        <TextView
+            android:id="@+id/tv_noMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:text="@string/no_more"
+            android:textColor="#999999"
+            android:textSize="12sp"
+            tools:ignore="TextContrastCheck" />
+
+      </LinearLayout>
+    </ScrollView>
+
+  </LinearLayout>
+
+  <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/rv_search"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:visibility="gone">
+
+  </androidx.recyclerview.widget.RecyclerView>
+
+  <cn.wearbbs.music.view.MessageView
+      android:id="@+id/mv_message"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginBottom="20dp"
+      android:gravity="center"
+      android:visibility="gone" >
+
+  </cn.wearbbs.music.view.MessageView>
+
+  <cn.wearbbs.music.view.LoadingView
+      android:id="@+id/lv_loading"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:gravity="center"
+      android:paddingBottom="20dp"
+      android:visibility="gone" />
+
+</LinearLayout>

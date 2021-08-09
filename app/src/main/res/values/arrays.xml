@@ -1,0 +1,24 @@
+<resources>
+    <!-- 启动时 -->
+    <string-array name="opening_entries">
+        <item>无音乐</item>
+        <item>加载私人FM</item>
+    </string-array>
+
+    <string-array name="opening_values">
+        <item>nothing</item>
+        <item>fm</item>
+    </string-array>
+
+    <!-- 默认视频播放器 -->
+    <string-array name="video_player_entries">
+        <item>腕上视频</item>
+        <item>腕管Pro</item>
+    </string-array>
+
+    <string-array name="video_player_values">
+        <item>WristVideo</item>
+        <item>WristButlerPro</item>
+    </string-array>
+
+</resources>

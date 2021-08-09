@@ -1,0 +1,38 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ListPreference
+        app:defaultValue="nothing"
+        app:entries="@array/opening_entries"
+        app:entryValues="@array/opening_values"
+        app:key="opening"
+        app:title="@string/opening"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        app:defaultValue="WristVideo"
+        app:entries="@array/video_player_entries"
+        app:entryValues="@array/video_player_values"
+        app:key="video_player"
+        app:title="@string/video_player"
+        app:useSimpleSummaryProvider="true" />
+
+    <SwitchPreferenceCompat
+        app:key="dark"
+        app:title="@string/dark" />
+
+
+    <SwitchPreferenceCompat
+        app:key="dev"
+        app:singleLineTitle="false"
+        app:title="接受测试版更新" />
+
+    <PreferenceScreen
+        app:key="opensource"
+        app:title="@string/opensource" />
+
+    <PreferenceScreen
+        app:key="about"
+        app:title="@string/about" />
+
+</PreferenceScreen>
