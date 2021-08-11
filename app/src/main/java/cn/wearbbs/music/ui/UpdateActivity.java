@@ -30,9 +30,6 @@ public class UpdateActivity extends AppCompatActivity {
     }
 
     public void onClick(View view) {
-        Intent intent = new Intent(UpdateActivity.this, MenuActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivity(intent);
         finish();
     }
 
@@ -60,7 +57,7 @@ public class UpdateActivity extends AppCompatActivity {
             else{
                 runOnUiThread(() -> {
                     findViewById(R.id.lv_loading).setVisibility(View.GONE);
-                    findViewById(R.id.ll_noUpdate).setVisibility(View.VISIBLE);
+                    findViewById(R.id.sv_noUpdate).setVisibility(View.VISIBLE);
                     TextView tv_hint_no = findViewById(R.id.tv_hint_no);
                     tv_hint_no.setText(tv_hint_no.getText().toString()
                             .replace("{version}", String.valueOf(data.getDouble("version"))));

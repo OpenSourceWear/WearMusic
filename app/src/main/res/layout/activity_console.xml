@@ -5,7 +5,7 @@
     android:id="@+id/ll_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FAFAFA"
+    android:background="?attr/colorOnPrimary"
     android:orientation="vertical"
     tools:context=".ui.ConsoleActivity">
 
@@ -182,7 +182,7 @@
                 android:contentDescription="@string/todo"
                 android:onClick="onClick"
                 android:theme="@style/RippleWhite"
-                app:srcCompat="@drawable/icon_repeat"
+                app:srcCompat="@drawable/icon_play_order"
                 tools:ignore="TouchTargetSizeCheck" />
 
             <ImageView

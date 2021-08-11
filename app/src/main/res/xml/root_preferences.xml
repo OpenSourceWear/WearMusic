@@ -17,6 +17,14 @@
         app:title="@string/video_player"
         app:useSimpleSummaryProvider="true" />
 
+    <ListPreference
+        app:defaultValue="vercel"
+        app:entries="@array/server_entries"
+        app:entryValues="@array/server_values"
+        app:key="server"
+        app:title="@string/server"
+        app:useSimpleSummaryProvider="true" />
+
     <SwitchPreferenceCompat
         app:key="dark"
         app:title="@string/dark" />

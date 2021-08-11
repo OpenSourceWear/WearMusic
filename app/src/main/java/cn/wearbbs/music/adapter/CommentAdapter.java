@@ -92,7 +92,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                         if(new MusicApi(SharedPreferencesUtil.getString("cookie","",activity))
                                 .likeComment(id,currentCommentInfo.getString("commentId"), false)){
                             currentCommentInfo.put("liked",false);
-                            viewHolder.iv_thumb.setImageResource(R.drawable.ic_outline_thumb_up_24);
+                            activity.runOnUiThread(()->viewHolder.iv_thumb.setImageResource(R.drawable.ic_outline_thumb_up_24));
                         }
                         else{
                             Toast.makeText(activity,"取消点赞失败",Toast.LENGTH_SHORT).show();
@@ -102,10 +102,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                         if(new MusicApi(SharedPreferencesUtil.getString("cookie","",activity))
                                 .likeComment(id,currentCommentInfo.getString("commentId"), true)){
                             currentCommentInfo.put("liked",true);
-                            viewHolder.iv_thumb.setImageResource(R.drawable.ic_baseline_thumb_up_24);
+                            activity.runOnUiThread(()->viewHolder.iv_thumb.setImageResource(R.drawable.ic_baseline_thumb_up_24));
                         }
                         else{
-
                             Toast.makeText(activity,"点赞失败",Toast.LENGTH_SHORT).show();
                         }
                     }

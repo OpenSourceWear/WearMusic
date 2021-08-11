@@ -6,8 +6,11 @@ import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+
+import cn.wearbbs.music.fragment.PlayerFragment;
 
 public class MusicPlayerService extends Service {
     private static final String TAG = "MusicPlayerService";
@@ -98,6 +101,7 @@ public class MusicPlayerService extends Service {
 //                }).start();
             } catch (Exception e) {
                 Log.d(TAG, "initAudio: 准备失败");
+                Toast.makeText(getApplicationContext(),"准备音乐失败，若多次出现此问题，请尝试重新登录", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
         }
@@ -186,15 +190,20 @@ public class MusicPlayerService extends Service {
             return mMediaPlayer.getDuration();
         }
 
-        public void setRepeatOne(Boolean repeatOne){
-            if(repeatOne){
-                mMediaPlayer.setOnCompletionListener(mp -> {
-                    mp.start();
-                    mp.setLooping(true);
-                });
-            }
-            else{
-                mMediaPlayer.setOnCompletionListener(backupListener);
+        public void setPlayOrder(int orderId){
+            switch (orderId){
+                case PlayerFragment.PLAY_ORDER:
+                    mMediaPlayer.setOnCompletionListener(backupListener);
+                    break;
+                case PlayerFragment.PLAY_REPEAT_ONE:
+                    mMediaPlayer.setOnCompletionListener(mp -> {
+                        mp.start();
+                        mp.setLooping(true);
+                    });
+                    break;
+                case PlayerFragment.PLAY_SHUFFLE:
+                    //TODO:随机播放
+                    break;
             }
         }
     }

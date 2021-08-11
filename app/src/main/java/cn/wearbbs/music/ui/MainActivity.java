@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.viewpager2.widget.ViewPager2;
 
+import api.MusicApi;
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.adapter.ViewPagerAdapter;
 import cn.wearbbs.music.util.SharedPreferencesUtil;
@@ -22,7 +23,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        NetWorkUtil.setDomain("https://netease-cloud-music-api-dun-nine.vercel.app");
+        if(SharedPreferencesUtil.getString("server","vercel",this).equals("wearbbs")){
+            NetWorkUtil.setDomain("https://music.wearbbs.cn");
+        }
+        else{
+            NetWorkUtil.setDomain("https://netease-cloud-music-api-dun-nine.vercel.app");
+        }
+
         if (SharedPreferencesUtil.getBoolean("dark", false, this)) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
@@ -35,8 +42,29 @@ public class MainActivity extends AppCompatActivity {
 
         ViewPager2 vp_main = findViewById(R.id.vp_main);
         vp_main.setOffscreenPageLimit(2);
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, getIntent());
-        vp_main.setAdapter(viewPagerAdapter);
+        if(getIntent().getStringExtra("data") == null){
+            new Thread(()->{
+                String cookie = SharedPreferencesUtil.getString("cookie","",this);
+                if(getIntent().getBooleanExtra("fm",false)||(SharedPreferencesUtil.getString("opening","nothing",this).equals("fm")&&!cookie.isEmpty())){
+                    runOnUiThread(()->{
+                        vp_main.setVisibility(View.GONE);
+                        findViewById(R.id.lv_loading).setVisibility(View.VISIBLE);
+                    });
+                    getIntent().putExtra("data",new MusicApi(cookie).getFM().toJSONString());
+                }
+                runOnUiThread(()->{
+                    ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, getIntent());
+                    vp_main.setAdapter(viewPagerAdapter);
+                    vp_main.setVisibility(View.VISIBLE);
+                    findViewById(R.id.lv_loading).setVisibility(View.GONE);
+                });
+            }).start();
+        }
+        else{
+            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, getIntent());
+            vp_main.setAdapter(viewPagerAdapter);
+        }
+
     }
 
     @SuppressLint("NonConstantResourceId")

@@ -29,9 +29,6 @@ public class FeedbackActivity extends AppCompatActivity {
         Intent intent;
         switch (view.getId()) {
             case R.id.main_title:
-                intent = new Intent(FeedbackActivity.this, MenuActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(intent);
                 finish();
                 break;
             case R.id.btn_submit:

@@ -40,15 +40,16 @@ import api.MVApi;
 import api.MusicApi;
 import api.MusicListApi;
 import cn.wearbbs.music.R;
+import cn.wearbbs.music.fragment.PlayerFragment;
 import cn.wearbbs.music.util.DownloadUtil;
 import cn.wearbbs.music.util.SharedPreferencesUtil;
 
 public class ConsoleActivity extends AppCompatActivity {
     private AudioManager audioManager;
-    private int max,musicIndex;
+    private int max, orderId;
     private Toast toast;
     private JSONArray data;
-    private Boolean liked = false,local, repeatOne;
+    private Boolean liked = false,local;
     private String cookie;
     private JSONObject currentMusicInfo;
     private ProgressBar pb_main;
@@ -65,16 +66,23 @@ public class ConsoleActivity extends AppCompatActivity {
 
         data = JSON.parseArray(getIntent().getStringExtra("data"));
         local  = getIntent().getBooleanExtra("local",false);
-        repeatOne = getIntent().getBooleanExtra("repeatOne",false);
-        musicApi = new MusicApi(cookie);
+        orderId = getIntent().getIntExtra("order", PlayerFragment.PLAY_ORDER);
 
-        if(repeatOne){
-            ImageView iv_repeat = findViewById(R.id.iv_repeat);
-            iv_repeat.setImageResource(R.drawable.icon_repeat_one);
+        ImageView iv_repeat = findViewById(R.id.iv_repeat);
+        switch (orderId){
+            case PlayerFragment.PLAY_ORDER:
+                iv_repeat.setImageResource(R.drawable.icon_play_order);
+                break;
+            case PlayerFragment.PLAY_REPEAT_ONE:
+                iv_repeat.setImageResource(R.drawable.icon_play_repeat_one);
+                break;
+            case PlayerFragment.PLAY_SHUFFLE:
+                //TODO:随机播放
+                break;
         }
-        musicIndex = getIntent().getIntExtra("musicIndex",0);
         cookie = SharedPreferencesUtil.getString("cookie", "", this);
-        currentMusicInfo = data.getJSONObject(musicIndex);
+        musicApi = new MusicApi(cookie);
+        currentMusicInfo = data.getJSONObject(getIntent().getIntExtra("musicIndex",0));
         if(currentMusicInfo.containsKey("simpleSong")){
             currentMusicInfo = currentMusicInfo.getJSONObject("simpleSong");
         }
@@ -101,13 +109,15 @@ public class ConsoleActivity extends AppCompatActivity {
                         liked = true;
                     }
                 }
-                ImageView like_view = findViewById(R.id.iv_like);
-                if(liked){
-                    like_view.setImageResource(R.drawable.ic_baseline_favorite_24);
-                }
-                else{
-                    like_view.setImageResource(R.drawable.ic_baseline_favorite_border_24);
-                }
+                runOnUiThread(()->{
+                    ImageView like_view = findViewById(R.id.iv_like);
+                    if(liked){
+                        like_view.setImageResource(R.drawable.ic_baseline_favorite_24);
+                    }
+                    else{
+                        like_view.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+                    }
+                });
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -155,7 +165,7 @@ public class ConsoleActivity extends AppCompatActivity {
                         if(musicApi.likeMusic(currentMusicInfo.getString("id"),false)){
                             toast = Toast.makeText(this,"取消收藏成功",Toast.LENGTH_SHORT);
                             liked = false;
-                            like_view.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+                            runOnUiThread(()->like_view.setImageResource(R.drawable.ic_baseline_favorite_border_24));
                         }
                         else{
                             toast = Toast.makeText(this,"取消收藏失败",Toast.LENGTH_SHORT);
@@ -165,7 +175,7 @@ public class ConsoleActivity extends AppCompatActivity {
                         if(musicApi.likeMusic(currentMusicInfo.getString("id"),true)){
                             toast = Toast.makeText(this,"收藏成功",Toast.LENGTH_SHORT);
                             liked = true;
-                            like_view.setImageResource(R.drawable.ic_baseline_favorite_24);
+                            runOnUiThread(()->like_view.setImageResource(R.drawable.ic_baseline_favorite_24));
                         }
                         else{
                             toast = Toast.makeText(this,"收藏失败",Toast.LENGTH_SHORT);
@@ -239,12 +249,14 @@ public class ConsoleActivity extends AppCompatActivity {
                                     startActivity(intent);
                                 }
                                 catch(Exception e) {
+                                    Looper.prepare();
                                     if(toast!=null){
                                         toast.cancel();
                                     }
                                     toast = Toast.makeText(this, "你没有安装配套视频软件：腕管Pro，请先前往应用商店下载！", Toast.LENGTH_LONG);
                                     toast.show();
                                     e.printStackTrace();
+                                    Looper.loop();
                                 }
                             }
                             else{
@@ -267,12 +279,14 @@ public class ConsoleActivity extends AppCompatActivity {
                                     }
                                     catch(Exception ee)
                                     {
+                                        Looper.prepare();
                                         if(toast!=null){
                                             toast.cancel();
                                         }
                                         toast = Toast.makeText(this, "你没有安装配套视频软件：腕上视频，请先前往应用商店下载！", Toast.LENGTH_LONG);
                                         toast.show();
                                         ee.printStackTrace();
+                                        Looper.loop();
                                     }
                                 }
                             }
@@ -294,10 +308,10 @@ public class ConsoleActivity extends AppCompatActivity {
                         try {
                             String albumId;
                             if(currentMusicInfo.containsKey("al")){
-                                albumId = currentMusicInfo.getJSONArray("al").getJSONObject(0).getString("id");
+                                albumId = currentMusicInfo.getJSONObject("al").getString("id");
                             }
                             else{
-                                albumId = currentMusicInfo.getJSONArray("album").getJSONObject(0).getString("id");
+                                albumId = currentMusicInfo.getJSONObject("album").getString("id");
                             }
                             bitmap = Glide.with(ConsoleActivity.this)
                                     .asBitmap()
@@ -313,13 +327,15 @@ public class ConsoleActivity extends AppCompatActivity {
                         //设置图片
                         xtcShareMessage.setThumbImage(bitmap);
                         //设置文本
-                        xtcShareMessage.setDescription(currentMusicInfo + "\n" + artistName);
+                        xtcShareMessage.setDescription(currentMusicInfo.getString("name") + "\n" + artistName);
                         //第四步：创建SendMessageToXTC.Request对象，并设置message属性为xtcShareMessage
                         SendMessageToXTC.Request request = new SendMessageToXTC.Request();
                         request.setMessage(xtcShareMessage);
                         //第五步：创建ShareMessageManager对象，调用sendRequestToXTC方法，传入SendMessageToXTC.Request对象和AppKey
                         ShareMessageManager SMM = new ShareMessageManager(this);
+                        Looper.prepare();
                         SMM.sendRequestToXTC(request, "");
+                        Looper.loop();
                     }).start();
                 }
                 else{
@@ -331,15 +347,22 @@ public class ConsoleActivity extends AppCompatActivity {
             case R.id.iv_repeat:
                 Intent intent = new Intent();
                 ImageView iv_repeat = findViewById(R.id.iv_repeat);
-                if(repeatOne){
-                    // 处于单曲循环模式
-                    intent.putExtra("repeatOne",false);
-                    iv_repeat.setImageResource(R.drawable.icon_repeat);
-                }
-                else{
-                    // 处于顺序播放模式
-                    intent.putExtra("repeatOne",true);
-                    iv_repeat.setImageResource(R.drawable.icon_repeat_one);
+                switch (orderId){
+                    case PlayerFragment.PLAY_ORDER:
+                        // 处于顺序播放模式
+                        orderId = PlayerFragment.PLAY_REPEAT_ONE;
+                        intent.putExtra("orderId",PlayerFragment.PLAY_REPEAT_ONE);
+                        iv_repeat.setImageResource(R.drawable.icon_play_repeat_one);
+                        break;
+                    case PlayerFragment.PLAY_REPEAT_ONE:
+                        // 处于单曲循环模式
+                        orderId = PlayerFragment.PLAY_ORDER;
+                        intent.putExtra("orderId",PlayerFragment.PLAY_ORDER);
+                        iv_repeat.setImageResource(R.drawable.icon_play_order);
+                        break;
+                    case PlayerFragment.PLAY_SHUFFLE:
+                        //TODO:随机播放
+                        break;
                 }
                 setResult(RESULT_OK,intent);
                 break;

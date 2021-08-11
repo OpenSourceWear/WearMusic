@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -34,11 +35,14 @@ import cn.wearbbs.music.ui.ViewPictureActivity;
 import cn.wearbbs.music.util.SharedPreferencesUtil;
 
 public class PlayerFragment extends Fragment {
-    private JSONArray data;
+    private static JSONArray data;
     private static int musicIndex;
     private static MusicPlayerService.MyBinder binder;
     private boolean local;
-    public static boolean repeatOne = false;
+    public static int order = 0;
+    public static final int PLAY_ORDER = 0,
+            PLAY_REPEAT_ONE = 1,
+            PLAY_SHUFFLE = 2;
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -79,20 +83,13 @@ public class PlayerFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_player, container, false);
         if(getArguments() != null){
             data = JSON.parseArray(requireArguments().getString("data"));
-            if(data == null){
-                new Thread(()->{
-                    String cookie = SharedPreferencesUtil.getString("cookie","",requireContext());
-                    if(getArguments().getBoolean("fm")||(SharedPreferencesUtil.getString("opening","nothing",requireContext()).equals("fm")&&!cookie.isEmpty())){
-                        data = new MusicApi(cookie).getFM();
-                        System.out.println(data.toJSONString());
-                        requireActivity().runOnUiThread(()->{
-                            initView(view,data,requireActivity());
-                        });
-                    }
-                }).start();
-            }
             if (requireArguments().getString("data") != null) {
-                initView(view,data,requireActivity());
+                if(data.size()==0){
+                    Toast.makeText(requireContext(),"你似乎没有登录哦",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    initView(view,data,requireActivity());
+                }
             }
         }
         return view;
@@ -310,6 +307,11 @@ public class PlayerFragment extends Fragment {
         return musicIndex;
     }
 
+
+    public static JSONArray getData() {
+        return data;
+    }
+
     public int getCurrentPosition() {
         while (!binder.getPrepareStatus()) {
         }
@@ -324,18 +326,16 @@ public class PlayerFragment extends Fragment {
 
     /**
      * 设置循环状态
-     * @param repeatOne true：单曲循环  false：顺序播放
      */
-    public static void setRepeatOne(Boolean repeatOne){
-        PlayerFragment.repeatOne = repeatOne;
-        binder.setRepeatOne(repeatOne);
+    public static void setPlayOrder(int orderId){
+        PlayerFragment.order = orderId;
+        binder.setPlayOrder(orderId);
     }
 
-    /**6
+    /**
      * 获取循环状态
-     * @return true：单曲循环  false：顺序播放
      */
-    public static Boolean getRepeatOne(){
-        return repeatOne;
+    public static int getPlayOrder(){
+        return order;
     }
 }

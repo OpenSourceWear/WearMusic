@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sv_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorOnPrimary"
+    tools:context=".ui.AddMusicActivity">
+
+    <LinearLayout
+        android:id="@+id/ll_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/main_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/colorPrimary"
+            android:gravity="center_vertical"
+            android:onClick="onClick"
+            android:padding="8dp">
+
+            <ImageView
+                android:id="@+id/iv_extraicon"
+                android:layout_width="12dp"
+                android:layout_height="19dp"
+                android:layout_marginStart="2dp"
+                android:layout_toStartOf="@id/tv_title"
+                android:contentDescription="@string/todo"
+                android:rotation="-270"
+                android:src="@drawable/icon_extra" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="@string/addMusic"
+                android:textColor="#FAFAFA"
+                tools:ignore="RelativeOverlap,TextContrastCheck" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_ftp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_hint_ftp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="@string/hintForFtp" />
+
+            <Button
+                android:id="@+id/btn_ftp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:backgroundTint="#2175F3"
+                android:onClick="onClick"
+                android:text="@string/open" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

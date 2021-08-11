@@ -49,6 +49,14 @@
             android:layout_height="3dp"
             android:visibility="visible" />
 
+        <cn.wearbbs.music.view.LoadingView
+            android:id="@+id/lv_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingBottom="20dp"
+            android:visibility="gone" />
+
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp_main"
             android:layout_width="match_parent"

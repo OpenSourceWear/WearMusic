@@ -5,10 +5,9 @@
     android:id="@+id/ll_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FAFAFA"
+    android:background="?attr/colorOnPrimary"
     android:orientation="vertical"
-    tools:context=".ui.LocalMusicActivity"
-    tools:visibility="visible">
+    tools:context=".ui.LocalMusicActivity">
 
     <RelativeLayout
         android:id="@+id/main_title"
@@ -47,7 +46,7 @@
         android:background="#BF2175F3"
         android:gravity="center"
         android:onClick="onClick"
-        android:text="@string/addMusic"
+        android:text="@string/addMusic_hint"
         android:textColor="#FFFFFF"
         android:textSize="10sp"
         tools:ignore="SmallSp,TextContrastCheck,TouchTargetSizeCheck" />
@@ -72,6 +71,8 @@
         android:id="@+id/mv_message"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center"
+        android:paddingBottom="20dp"
         android:visibility="gone" />
 
 </LinearLayout>

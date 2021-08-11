@@ -2,6 +2,7 @@ package cn.wearbbs.music.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,24 +86,29 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> 
                 new Thread(() -> {
                     try{
                         imgUrl[0] = api.getMusicCover(finalMusicInfo.getJSONObject("album").getString("id"));
+                        activity.runOnUiThread(()->{
+                            viewHolder.iv_cover.setImageResource(R.drawable.ic_baseline_photo_size_select_actual_24);
+                            RequestOptions options = RequestOptions.bitmapTransform(new RoundedCorners(10)).placeholder(R.drawable.ic_baseline_photo_size_select_actual_24).error(R.drawable.ic_baseline_photo_size_select_actual_24);
+                            try{
+                                Glide.with(activity).load(imgUrl[0].replace("http://", "https://")).apply(options).into(viewHolder.iv_cover);
+                            }
+                            catch (Exception ignored) { }
+                        });
                     }
-                    catch(Exception ignored){}
+                    catch(Exception ignored){ }
                 }).start();
             } else {
                 artists = musicInfo.getJSONArray("ar");
                 imgUrl[0] = musicInfo.getJSONObject("al").getString("picUrl");
+                RequestOptions options = RequestOptions.bitmapTransform(new RoundedCorners(10)).placeholder(R.drawable.ic_baseline_photo_size_select_actual_24).error(R.drawable.ic_baseline_photo_size_select_actual_24);
+                try{
+                    Glide.with(activity).load(imgUrl[0].replace("http://", "https://")).apply(options).into(viewHolder.iv_cover);
+                }
+                catch (Exception ignored) { }
             }
             viewHolder.tv_title.setText(musicInfo.getString("name"));
             String artistName = artists.getJSONObject(0).getString("name");
             viewHolder.tv_artists.setText(artistName == null ? activity.getString(R.string.unknown) : artistName);
-            viewHolder.iv_cover.setImageResource(R.drawable.ic_baseline_photo_size_select_actual_24);
-            RequestOptions options = RequestOptions.bitmapTransform(new RoundedCorners(10)).placeholder(R.drawable.ic_baseline_photo_size_select_actual_24).error(R.drawable.ic_baseline_photo_size_select_actual_24);
-            String finalImgUrl = imgUrl[0];
-            viewHolder.iv_cover.setImageResource(R.drawable.ic_baseline_photo_size_select_actual_24);
-            try{
-                Glide.with(activity).load(finalImgUrl.replace("http://", "https://")).apply(options).into(viewHolder.iv_cover);
-            }
-            catch (Exception ignored){}
             int finalPosition = position;
             viewHolder.ll_main.setOnClickListener(v -> {
                 Intent intent = new Intent(activity, MainActivity.class);

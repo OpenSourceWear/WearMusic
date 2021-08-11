@@ -39,7 +39,7 @@
                 android:layout_toEndOf="@id/iv_avatar"
                 android:singleLine="true"
                 android:text="@string/untitled"
-                android:textColor="#2A2B2C" />
+                android:textColor="?attr/colorOnSecondary" />
 
             <ImageView
                 android:id="@+id/iv_thumb"
@@ -65,7 +65,7 @@
         android:padding="10dp"
         android:singleLine="false"
         android:textColor="#828282"
-        app:etv_ToExpandHintColor="?attr/colorPrimary"
+        app:etv_ToExpandHintColor="?attr/colorPrimaryVariant"
         tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
 </LinearLayout>

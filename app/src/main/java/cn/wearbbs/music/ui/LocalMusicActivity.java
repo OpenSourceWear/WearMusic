@@ -41,13 +41,11 @@ public class LocalMusicActivity extends AppCompatActivity {
     public void onClick(View view){
         switch (view.getId()){
             case R.id.main_title:
-                Intent intent = new Intent(LocalMusicActivity.this, MenuActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(intent);
                 finish();
                 break;
             case R.id.tv_add:
-                //TODO:导入音乐
+                startActivity(new Intent(LocalMusicActivity.this, AddMusicActivity.class));
+                break;
         }
     }
 
@@ -56,6 +54,7 @@ public class LocalMusicActivity extends AppCompatActivity {
         if(root.exists()){
             RecyclerView rv_main = findViewById(R.id.rv_main);
             JSONArray data = new JSONArray();
+            findViewById(R.id.lv_loading).setVisibility(View.GONE);
 
             File musicDir = new File(root.getPath() + "/music");
             File lrcDir = new File(root.getPath() + "/lrc");
@@ -65,12 +64,22 @@ public class LocalMusicActivity extends AppCompatActivity {
             File[] musicFiles = musicDir.listFiles(pathname -> (
                     pathname.getName().endsWith(".mp3")||
                     pathname.getName().endsWith(".wav")||
-                    pathname.getName().endsWith(".aac")));
+                    pathname.getName().endsWith(".aac")||
+                    pathname.getName().endsWith(".flac")));
             File[] lrcFiles = lrcDir.listFiles(pathname -> (pathname.getName().endsWith(".lrc")));
             File[] coverFiles = coverDir.listFiles(pathname -> (
                     pathname.getName().endsWith(".jpg")||
                             pathname.getName().endsWith(".png")));
             File[] idFiles = idDir.listFiles(pathname -> (pathname.getName().endsWith(".txt")));
+
+            if(Objects.requireNonNull(musicFiles).length==0){
+                rv_main.setVisibility(View.GONE);
+                MessageView mv_message = findViewById(R.id.mv_message);
+                mv_message.setImageResource(R.drawable.ic_baseline_assignment_24);
+                mv_message.setText(R.string.msg_noMusic);
+                mv_message.setVisibility(View.VISIBLE);
+                return;
+            }
 
             for(int i = 0; i < Objects.requireNonNull(musicFiles).length; i++){
                 JSONObject musicInfo = new JSONObject();

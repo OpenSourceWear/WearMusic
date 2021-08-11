@@ -39,52 +39,58 @@
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_noUpdate"
+    <ScrollView
+        android:id="@+id/sv_noUpdate"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:visibility="gone">
 
-        <TextView
-            android:id="@+id/tv_dev_no"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:gravity="center"
-            android:text="@string/tipForDev"
-            android:textSize="12sp"
-            android:visibility="gone"
-            app:drawableLeftCompat="@drawable/ic_baseline_check_24" />
-
-        <TextView
-            android:id="@+id/tv_hint_no"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:gravity="center"
-            android:text="@string/notUpdateHint"
-            android:textColor="#999999"
-            android:textSize="12sp"
-            tools:ignore="TextContrastCheck" />
+            android:orientation="vertical"
+            android:visibility="visible">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:gravity="center"
-            android:text="@string/notUpdate"
-            android:textColor="?attr/colorOnSecondary" />
+            <TextView
+                android:id="@+id/tv_dev_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="@string/tipForDev"
+                android:textSize="12sp"
+                android:visibility="gone"
+                app:drawableLeftCompat="@drawable/ic_baseline_check_24" />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="66dp"
-            android:layout_marginTop="5dp"
-            android:contentDescription="@string/todo"
-            app:srcCompat="@drawable/ic_baseline_assignment_turned_in_24" />
+            <TextView
+                android:id="@+id/tv_hint_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="@string/notUpdateHint"
+                android:textColor="#999999"
+                android:textSize="12sp"
+                tools:ignore="TextContrastCheck" />
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:gravity="center"
+                android:text="@string/notUpdate"
+                android:textColor="?attr/colorOnSecondary" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="66dp"
+                android:layout_marginTop="5dp"
+                android:contentDescription="@string/todo"
+                app:srcCompat="@drawable/ic_baseline_assignment_turned_in_24" />
+
+        </LinearLayout>
+    </ScrollView>
 
     <ScrollView
         android:id="@+id/sv_needUpdate"
@@ -161,6 +167,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="20dp"
-        android:gravity="center" />
+        android:gravity="center"
+        android:visibility="visible" />
 
 </LinearLayout>

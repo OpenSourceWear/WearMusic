@@ -55,7 +55,13 @@
 
     <!-- 本地音乐 -->
     <string name="localMusic">本地音乐</string>
-    <string name="addMusic">导入音乐 ></string>
+    <string name="addMusic_hint">导入音乐 ></string>
+
+    <!-- 导入音乐 -->
+    <string name="addMusic">导入音乐</string>
+    <string name="hintForFtp">用户名：WearMusic\n密码：WearMusic\n端口：2222\nIP：Unknown\n支持：.mp3 .wav .aac .flac\n请使用歌曲名--歌手的格式命名以便软件识别\n可前往官网：wmusic.wearbbs.cn 下载导入工具</string>
+    <string name="open">开启</string>
+    <string name="close">关闭</string>
 
     <!-- 更新 -->
     <string name="needUpdate">需要更新</string>
@@ -69,6 +75,8 @@
     <string name="feedback">反馈问题</string>
     <string name="checkUpdate">检查更新</string>
     <string name="aboutContent">v3.0\n音乐的力量，听你所想。\n作者： JackuXL\n出品：WearBBS\n官方QQ群：133636679\n官网：https://wmusic.wearbbs.cn\n论坛：https://wearbbs.cn\n使用【网易云API】开发\n特别感谢：@luern0313</string>
+
+    <!-- 其他-->
     <string name="msg_noLogin">你还没有登录哦</string>
     <string name="msg_suicide">你不孤单，我们都在。</string>
     <string name="tip">左滑切换到\n歌词界面</string>
@@ -84,6 +92,7 @@
     <string name="comment">评论</string>
     <string name="load_failed">加载失败</string>
     <string name="qrcode">二维码</string>
-    <string name="send">发送</string>
     <string name="playList">播放列表</string>
+    <string name="send">发送</string>
+    <string name="server">服务器偏好</string>
 </resources>

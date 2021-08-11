@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WearMusicPro">
         <activity
+            android:name=".ui.AddMusicActivity"
+            android:exported="true" />
+        <activity
             android:name=".ui.ReplyActivity"
             android:exported="true" />
         <activity

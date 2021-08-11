@@ -54,7 +54,6 @@ public class MusicLibraryAdapter extends RecyclerView.Adapter<MusicLibraryAdapte
             Intent intent = new Intent(activity, MusicListActivity.class);
             intent.putExtra("detail", playListDetail.toJSONString());
             activity.startActivity(intent);
-            activity.finish();
         });
 
     }

@@ -65,7 +65,7 @@ public class LyricsFragment extends Fragment {
                         .putExtra("data",data.toJSONString())
                         .putExtra("musicIndex",musicIndex)
                         .putExtra("local",local)
-                        .putExtra("repeatOne",PlayerFragment.getRepeatOne()),0);
+                        .putExtra("order",PlayerFragment.getPlayOrder()),0);
             });
         }
         return view;
@@ -75,18 +75,6 @@ public class LyricsFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             currentPosition = intent.getIntExtra("currentPosition", 0);
-        }
-    }
-
-    class MusicChangedBroadcast extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int newIndex = intent.getIntExtra("musicIndex", 0);
-            data = JSON.parseArray(intent.getStringExtra("data"));
-            if(musicIndex!=newIndex){
-                musicIndex=newIndex;
-                updateLyric(context);
-            }
         }
     }
 
@@ -171,7 +159,7 @@ public class LyricsFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
-                PlayerFragment.setRepeatOne(data.getBooleanExtra("repeatOne",false));
+                PlayerFragment.setPlayOrder(data.getIntExtra("orderId",PlayerFragment.PLAY_ORDER));
             }
         }
     }
