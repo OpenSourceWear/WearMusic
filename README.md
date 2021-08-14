@@ -26,14 +26,6 @@
 
 ### 如何安装
 
-#### 一键安装（推荐）
-
-安装 WearOS 工具箱，连接手表，进入应用库，轻触 “WearMusic” ，一键安装，耐心等待系统下载并安装即可。
-
-![一键安装教程](https://www.hualigs.cn/image/602271994bd07.jpg)
-
-> 在此之前，请您务必确认是否已经打开ADB。详情可前往 [WearBBS](https://wearbbs.cn) 查看 [ADB开启教程](https://wearbbs.cn/threads/adb.110/)。
-
 #### 手动安装
 
 - [官方网站](https://wmusic.wearbbs.cn)
