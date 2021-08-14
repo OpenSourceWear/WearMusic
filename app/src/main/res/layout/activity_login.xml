@@ -287,7 +287,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:backgroundTint="#2175F3"
+                android:backgroundTint="@color/blue_500"
                 android:gravity="center"
                 android:onClick="onClick"
                 android:text="@string/login"

@@ -51,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:text="@string/untitled"
+                    android:text="@string/noLogin"
                     android:textColor="#FAFAFA" />
 
                 <TextView
@@ -59,7 +59,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:text="@string/id"
+                    android:text="@string/noLogin"
                     android:textColor="#CCFAFAFA"
                     android:textSize="12sp" />
             </LinearLayout>

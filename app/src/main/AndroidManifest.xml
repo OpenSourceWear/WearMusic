@@ -61,7 +61,7 @@
         <activity android:name=".ui.SearchActivity" />
 
         <service
-            android:name=".service.MusicPlayerService"
+            android:name="cn.wearbbs.music.service.MusicPlayerService"
             android:enabled="true" />
 
         <activity android:name=".ui.LoginActivity" />

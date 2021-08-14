@@ -89,7 +89,7 @@ public class UpdateActivity extends AppCompatActivity {
         JSONObject result = new JSONObject();
         result.put("needUpdate",version < latestVersion);
         result.put("version",version);
-        result.put("latestVersion",version);
+        result.put("latestVersion",latestVersion);
         return result;
     }
 }

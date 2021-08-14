@@ -2,11 +2,13 @@ package cn.wearbbs.music.fragment;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,13 +55,14 @@ public class LyricsFragment extends Fragment {
             local = getArguments().getBoolean("local");
             lrcView = view.findViewById(R.id.lv_main);
             updateLyric(requireContext());
-            new Thread(() -> {
-                while (true) {
-                    if (currentPosition != 0) {
-                        lrcView.updateTime(currentPosition);
-                    }
+            new Thread(){
+                @Override
+                public void run() {
+                    super.run();
+                    //间隔时间
+                    handler.sendEmptyMessageDelayed(1, 1000);
                 }
-            }).start();
+            }.start();
             view.findViewById(R.id.ll_console).setOnClickListener(v -> {
                 startActivityForResult(new Intent(requireContext(), ConsoleActivity.class)
                         .putExtra("data",data.toJSONString())
@@ -163,4 +166,16 @@ public class LyricsFragment extends Fragment {
             }
         }
     }
+
+    @SuppressLint("HandlerLeak")
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(android.os.Message msg) {
+            if (currentPosition > 0) {
+                lrcView.updateTime(currentPosition);
+            }
+            //调取子线程
+            handler.sendEmptyMessageDelayed(0, 1000);
+        }
+    };
 }

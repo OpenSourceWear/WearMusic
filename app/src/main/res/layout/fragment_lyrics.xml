@@ -35,7 +35,7 @@
             tools:ignore="SmallSp" />
     </LinearLayout>
 
-    <cn.wearbbs.music.view.LrcView
+    <me.wcy.lrcview.LrcView
         android:id="@+id/lv_main"
         android:layout_width="match_parent"
         android:layout_height="0dp"
