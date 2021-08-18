@@ -54,6 +54,10 @@ public class LyricsFragment extends Fragment {
             musicIndex = getArguments().getInt("musicIndex");
             local = getArguments().getBoolean("local");
             lrcView = view.findViewById(R.id.lv_main);
+            lrcView.setDraggable(true, (lrcView, time) -> {
+                PlayerFragment.seekTo(time);
+                return true;
+            });
             updateLyric(requireContext());
             new Thread(){
                 @Override

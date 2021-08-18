@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -56,6 +57,9 @@ public class AddMusicActivity extends AppCompatActivity {
                 break;
             case R.id.main_title:
                 finish();
+                break;
+            case R.id.tv_path:
+                startActivity(new Intent(AddMusicActivity.this,QRCodeActivity.class).putExtra("url", String.format("%s\n%s\n%s", getString(R.string.musicRoot), getString(R.string.lyricsRoot),getString(R.string.coverRoot))));
                 break;
         }
     }

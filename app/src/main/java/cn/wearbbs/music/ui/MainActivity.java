@@ -9,6 +9,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.microsoft.appcenter.AppCenter;
+import com.microsoft.appcenter.analytics.Analytics;
+import com.microsoft.appcenter.crashes.Crashes;
+
 import api.MusicApi;
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.adapter.ViewPagerAdapter;
@@ -27,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
             NetWorkUtil.setDomain("https://music.wearbbs.cn");
         }
         else{
-            NetWorkUtil.setDomain("https://netease-cloud-music-api-dun-nine.vercel.app");
+            NetWorkUtil.setDomain("https://netease-cloud-music-api-jackuxl.vercel.app");
         }
 
         if (SharedPreferencesUtil.getBoolean("dark", false, this)) {
@@ -90,4 +94,5 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.tv_tip_background).setVisibility(View.GONE);
         findViewById(R.id.ll_tip).setVisibility(View.GONE);
     }
+
 }

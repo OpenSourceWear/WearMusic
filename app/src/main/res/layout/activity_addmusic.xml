@@ -44,6 +44,18 @@
 
         </RelativeLayout>
 
+        <TextView
+            android:id="@+id/tv_path"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:background="#BF2175F3"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:text="@string/path_hint"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
+            tools:ignore="SmallSp,TextContrastCheck,TouchTargetSizeCheck" />
+
         <LinearLayout
             android:id="@+id/ll_ftp"
             android:layout_width="match_parent"

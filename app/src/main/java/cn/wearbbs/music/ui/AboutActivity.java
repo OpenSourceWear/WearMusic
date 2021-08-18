@@ -33,4 +33,7 @@ public class AboutActivity extends SlideBackActivity {
         }
 
     }
+    public void crash(View view){
+        findViewById(R.id.iv_thumb).setVisibility(View.VISIBLE);
+    }
 }

@@ -96,4 +96,9 @@
     <string name="send">发送</string>
     <string name="server">服务器偏好</string>
     <string name="noLogin">未登录</string>
+    <string name="path_hint"><![CDATA[储存位置 >]]></string>
+    <string name="musicRoot">音乐储存位置：\n/storage/emulated/0/Android/data/cn.wearbbs.music/files/download/music/</string>
+    <string name="lyricsRoot">歌词储存位置：\n/storage/emulated/0/Android/data/cn.wearbbs.music/files/download/lrc/</string>
+    <string name="coverRoot">封面储存位置：\n/storage/emulated/0/Android/data/cn.wearbbs.music/files/download/cover/</string>
+
 </resources>

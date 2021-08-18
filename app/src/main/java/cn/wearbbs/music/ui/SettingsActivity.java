@@ -6,9 +6,11 @@ import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import cn.wearbbs.music.R;
+import util.NetWorkUtil;
 
 /**
  * 设置
@@ -59,6 +61,19 @@ public class SettingsActivity extends SlideBackActivity {
             findPreference("opensource").setOnPreferenceClickListener(preference -> {
                 startActivity(new Intent(getActivity(), OpenSourceActivity.class));
                 return true;
+            });
+
+            findPreference("server").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if(newValue.equals("vercel")){
+                        NetWorkUtil.setDomain("https://netease-cloud-music-api-jackuxl.vercel.app");
+                    }
+                    else{
+                        NetWorkUtil.setDomain("https://music.wearbbs.cn");
+                    }
+                    return true;
+                }
             });
         }
     }

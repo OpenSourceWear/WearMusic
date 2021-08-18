@@ -10,8 +10,8 @@ android {
         applicationId "cn.wearbbs.music"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 8
-        versionName "3.1"
+        versionCode 9
+        versionName "3.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -49,4 +49,8 @@ dependencies {
     implementation 'cn.carbs.android:ExpandableTextView:1.0.3'
     implementation 'me.panpf:sketch:2.7.1'
     implementation 'com.google.zxing:core:3.4.0'
+
+    def appCenterSdkVersion = '4.1.0'
+    implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
+    implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
 }

@@ -37,7 +37,7 @@ import cn.wearbbs.music.util.SharedPreferencesUtil;
 public class PlayerFragment extends Fragment {
     private static JSONArray data;
     private static int musicIndex;
-    private static MusicPlayerService.MyBinder binder;
+    public static MusicPlayerService.MyBinder binder;
     private boolean local;
     public static int order = 0;
     public static final int PLAY_ORDER = 0,
@@ -337,5 +337,9 @@ public class PlayerFragment extends Fragment {
      */
     public static int getPlayOrder(){
         return order;
+    }
+
+    public static void seekTo(long time){
+        binder.seekTo(time);
     }
 }

@@ -206,5 +206,12 @@ public class MusicPlayerService extends Service {
                     break;
             }
         }
+
+        public void seekTo(long time){
+            if(mMediaPlayer!=null){
+                mMediaPlayer.seekTo((int)time);
+            }
+
+        }
     }
 }
