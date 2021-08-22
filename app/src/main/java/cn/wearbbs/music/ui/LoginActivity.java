@@ -117,12 +117,12 @@ public class LoginActivity extends SlideBackActivity {
                         // 请求失败
                         err++;
                         if (err >= 5) {
-                            showErrorMessageQR();
+                            runOnUiThread(this::showErrorMessageQR);
                             flagQR = false;
                         }
                     case 800:
                         // 二维码过期
-                        showErrorMessageQR();
+                        runOnUiThread(this::showErrorMessageQR);
                         flagQR = false;
                         break;
                     case 802:
@@ -131,14 +131,22 @@ public class LoginActivity extends SlideBackActivity {
                         break;
                     case 803:
                         // 授权成功
-                        SharedPreferencesUtil.putString("cookie", api.getCookie(), this);
-                        JSONObject profile = api.getProfile();
-                        SharedPreferencesUtil.putJSONObject("profile", profile, this);
-                        Intent intent = new Intent();
-                        intent.putExtra("profile", profile.toJSONString());
-                        setResult(RESULT_OK, intent);
-                        flagQR = false;
-                        finish();
+                        SharedPreferencesUtil.putString("cookie", api.getCookie());
+                        try{
+                            JSONObject profile = api.getProfile();
+                            SharedPreferencesUtil.putJSONObject("profile", profile);
+                            Intent intent = new Intent();
+                            intent.putExtra("profile", profile.toJSONString());
+                            setResult(RESULT_OK, intent);
+                            flagQR = false;
+                            finish();
+                        }
+                        catch (Exception e){
+                            Looper.prepare();
+                            Toast.makeText(this,"用户信息获取失败",Toast.LENGTH_SHORT).show();
+                            Looper.loop();
+                            runOnUiThread(this::showErrorMessageQR);
+                        }
                         break;
                 }
                 try {
@@ -188,9 +196,9 @@ public class LoginActivity extends SlideBackActivity {
         api.setPassword(et_pwd.getText().toString(), false);
         new Thread(() -> {
             if (api.login() == 200) {
-                SharedPreferencesUtil.putString("cookie", api.getCookie(), this);
+                SharedPreferencesUtil.putString("cookie", api.getCookie());
                 JSONObject profile = api.getProfile();
-                SharedPreferencesUtil.putJSONObject("profile", profile, this);
+                SharedPreferencesUtil.putJSONObject("profile", profile);
                 Intent intent = new Intent();
                 intent.putExtra("profile", profile.toJSONString());
                 setResult(RESULT_OK, intent);

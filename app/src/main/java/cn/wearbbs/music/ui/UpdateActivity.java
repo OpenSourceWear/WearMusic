@@ -1,9 +1,6 @@
 package cn.wearbbs.music.ui;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,7 +12,9 @@ import com.alibaba.fastjson.JSONObject;
 
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.api.AppServiceApi;
+import cn.wearbbs.music.application.MainApplication;
 import cn.wearbbs.music.util.SharedPreferencesUtil;
+import cn.wearbbs.music.view.MessageView;
 
 /**
  * 更新
@@ -33,25 +32,22 @@ public class UpdateActivity extends AppCompatActivity {
         finish();
     }
 
+    @SuppressLint("StringFormatMatches")
     public void init() {
         findViewById(R.id.lv_loading).setVisibility(View.VISIBLE);
-        if (SharedPreferencesUtil.getBoolean("dev", false, this)) {
-            // 已开启检索测试版
-            findViewById(R.id.tv_dev_no).setVisibility(View.VISIBLE);
-            findViewById(R.id.tv_dev).setVisibility(View.VISIBLE);
-            ImageView iv_qrcode = findViewById(R.id.iv_qrcode);
-            iv_qrcode.setImageResource(R.drawable.qrcode_update_dev);
-        }
         new Thread(()->{
-            JSONObject data = checkUpdate(this);
-            if(data.getBoolean("needUpdate")){
+            JSONObject data = checkUpdate();
+            if(data == null){
+                runOnUiThread(this::showErrorMessage);
+            }
+            else if(data.getBoolean("needUpdate")){
                 runOnUiThread(() -> {
                     findViewById(R.id.lv_loading).setVisibility(View.GONE);
                     findViewById(R.id.sv_needUpdate).setVisibility(View.VISIBLE);
                     TextView tv_hint = findViewById(R.id.tv_hint);
-                    tv_hint.setText(tv_hint.getText().toString()
-                            .replace("{oldVersion}", String.valueOf(data.getDouble("version")))
-                            .replace("{newVersion}", String.valueOf(data.getDouble("latestVersion"))));
+                    tv_hint.setText(String.format(getString(R.string.needUpdateHint),data.getString("currentVersion"),data.getString("latestVersion")));
+                    TextView tv_changeLog = findViewById(R.id.tv_changeLog);
+                    tv_changeLog.setText(data.getString("changeLog"));
                 });
             }
             else{
@@ -59,8 +55,7 @@ public class UpdateActivity extends AppCompatActivity {
                     findViewById(R.id.lv_loading).setVisibility(View.GONE);
                     findViewById(R.id.sv_noUpdate).setVisibility(View.VISIBLE);
                     TextView tv_hint_no = findViewById(R.id.tv_hint_no);
-                    tv_hint_no.setText(tv_hint_no.getText().toString()
-                            .replace("{version}", String.valueOf(data.getDouble("version"))));
+                    tv_hint_no.setText(String.format(getString(R.string.noUpdateHint),data.getString("currentVersion"),data.getString("latestVersion")));
                 });
             }
         }).start();
@@ -70,26 +65,48 @@ public class UpdateActivity extends AppCompatActivity {
      * 检查更新
      * @return 是否需要更新
      */
-    public static JSONObject checkUpdate(Context context) {
+    public static JSONObject checkUpdate() {
         double latestVersion;
-        double version = 0;
-        if (SharedPreferencesUtil.getBoolean("dev", false, context)) {
-            // 已开启检索测试版
-            latestVersion = AppServiceApi.getLatestDevVersion();
-        } else {
-            // 未开启检索测试版
-            latestVersion = AppServiceApi.getLatestVersion();
+        double currentVersion;
+        try{
+            JSONObject info;
+            info = AppServiceApi.getLatestVersionInfo();
+            latestVersion = info.getDouble("latestVersion");
+            currentVersion = MainApplication.getApplicationVersion();
+            info.put("needUpdate",currentVersion < latestVersion);
+            info.put("currentVersion",currentVersion);
+            return info;
         }
-        PackageManager packageManager = context.getPackageManager();
-        try {
-            PackageInfo packInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
-            version = Double.parseDouble(packInfo.versionName);
-        } catch (PackageManager.NameNotFoundException ignored) {
+        catch (Exception e){
+            return null;
         }
-        JSONObject result = new JSONObject();
-        result.put("needUpdate",version < latestVersion);
-        result.put("version",version);
-        result.put("latestVersion",latestVersion);
-        return result;
+
     }
+
+    public void showErrorMessage(){
+        findViewById(R.id.lv_loading).setVisibility(View.GONE);
+        findViewById(R.id.tv_dev_no).setVisibility(View.GONE);
+        findViewById(R.id.tv_dev).setVisibility(View.GONE);
+
+        MessageView mv_message = findViewById(R.id.mv_message);
+        mv_message.setVisibility(View.VISIBLE);
+        mv_message.setContent(MessageView.LOAD_FAILED, v -> {
+            mv_message.setVisibility(View.GONE);
+            init();
+        });
+    }
+
+    @Override
+    public void finish(){
+        AppServiceApi.resetServer();
+        super.finish();
+    }
+
+    @Override
+    public void onDestroy(){
+        AppServiceApi.resetServer();
+        super.onDestroy();
+    }
+
+
 }

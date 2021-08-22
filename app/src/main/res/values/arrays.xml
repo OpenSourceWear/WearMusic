@@ -32,4 +32,15 @@
         <item>wearbbs</item>
     </string-array>
 
+    <!-- 时间 -->
+    <string-array name="time_entries">
+        <item>24小时制</item>
+        <item>12小时制</item>
+    </string-array>
+
+    <string-array name="time_values">
+        <item>24</item>
+        <item>12</item>
+    </string-array>
+
 </resources>

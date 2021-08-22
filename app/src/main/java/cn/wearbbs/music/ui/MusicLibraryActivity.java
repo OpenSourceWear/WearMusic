@@ -33,40 +33,40 @@ public class MusicLibraryActivity extends AppCompatActivity {
     }
 
     public void init(){
-        MusicListApi api = new MusicListApi(
-                SharedPreferencesUtil.getJSONObject("profile",this).getString("userId"),
-                SharedPreferencesUtil.getString("cookie", "", this));
+        MusicListApi api = new MusicListApi(SharedPreferencesUtil.getJSONObject("profile").getString("userId"), SharedPreferencesUtil.getString("cookie", ""));
         LoadingView lv_loading = findViewById(R.id.lv_loading);
         RecyclerView rv_main = findViewById(R.id.rv_main);
         MessageView mv_message = findViewById(R.id.mv_message);
-        new Thread(() -> {
-            try{
-                lv_loading.setVisibility(View.VISIBLE);
-                rv_main.setVisibility(View.GONE);
-                JSONArray data = api.getMusicList();
-                runOnUiThread(() -> {
-                    if (data.size() == 0) {
-                        rv_main.setVisibility(View.GONE);
-                        mv_message.setVisibility(View.VISIBLE);
-                        mv_message.setContent(MessageView.NO_LOGIN,null);
-                    } else {
-                        rv_main.setLayoutManager(new LinearLayoutManager(this));
-                        rv_main.setAdapter(new MusicLibraryAdapter(data, this));
-                        lv_loading.setVisibility(View.GONE);
-                        rv_main.setVisibility(View.VISIBLE);
-                    }
-                });
-            }
-            catch (Exception e){
-                runOnUiThread(()->{
-                    mv_message.setVisibility(View.VISIBLE);
-                    mv_message.setContent(MessageView.LOAD_FAILED, v -> {
-                        mv_message.setVisibility(View.GONE);
-                        init();
+        if(SharedPreferencesUtil.getString("cookie", "").isEmpty()){
+            showNoLoginMessage();
+        }
+        else{
+            new Thread(() -> {
+                try{
+                    lv_loading.setVisibility(View.VISIBLE);
+                    rv_main.setVisibility(View.GONE);
+                    JSONArray data = api.getMusicList();
+                    runOnUiThread(() -> {
+                        if(data==null){
+                            showErrorMessage();
+                        }
+                        else if (data.size() == 0) {
+                            rv_main.setVisibility(View.GONE);
+                            mv_message.setVisibility(View.VISIBLE);
+                            mv_message.setContent(MessageView.NO_LOGIN,null);
+                        } else {
+                            rv_main.setLayoutManager(new LinearLayoutManager(this));
+                            rv_main.setAdapter(new MusicLibraryAdapter(data, this));
+                            lv_loading.setVisibility(View.GONE);
+                            rv_main.setVisibility(View.VISIBLE);
+                        }
                     });
-                });
-            }
-        }).start();
+                }
+                catch (Exception e){
+                    runOnUiThread(this::showErrorMessage);
+                }
+            }).start();
+        }
     }
 
     public void onClick(View view) {
@@ -74,5 +74,24 @@ public class MusicLibraryActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
         finish();
+    }
+
+    public void showNoLoginMessage() {
+        RecyclerView rv_main = findViewById(R.id.rv_main);
+        rv_main.setVisibility(View.GONE);
+        MessageView mv_message = findViewById(R.id.mv_message);
+        mv_message.setVisibility(View.VISIBLE);
+        mv_message.setContent(MessageView.NO_LOGIN,null);
+    }
+
+    public void showErrorMessage(){
+        RecyclerView rv_main = findViewById(R.id.rv_main);
+        MessageView mv_message = findViewById(R.id.mv_message);
+        rv_main.setVisibility(View.GONE);
+        mv_message.setVisibility(View.VISIBLE);
+        mv_message.setContent(MessageView.LOAD_FAILED, v -> {
+            mv_message.setVisibility(View.GONE);
+            init();
+        });
     }
 }

@@ -44,7 +44,7 @@ public class LocalMusicActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.tv_add:
-                startActivity(new Intent(LocalMusicActivity.this, AddMusicActivity.class));
+                startActivity(new Intent(LocalMusicActivity.this, FtpActivity.class));
                 break;
         }
     }
@@ -72,12 +72,12 @@ public class LocalMusicActivity extends AppCompatActivity {
                             pathname.getName().endsWith(".png")));
             File[] idFiles = idDir.listFiles(pathname -> (pathname.getName().endsWith(".txt")));
 
-            if(Objects.requireNonNull(musicFiles).length==0){
-                rv_main.setVisibility(View.GONE);
-                MessageView mv_message = findViewById(R.id.mv_message);
-                mv_message.setImageResource(R.drawable.ic_baseline_assignment_24);
-                mv_message.setText(R.string.msg_noMusic);
-                mv_message.setVisibility(View.VISIBLE);
+            if(musicFiles==null){
+                showErrorMessage();
+                return;
+            }
+            if(musicFiles.length==0){
+                showNoMusicMessage();
                 return;
             }
 
@@ -105,13 +105,13 @@ public class LocalMusicActivity extends AppCompatActivity {
 
                 int idIndex = searchFilesArrayForIndex(idFiles,getFileName(musicFiles[i]));
                 if(idIndex!=-1){
-                    assert idFiles != null;
                     String id = null;
                     try {
                         BufferedReader in = new BufferedReader(new FileReader(idFiles[idIndex]));
                         id=in.readLine();
                     } catch (IOException ignored) { }
                     musicInfo.put("id",id);
+                    musicInfo.put("idFile",idFiles[idIndex].getPath());
                 }
                 else{
                     musicInfo.put("id",null);
@@ -124,11 +124,7 @@ public class LocalMusicActivity extends AppCompatActivity {
             rv_main.setVisibility(View.VISIBLE);
         }
         else{
-            findViewById(R.id.lv_loading).setVisibility(View.GONE);
-            MessageView mv_message = findViewById(R.id.mv_message);
-            mv_message.setImageResource(R.drawable.ic_baseline_assignment_24);
-            mv_message.setText(R.string.msg_noMusic);
-            mv_message.setVisibility(View.VISIBLE);
+            showNoMusicMessage();
         }
     }
 
@@ -171,11 +167,42 @@ public class LocalMusicActivity extends AppCompatActivity {
                 initList();
             }else {
                 // 拒绝授权
-                findViewById(R.id.lv_loading).setVisibility(View.GONE);
-                MessageView mv_message = findViewById(R.id.mv_message);
-                mv_message.setImageResource(R.drawable.ic_baseline_sd_storage_24);
-                mv_message.setText(R.string.permission_denied);
+                showPermissionDeniedMessage();
             }
         }
+    }
+    public void showPermissionDeniedMessage(){
+        RecyclerView rv_main = findViewById(R.id.rv_main);
+        rv_main.setVisibility(View.GONE);
+
+        findViewById(R.id.lv_loading).setVisibility(View.GONE);
+
+        MessageView mv_message = findViewById(R.id.mv_message);
+        mv_message.setImageResource(R.drawable.ic_baseline_sd_storage_24);
+        mv_message.setText(R.string.permission_denied);
+    }
+    public void showNoMusicMessage(){
+        RecyclerView rv_main = findViewById(R.id.rv_main);
+        rv_main.setVisibility(View.GONE);
+
+        findViewById(R.id.lv_loading).setVisibility(View.GONE);
+
+        MessageView mv_message = findViewById(R.id.mv_message);
+        mv_message.setImageResource(R.drawable.ic_baseline_assignment_24);
+        mv_message.setText(R.string.msg_noMusic);
+        mv_message.setVisibility(View.VISIBLE);
+    }
+    public void showErrorMessage(){
+        RecyclerView rv_main = findViewById(R.id.rv_main);
+        rv_main.setVisibility(View.GONE);
+
+        findViewById(R.id.lv_loading).setVisibility(View.GONE);
+
+        MessageView mv_message = findViewById(R.id.mv_message);
+        mv_message.setVisibility(View.VISIBLE);
+        mv_message.setContent(MessageView.LOAD_FAILED, v -> {
+            mv_message.setVisibility(View.GONE);
+            initList();
+        });
     }
 }

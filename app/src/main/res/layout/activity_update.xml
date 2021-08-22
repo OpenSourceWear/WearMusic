@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:text="@string/notUpdateHint"
+                android:text="@string/noUpdateHint"
                 android:textColor="#999999"
                 android:textSize="12sp"
                 tools:ignore="TextContrastCheck" />
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:gravity="center"
-                android:text="@string/notUpdate"
+                android:text="@string/noUpdate"
                 android:textColor="?attr/colorOnSecondary" />
 
             <ImageView
@@ -138,6 +138,30 @@
                 android:text="@string/needUpdate"
                 android:textColor="?attr/colorOnSecondary" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/changeLog"
+                android:textColor="?attr/colorOnSecondary" />
+
+            <TextView
+                android:id="@+id/tv_changeLog"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="@string/unknown"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/qrcode"
+                android:textColor="?attr/colorOnSecondary" />
+
             <ImageView
                 android:id="@+id/iv_qrcode"
                 android:layout_width="130dp"
@@ -166,8 +190,18 @@
         android:id="@+id/lv_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="20dp"
         android:gravity="center"
-        android:visibility="visible" />
+        android:paddingBottom="20dp"
+        android:visibility="visible">
+
+    </cn.wearbbs.music.view.LoadingView>
+
+    <cn.wearbbs.music.view.MessageView
+        android:id="@+id/mv_message"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:paddingBottom="20dp"
+        android:visibility="gone" />
 
 </LinearLayout>

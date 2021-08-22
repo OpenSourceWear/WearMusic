@@ -9,14 +9,14 @@
     tools:context=".ui.FeedbackActivity">
 
     <LinearLayout
-        android:id="@+id/ll_loading"
+        android:id="@+id/ll_info"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <RelativeLayout
-            android:id="@+id/main_title_loading"
+            android:id="@+id/main_title_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
@@ -51,12 +51,22 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:paddingBottom="20dp" />
+
+        <cn.wearbbs.music.view.MessageView
+            android:id="@+id/mv_message"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingBottom="20dp"
+            android:visibility="gone" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_feedback"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <RelativeLayout
             android:id="@+id/main_title"
@@ -90,10 +100,10 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <LinearLayout
-                android:id="@+id/ll_feedback"
+                android:id="@+id/ll_feedback_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -148,14 +158,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:backgroundTint="@color/blue_500"
+                    android:backgroundTint="?attr/colorPrimary"
                     android:gravity="center"
                     android:onClick="onClick"
                     android:text="@string/submit"
+                    android:textColor="@android:color/white"
                     tools:ignore="TextContrastCheck" />
 
             </LinearLayout>
         </ScrollView>
 
     </LinearLayout>
+
+
 </LinearLayout>

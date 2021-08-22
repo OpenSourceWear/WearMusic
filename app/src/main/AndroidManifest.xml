@@ -7,6 +7,7 @@
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
+    <uses-feature android:name="android.hardware.type.watch" />
 
     <application
         android:name=".application.MainApplication"
@@ -15,9 +16,14 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.WearMusicPro">
+        android:theme="@style/Theme.WearMusicPro"
+        android:requestLegacyExternalStorage="true">
+
         <activity
-            android:name=".ui.AddMusicActivity"
+            android:name=".ui.UserProfileActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.FtpActivity"
             android:exported="true" />
         <activity
             android:name=".ui.ReplyActivity"
@@ -33,9 +39,6 @@
             android:exported="true" />
         <activity
             android:name=".ui.CommentActivity"
-            android:exported="true" />
-        <activity
-            android:name=".ui.ConsoleActivity"
             android:exported="true" />
         <activity
             android:name=".ui.LocalMusicActivity"
@@ -62,7 +65,7 @@
         <activity android:name=".ui.SearchActivity" />
 
         <service
-            android:name="cn.wearbbs.music.service.MusicPlayerService"
+            android:name=".service.MusicPlayerService"
             android:enabled="true" />
 
         <activity android:name=".ui.LoginActivity" />
@@ -75,8 +78,13 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
             </intent-filter>
         </activity>
     </application>

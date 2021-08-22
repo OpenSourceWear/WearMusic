@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorOnPrimary"
+    android:orientation="vertical"
+    tools:context=".ui.UserProfileActivity"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/main_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:gravity="center_vertical"
+            android:onClick="onClick"
+            android:padding="8dp">
+
+            <ImageView
+                android:id="@+id/iv_extraicon"
+                android:layout_width="12dp"
+                android:layout_height="19dp"
+                android:layout_marginStart="2dp"
+                android:layout_toStartOf="@id/tv_title"
+                android:contentDescription="@string/todo"
+                android:rotation="-270"
+                android:src="@drawable/icon_extra" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="@string/user"
+                android:textColor="#FAFAFA"
+                tools:ignore="RelativeOverlap,TextContrastCheck" />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="64dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="6dp"
+            android:contentDescription="@string/todo"
+            android:onClick="onClick"
+            app:srcCompat="@drawable/ic_baseline_supervised_user_circle_primary_24"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/untitled"
+            android:textColor="?attr/colorOnSecondary"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/id"
+            android:textColor="#999999"
+            android:textSize="10sp"
+            tools:ignore="SmallSp,TextContrastCheck" />
+
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="6dp"
+            android:backgroundTint="?attr/colorPrimary"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:text="@string/logout"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
+    </LinearLayout>
+
+</ScrollView>

@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSONArray;
@@ -22,8 +23,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
+import api.UserApi;
 import cn.wearbbs.music.R;
+import cn.wearbbs.music.application.MainApplication;
+import cn.wearbbs.music.ui.LocalMusicActivity;
 import cn.wearbbs.music.ui.MainActivity;
+import cn.wearbbs.music.util.SharedPreferencesUtil;
+import cn.wearbbs.music.util.ToastUtil;
 
 public class LocalMusicAdapter extends RecyclerView.Adapter<LocalMusicAdapter.ViewHolder> {
     private final JSONArray data;
@@ -72,6 +78,47 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<LocalMusicAdapter.Vi
             intent.putExtra("local",true);
             activity.startActivity(intent);
             activity.finish();
+        });
+
+        viewHolder.ll_main.setOnLongClickListener(v -> {
+            String title = name;
+            if(name.contains("--")){
+                title = name.substring(0,name.indexOf("-"));
+            }
+
+            new AlertDialog.Builder(activity)
+                    .setTitle("提示")
+                    .setMessage(String.format("确定要删除 %s 吗", title))
+                    .setPositiveButton("确定", (dialogInterface, i) -> {
+                        File musicFile = new File(currentMusicInfo.getString("musicFile"));
+                        File lrcFile = new File(currentMusicInfo.getString("lrcFile"));
+                        File coverFile = new File(currentMusicInfo.getString("coverFile"));
+                        File idFile = new File(currentMusicInfo.getString("coverFile"));
+                        boolean flag = true;
+                        if(musicFile.exists()){
+                            flag = musicFile.delete();
+                        }
+                        if(lrcFile.exists()){
+                            flag &= lrcFile.delete();
+                        }
+                        if(coverFile.exists()){
+                            flag &= coverFile.delete();
+                        }
+                        if(idFile.exists()){
+                            flag &= idFile.delete();
+                        }
+                        if(flag){
+                            ToastUtil.show(activity,"删除成功");
+                            activity.startActivity(new Intent(activity, LocalMusicActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                            activity.finish();
+                        }
+                        else{
+                            ToastUtil.show(activity,"删除失败");
+                        }
+                    })
+                    .setNegativeButton("手滑了", (dialogInterface, i) -> dialogInterface.dismiss())
+                    .create().show();
+            return true;
         });
     }
 

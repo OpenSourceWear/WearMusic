@@ -110,7 +110,7 @@
             android:id="@+id/btn_iknow"
             android:layout_width="wrap_content"
             android:layout_height="38dp"
-            android:backgroundTint="@color/blue_500"
+            android:backgroundTint="?attr/colorPrimary"
             android:onClick="onClick"
             android:text="@string/iknow"
             android:textSize="12sp"

@@ -28,8 +28,8 @@ public class MenuActivity extends SlideBackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        JSONObject profile = SharedPreferencesUtil.getJSONObject("profile", this);
-        if (SharedPreferencesUtil.getJSONObject("profile", this).size() >= 5) {
+        JSONObject profile = SharedPreferencesUtil.getJSONObject("profile");
+        if (SharedPreferencesUtil.getJSONObject("profile").size() >= 5) {
             initUserItem(profile);
         }
     }
@@ -37,9 +37,19 @@ public class MenuActivity extends SlideBackActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 0 && resultCode == RESULT_OK) {
-            JSONObject profile = JSON.parseObject(data.getStringExtra("profile"));
-            initUserItem(profile);
+        if(resultCode == RESULT_OK){
+            switch (requestCode){
+                case 0:
+                    JSONObject profile = JSON.parseObject(data.getStringExtra("profile"));
+                    initUserItem(profile);
+                    startActivity(new Intent(MenuActivity.this,MenuActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                    finish();
+                    break;
+                case 1:
+                    startActivity(new Intent(MenuActivity.this,MenuActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                    finish();
+                    break;
+            }
         }
     }
 
@@ -55,7 +65,6 @@ public class MenuActivity extends SlideBackActivity {
 
     @SuppressLint("NonConstantResourceId")
     public void onClick(View view) {
-        Intent intent;
         switch (view.getId()) {
             case R.id.item_fm:
                 startActivity(new Intent(MenuActivity.this, MainActivity.class)
@@ -67,29 +76,10 @@ public class MenuActivity extends SlideBackActivity {
                 startActivity(new Intent(MenuActivity.this, SettingsActivity.class));
                 break;
             case R.id.item_user:
-                if (SharedPreferencesUtil.getJSONObject("profile", this).size() <= 5) {
+                if (SharedPreferencesUtil.getJSONObject("profile").size() <= 5) {
                     startActivityForResult(new Intent(MenuActivity.this, LoginActivity.class), 0);
                 } else {
-                    // 退出登录
-                    new AlertDialog.Builder(this)
-                            .setTitle("确定要退出登录吗")
-                            .setPositiveButton("确定", (dialogInterface, i) -> {
-                                UserApi api = new UserApi();
-                                NetWorkUtil.setDomain("https://music.wearbbs.cn");
-                                api.setCookie(SharedPreferencesUtil.getString("cookie", "", this));
-                                new Thread(() -> {
-                                    api.logout();
-                                    SharedPreferencesUtil.remove("cookie", MenuActivity.this);
-                                    SharedPreferencesUtil.remove("profile", MenuActivity.this);
-                                    Intent restart = new Intent(MenuActivity.this, MenuActivity.class);
-                                    restart.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                                    restart.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivity(restart);
-                                    finish();
-                                }).start();
-                            })
-                            .setNegativeButton("手滑了", (dialogInterface, i) -> dialogInterface.dismiss())
-                            .create().show();
+                    startActivityForResult(new Intent(MenuActivity.this, UserProfileActivity.class), 1);
                 }
                 break;
             case R.id.item_search:

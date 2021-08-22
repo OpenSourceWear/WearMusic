@@ -22,6 +22,7 @@
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/drawable/ic_baseline_message_24.xml" value="1.31875" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/drawable/ic_baseline_music_video_24.xml" value="1.31875" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/drawable/ic_baseline_person_24.xml" value="1.259375" />
+        <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/drawable/ic_baseline_phone_android_24.xml" value="1.7958333333333334" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/drawable/ic_baseline_photo_size_select_actual_24.xml" value="1.259375" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/drawable/ic_baseline_play_circle_filled_24.xml" value="1.259375" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/drawable/ic_baseline_playlist_play_24.xml" value="1.31875" />
@@ -40,17 +41,18 @@
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/drawable/ic_baseline_visibility_off_24.xml" value="1.31875" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/drawable/ic_baseline_volume_down_24.xml" value="1.31875" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/drawable/ic_baseline_volume_up_24.xml" value="1.31875" />
+        <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/drawable/ic_baseline_warning_24.xml" value="1.13125" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/drawable/ic_outline_thumb_up_24.xml" value="1.31875" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/drawable/shape_progressbar_azure.xml" value="1.4375" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/drawable/shape_progressbar_loading.xml" value="1.4375" />
-        <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/activity_about.xml" value="0.43874643874643876" />
+        <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/activity_about.xml" value="1.0" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/activity_addmusic.xml" value="0.6296296296296297" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/activity_comment.xml" value="1.184375" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/activity_console.xml" value="1.0" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/activity_feedback.xml" value="1.1425" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/activity_localmusic.xml" value="0.7491525423728813" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/activity_login.xml" value="1.0" />
-        <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/activity_main.xml" value="0.7895833333333333" />
+        <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/activity_main.xml" value="1.5" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/activity_menu.xml" value="0.625" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/activity_music.xml" value="1.0" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/activity_music_pan.xml" value="0.8575" />
@@ -63,7 +65,9 @@
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/activity_settings.xml" value="0.8575" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/activity_sharelyric.xml" value="1.096875" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/activity_update.xml" value="1.0" />
+        <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/activity_userprofile.xml" value="0.8393234672304439" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/activity_viewpicture.xml" value="1.0" />
+        <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/fragment_console.xml" value="1.309375" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/fragment_lyrics.xml" value="0.7074626865671642" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/fragment_player.xml" value="1.61875" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/item_comment.xml" value="0.8575197889182058" />
@@ -76,11 +80,17 @@
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/ml_header.xml" value="1.9041666666666666" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/view_loading.xml" value="1.5625" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/view_message.xml" value="0.99375" />
+        <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/widget_musiclist_info.xml" value="1.3791666666666667" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/layout/widget_reply.xml" value="1.015625" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/mipmap/ic_launcher.xml" value="1.4" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/xml/root_preferences.xml" value="0.971875" />
       </map>
     </option>
+  </component>
+  <component name="EntryPointsManager">
+    <list size="1">
+      <item index="0" class="java.lang.String" itemvalue="org.greenrobot.eventbus.Subscribe" />
+    </list>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />

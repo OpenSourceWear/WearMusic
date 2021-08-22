@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+
 }
 
 android {
@@ -10,10 +11,18 @@ android {
         applicationId "cn.wearbbs.music"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 9
-        versionName "3.2"
+        versionCode 10
+        versionName "3.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                argument "rxhttp_rxjava", "rxjava3"
+            }
+        }
+
+
     }
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
@@ -29,6 +38,8 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
+
+
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.aar","*.jar"])
@@ -53,4 +64,6 @@ dependencies {
     def appCenterSdkVersion = '4.1.0'
     implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
     implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
+
+    implementation 'org.greenrobot:eventbus:3.2.0'
 }

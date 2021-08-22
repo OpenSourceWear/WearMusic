@@ -14,8 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +26,7 @@ import java.io.IOException;
 
 import api.MusicApi;
 import cn.wearbbs.music.R;
-import cn.wearbbs.music.ui.ConsoleActivity;
+import cn.wearbbs.music.ui.MainActivity;
 import cn.wearbbs.music.util.SharedPreferencesUtil;
 import me.wcy.lrcview.LrcView;
 
@@ -39,7 +39,6 @@ public class LyricsFragment extends Fragment {
     public static LyricsFragment newInstance(Intent intent) {
         LyricsFragment fragment = new LyricsFragment();
         Bundle args = new Bundle();
-        args.putString("data", intent.getStringExtra("data"));
         args.putInt("musicIndex", intent.getIntExtra("musicIndex",0));
         args.putBoolean("local",intent.getBooleanExtra("local",false));
         fragment.setArguments(args);
@@ -47,10 +46,15 @@ public class LyricsFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lyrics, container, false);
-        if (getArguments() != null && getArguments().getString("data") != null) {
-            data = JSON.parseArray(getArguments().getString("data"));
+        data = PlayerFragment.getData();
+        if (getArguments() != null && data!=null) {
             musicIndex = getArguments().getInt("musicIndex");
             local = getArguments().getBoolean("local");
             lrcView = view.findViewById(R.id.lv_main);
@@ -58,7 +62,7 @@ public class LyricsFragment extends Fragment {
                 PlayerFragment.seekTo(time);
                 return true;
             });
-            updateLyric(requireContext());
+            updateLyric();
             new Thread(){
                 @Override
                 public void run() {
@@ -67,13 +71,17 @@ public class LyricsFragment extends Fragment {
                     handler.sendEmptyMessageDelayed(1, 1000);
                 }
             }.start();
-            view.findViewById(R.id.ll_console).setOnClickListener(v -> {
-                startActivityForResult(new Intent(requireContext(), ConsoleActivity.class)
-                        .putExtra("data",data.toJSONString())
-                        .putExtra("musicIndex",musicIndex)
-                        .putExtra("local",local)
-                        .putExtra("order",PlayerFragment.getPlayOrder()),0);
-            });
+            if(!SharedPreferencesUtil.getBoolean("finishConsoleTip",false)){
+                view.findViewById(R.id.ll_console_tip).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.ll_console_tip).setOnClickListener(v -> {
+                    requireActivity().findViewById(R.id.ll_tip).setVisibility(View.VISIBLE);
+                    requireActivity().findViewById(R.id.tv_tip_background).setVisibility(View.VISIBLE);
+                    MainActivity.setOnTipHideListener(() -> {
+                        SharedPreferencesUtil.putBoolean("finishConsoleTip",true);
+                        view.findViewById(R.id.ll_console_tip).setVisibility(View.GONE);
+                    });
+                });
+            }
         }
         return view;
     }
@@ -92,11 +100,11 @@ public class LyricsFragment extends Fragment {
         currentPositionBroadcast = new CurrentPositionBroadcast();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("cn.wearbbs.music.player.position");
-        requireActivity().registerReceiver(currentPositionBroadcast, intentFilter);
+        LocalBroadcastManager.getInstance(requireActivity()).registerReceiver(currentPositionBroadcast, intentFilter);
         super.onAttach(context);
     }
 
-    public void updateLyric(Context context){
+    public void updateLyric(){
         new Thread(() -> {
             if(local){
                 String lrcFile = data.getJSONObject(musicIndex).getString("lrcFile");
@@ -124,7 +132,7 @@ public class LyricsFragment extends Fragment {
                 }
             }
             else{
-                MusicApi api = new MusicApi(SharedPreferencesUtil.getString("cookie", "", context));
+                MusicApi api = new MusicApi(SharedPreferencesUtil.getString("cookie", ""));
                 try {
                     String lyric;
                     if (data.getJSONObject(0).containsKey("simpleSong")) {
@@ -133,22 +141,18 @@ public class LyricsFragment extends Fragment {
                     else{
                         lyric = api.getMusicLyric(data.getJSONObject(musicIndex).getString("id"));
                     }
-                    if(lyric==null){
+                    if(lyric==null||lyric.isEmpty()){
                         lrcView.loadLrc("[00:00.00]无歌词");
                     }
                     else{
                         lrcView.loadLrc(lyric);
                     }
-                } catch (Exception ignored) { }
+                } catch (Exception ignored) {
+                    lrcView.loadLrc("[00:00.00]无歌词");
+                }
             }
 
         }).start();
-    }
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
     @Override
@@ -157,7 +161,7 @@ public class LyricsFragment extends Fragment {
         if(PlayerFragment.getMusicIndex()!=musicIndex){
             musicIndex = PlayerFragment.getMusicIndex();
             lrcView.loadLrc("[00:00.00]加载中");
-            updateLyric(requireContext());
+            updateLyric();
         }
     }
 
@@ -182,4 +186,6 @@ public class LyricsFragment extends Fragment {
             handler.sendEmptyMessageDelayed(0, 1000);
         }
     };
+
+
 }

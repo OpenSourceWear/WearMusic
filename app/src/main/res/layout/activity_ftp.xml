@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorOnPrimary"
-    tools:context=".ui.AddMusicActivity">
+    tools:context=".ui.FtpActivity">
 
     <LinearLayout
         android:id="@+id/ll_main"
@@ -75,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:backgroundTint="@color/blue_500"
+                android:backgroundTint="?attr/colorPrimary"
                 android:onClick="onClick"
                 android:text="@string/open" />
         </LinearLayout>

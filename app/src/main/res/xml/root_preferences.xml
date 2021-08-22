@@ -25,15 +25,19 @@
         app:title="@string/server"
         app:useSimpleSummaryProvider="true" />
 
+    <ListPreference
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:defaultValue="24"
+        app:entries="@array/time_entries"
+        app:entryValues="@array/time_values"
+        app:key="time"
+        app:title="@string/time"
+        app:useSimpleSummaryProvider="true" />
     <SwitchPreferenceCompat
         app:key="dark"
         app:title="@string/dark" />
 
-
-    <SwitchPreferenceCompat
-        app:key="dev"
-        app:singleLineTitle="false"
-        app:title="接受测试版更新" />
 
     <PreferenceScreen
         app:key="opensource"

@@ -15,6 +15,7 @@ import api.MusicApi;
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.adapter.CommentAdapter;
 import cn.wearbbs.music.util.SharedPreferencesUtil;
+import cn.wearbbs.music.view.MessageView;
 
 public class CommentActivity extends AppCompatActivity {
 
@@ -26,21 +27,26 @@ public class CommentActivity extends AppCompatActivity {
     }
 
     public void init(){
-        MusicApi api = new MusicApi(SharedPreferencesUtil.getString("cookie","",this));
+        MusicApi api = new MusicApi(SharedPreferencesUtil.getString("cookie",""));
         RecyclerView rv_main = findViewById(R.id.rv_main);
         rv_main.setLayoutManager(new LinearLayoutManager(this));
         new Thread(()->{
-            JSONArray data = api.getHotComment(getIntent().getStringExtra("id"));
-            runOnUiThread(()->{
-                findViewById(R.id.lv_loading).setVisibility(View.GONE);
-                if(SharedPreferencesUtil.getString("cookie","",this).isEmpty()){
-                    rv_main.setAdapter(new CommentAdapter(data,getIntent().getStringExtra("id"),this));
-                }
-                else{
-                    rv_main.setAdapter(new CommentAdapter(data,getIntent().getStringExtra("id"),this,getHeader()));
-                }
-                rv_main.setVisibility(View.VISIBLE);
-            });
+            try{
+                JSONArray data = api.getHotComment(getIntent().getStringExtra("id"));
+                runOnUiThread(()->{
+                    findViewById(R.id.lv_loading).setVisibility(View.GONE);
+                    if(SharedPreferencesUtil.getString("cookie","").isEmpty()){
+                        rv_main.setAdapter(new CommentAdapter(data,getIntent().getStringExtra("id"),this));
+                    }
+                    else{
+                        rv_main.setAdapter(new CommentAdapter(data,getIntent().getStringExtra("id"),this,getHeader()));
+                    }
+                    rv_main.setVisibility(View.VISIBLE);
+                });
+            }
+            catch (Exception e){
+                runOnUiThread(this::showErrorMessage);
+            }
         }).start();
 
     }
@@ -55,5 +61,19 @@ public class CommentActivity extends AppCompatActivity {
 
     public void onClick(View view){
         finish();
+    }
+
+    public void showErrorMessage(){
+        RecyclerView rv_main = findViewById(R.id.rv_main);
+        rv_main.setVisibility(View.GONE);
+
+        findViewById(R.id.lv_loading).setVisibility(View.GONE);
+
+        MessageView mv_message = findViewById(R.id.mv_message);
+        mv_message.setVisibility(View.VISIBLE);
+        mv_message.setContent(MessageView.LOAD_FAILED, v -> {
+            mv_message.setVisibility(View.GONE);
+            init();
+        });
     }
 }

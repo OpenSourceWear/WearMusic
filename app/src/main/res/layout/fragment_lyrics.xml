@@ -10,26 +10,25 @@
 
 
     <LinearLayout
-        android:id="@+id/ll_console"
+        android:id="@+id/ll_console_tip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="5dp">
+        android:padding="5dp"
+        android:visibility="gone">
 
         <ImageView
-            android:id="@+id/iv_console"
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:contentDescription="@string/todo"
-            app:srcCompat="@drawable/ic_baseline_menu_24" />
+            app:srcCompat="@drawable/ic_baseline_warning_24" />
 
         <TextView
-            android:id="@+id/tv_console"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="1dp"
-            android:text="@string/console"
+            android:text="@string/where_is_the_console"
             android:textColor="?attr/colorOnSecondary"
             android:textSize="10sp"
             tools:ignore="SmallSp" />

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorOnPrimary"
+    android:orientation="vertical"
+    android:paddingTop="5dp"
+    tools:context=".fragment.ConsoleFragment">
+
+    <LinearLayout
+        android:id="@+id/ll_first"
+        android:layout_width="135dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:divider="@drawable/middle_ss"
+        android:orientation="horizontal"
+        android:showDividers="middle">
+
+        <ImageView
+            android:id="@+id/iv_voiceDown"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/todo"
+                        android:theme="@style/RippleWhite"
+            app:srcCompat="@drawable/ic_baseline_volume_down_24"
+            tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck,ImageContrastCheck" />
+
+        <ImageView
+            android:id="@+id/iv_download"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/todo"
+                        android:theme="@style/RippleWhite"
+            app:srcCompat="@drawable/ic_baseline_cloud_download_24"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <ImageView
+            android:id="@+id/iv_voiceUp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/todo"
+            android:maxWidth="40dp"
+            android:maxHeight="40dp"
+            android:minWidth="40dp"
+            android:minHeight="40dp"
+                        android:theme="@style/RippleWhite"
+            app:srcCompat="@drawable/ic_baseline_volume_up_24"
+            tools:ignore="TouchTargetSizeCheck,ImageContrastCheck" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_second"
+        android:layout_width="130dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="2dp"
+        android:divider="@drawable/middle_ss"
+        android:orientation="horizontal"
+        android:showDividers="middle"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/iv_like"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/todo"
+                        android:theme="@style/RippleWhite"
+            app:srcCompat="@drawable/ic_baseline_favorite_border_24"
+            tools:ignore="TouchTargetSizeCheck,ImageContrastCheck" />
+
+        <ImageView
+            android:id="@+id/iv_comment"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/todo"
+                        android:theme="@style/RippleWhite"
+            app:srcCompat="@drawable/ic_baseline_message_24"
+            tools:ignore="TouchTargetSizeCheck,ImageContrastCheck" />
+
+        <ImageView
+            android:id="@+id/iv_share"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/todo"
+            android:maxWidth="40dp"
+            android:maxHeight="40dp"
+            android:minWidth="40dp"
+            android:minHeight="40dp"
+            android:theme="@style/RippleWhite"
+            app:srcCompat="@drawable/ic_baseline_phone_android_24"
+            tools:ignore="TouchTargetSizeCheck" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_third"
+        android:layout_width="140dp"
+        android:layout_height="35dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="10dp"
+        android:divider="@drawable/middle_ss"
+        android:orientation="horizontal"
+        android:showDividers="middle"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/iv_repeat"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/todo"
+                        android:theme="@style/RippleWhite"
+            app:srcCompat="@drawable/icon_play_order"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <ImageView
+            android:id="@+id/iv_mv"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/todo"
+                        android:theme="@style/RippleWhite"
+            app:srcCompat="@drawable/ic_baseline_music_video_24"
+            tools:ignore="TouchTargetSizeCheck,ImageContrastCheck" />
+
+        <ImageView
+            android:id="@+id/iv_playlist"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/todo"
+                        android:theme="@style/RippleWhite"
+            app:srcCompat="@drawable/ic_baseline_playlist_play_24"
+            tools:ignore="TouchTargetSizeCheck,ImageContrastCheck" />
+    </LinearLayout>
+
+
+</LinearLayout>

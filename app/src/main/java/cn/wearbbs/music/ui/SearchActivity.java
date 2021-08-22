@@ -33,39 +33,48 @@ public class SearchActivity extends SlideBackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        api = new MusicApi(SharedPreferencesUtil.getString("cookie", "", this));
+        api = new MusicApi(SharedPreferencesUtil.getString("cookie", ""));
         TextView tv_noMore = findViewById(R.id.tv_noMore);
         tv_noMore.setText(R.string.loading);
         // 获取热搜
         new Thread(() -> {
-            JSONArray hot = api.getHot();
-            if (hot.size() > 0) {
-                TagFlowLayout tfl_hot = findViewById(R.id.tfl_hot);
-                String[] hotList = new String[10];
-                for (int i = 0; i < 10; i++) {
-                    hotList[i] = hot.getJSONObject(i).getString("first");
+            try{
+                JSONArray hot = api.getHot();
+                if (hot.size() > 0) {
+                    TagFlowLayout tfl_hot = findViewById(R.id.tfl_hot);
+                    String[] hotList = new String[10];
+                    for (int i = 0; i < 10; i++) {
+                        hotList[i] = hot.getJSONObject(i).getString("first");
+                    }
+                    runOnUiThread(() -> {
+                        tv_noMore.setText(R.string.no_more);
+                        tfl_hot.setAdapter(new TagAdapter<String>(hotList) {
+                            @Override
+                            public View getView(FlowLayout parent, int position, String s) {
+                                final LayoutInflater mInflater = LayoutInflater.from(SearchActivity.this);
+                                TextView tv_hot = (TextView) mInflater.inflate(R.layout.item_hot,
+                                        tfl_hot, false);
+                                tv_hot.setText(s);
+                                return tv_hot;
+                            }
+                        });
+                        tfl_hot.setOnTagClickListener((view, position, parent) -> {
+                            EditText editText = findViewById(R.id.et_search);
+                            editText.setText(hotList[position]);
+                            findViewById(R.id.ll_hot_main).setVisibility(View.GONE);
+                            search();
+                            return true;
+                        });
+                    });
                 }
-                runOnUiThread(() -> {
-                    tv_noMore.setText(R.string.no_more);
-                    tfl_hot.setAdapter(new TagAdapter<String>(hotList) {
-                        @Override
-                        public View getView(FlowLayout parent, int position, String s) {
-                            final LayoutInflater mInflater = LayoutInflater.from(SearchActivity.this);
-                            TextView tv_hot = (TextView) mInflater.inflate(R.layout.item_hot,
-                                    tfl_hot, false);
-                            tv_hot.setText(s);
-                            return tv_hot;
-                        }
-                    });
-                    tfl_hot.setOnTagClickListener((view, position, parent) -> {
-                        EditText editText = findViewById(R.id.et_search);
-                        editText.setText(hotList[position]);
-                        findViewById(R.id.ll_hot_main).setVisibility(View.GONE);
-                        search();
-                        return true;
-                    });
-                });
+                else{
+                    throw new ArrayIndexOutOfBoundsException("Data is empty.");
+                }
             }
+            catch (Exception e){
+                runOnUiThread(()->tv_noMore.setText(R.string.load_failed));
+            }
+
         }).start();
     }
 

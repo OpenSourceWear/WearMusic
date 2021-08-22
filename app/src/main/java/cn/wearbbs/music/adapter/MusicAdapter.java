@@ -19,10 +19,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.jetbrains.annotations.NotNull;
 
 import api.MusicApi;
 import cn.wearbbs.music.R;
+import cn.wearbbs.music.event.MessageEvent;
 import cn.wearbbs.music.ui.MainActivity;
 import cn.wearbbs.music.util.SharedPreferencesUtil;
 
@@ -81,7 +84,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> 
             if (musicInfo.containsKey("artists")) {
                 artists = musicInfo.getJSONArray("artists");
                 MusicApi api;
-                api = new MusicApi(SharedPreferencesUtil.getString("cookie", "", activity));
+                api = new MusicApi(SharedPreferencesUtil.getString("cookie", ""));
                 JSONObject finalMusicInfo = musicInfo;
                 new Thread(() -> {
                     try{
@@ -114,11 +117,13 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> 
                 Intent intent = new Intent(activity, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("data", data.toJSONString());
+                EventBus.getDefault().post(new MessageEvent(data.toJSONString()));
                 intent.putExtra("musicIndex", finalPosition);
                 activity.startActivity(intent);
                 activity.finish();
             });
+
+
         }
     }
 

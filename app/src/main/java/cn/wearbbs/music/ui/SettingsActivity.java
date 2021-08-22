@@ -63,18 +63,16 @@ public class SettingsActivity extends SlideBackActivity {
                 return true;
             });
 
-            findPreference("server").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    if(newValue.equals("vercel")){
-                        NetWorkUtil.setDomain("https://netease-cloud-music-api-jackuxl.vercel.app");
-                    }
-                    else{
-                        NetWorkUtil.setDomain("https://music.wearbbs.cn");
-                    }
-                    return true;
+            findPreference("server").setOnPreferenceChangeListener((preference, newValue) -> {
+                if(newValue.equals("vercel")){
+                    NetWorkUtil.setDomain("https://wmusic.vercel.app/");
                 }
+                else{
+                    NetWorkUtil.setDomain("https://music.wearbbs.cn");
+                }
+                return true;
             });
+
         }
     }
 }

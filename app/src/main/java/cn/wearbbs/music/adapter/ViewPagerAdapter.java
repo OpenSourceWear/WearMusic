@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import cn.wearbbs.music.fragment.ConsoleFragment;
 import cn.wearbbs.music.fragment.LyricsFragment;
 import cn.wearbbs.music.fragment.PlayerFragment;
 
@@ -23,13 +24,18 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         if (position == 0) {
             return PlayerFragment.newInstance(intent);
-        } else {
+        } else if(position==1){
             return LyricsFragment.newInstance(intent);
+        }
+        else{
+            return ConsoleFragment.newInstance(intent);
         }
     }
 
     @Override
     public int getItemCount() {
-        return 2;
+        return 3;
     }
+
+
 }

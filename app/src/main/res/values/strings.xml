@@ -25,7 +25,7 @@
 
     <!-- 页面标题 -->
     <string name="play">播放</string>
-    <string name="likeList">我喜欢的音乐</string>
+    <string name="likeList">我喜欢的</string>
 
     <!-- 登录 -->
     <string name="login">登录</string>
@@ -65,21 +65,21 @@
 
     <!-- 更新 -->
     <string name="needUpdate">需要更新</string>
-    <string name="needUpdateHint">当前版本为{oldVersion}\n低于最新版本号{newVersion}</string>
+    <string name="needUpdateHint">当前版本为 v%s\n低于最新版本号 v%s</string>
     <string name="downloadHint">请扫描二维码查看更新</string>
-    <string name="notUpdateHint">当前版本为{version}\n与最新版本号相同</string>
-    <string name="notUpdate">无须更新</string>
+    <string name="noUpdateHint">当前版本为 v%s\n与最新版本号相同</string>
+    <string name="noUpdate">无须更新</string>
 
     <!-- 关于-->
     <string name="qqQunQRCode">官方群二维码</string>
     <string name="feedback">反馈问题</string>
     <string name="checkUpdate">检查更新</string>
-    <string name="aboutContent">v3.1\n音乐的力量，听你所想。\n作者： JackuXL\n出品：WearBBS\n官方QQ群：133636679\n官网：https://wmusic.wearbbs.cn\n论坛：https://wearbbs.cn\n使用【网易云API】开发\n特别感谢：@luern0313</string>
+    <string name="aboutContent">v%s\n音乐的力量，听你所想。\n作者： JackuXL\n出品：WearBBS\n官方QQ群：133636679\n官网：https://wmusic.wearbbs.cn\n论坛：https://wearbbs.cn\n使用【网易云API】开发\n特别感谢：@luern0313</string>
 
     <!-- 其他-->
     <string name="msg_noLogin">你还没有登录哦</string>
     <string name="msg_suicide">你不孤单，我们都在。</string>
-    <string name="tip">左滑切换到\n歌词界面</string>
+    <string name="tip">左滑查看\n更多功能</string>
     <string name="iknow">我知道了</string>
     <string name="tipForDev">已开启检索测试版本</string>
     <string name="tip_latest">当前为最新版本</string>
@@ -100,5 +100,10 @@
     <string name="musicRoot">音乐储存位置：\n/storage/emulated/0/Android/data/cn.wearbbs.music/files/download/music/</string>
     <string name="lyricsRoot">歌词储存位置：\n/storage/emulated/0/Android/data/cn.wearbbs.music/files/download/lrc/</string>
     <string name="coverRoot">封面储存位置：\n/storage/emulated/0/Android/data/cn.wearbbs.music/files/download/cover/</string>
+    <string name="user">用户</string>
+    <string name="logout">退出登录</string>
+    <string name="where_is_the_console">控制台去哪了</string>
+    <string name="changeLog">更新日志</string>
+    <string name="time">时间</string>
 
 </resources>

@@ -31,7 +31,7 @@ public class ReplyActivity extends AppCompatActivity {
                 EditText et_content = findViewById(R.id.et_content);
                 new Thread(()->{
                     Looper.prepare();
-                    if(new MusicApi(SharedPreferencesUtil.getString("cookie","",this)).sendComment(getIntent().getStringExtra("id"),et_content.getText().toString())){
+                    if(new MusicApi(SharedPreferencesUtil.getString("cookie","")).sendComment(getIntent().getStringExtra("id"),et_content.getText().toString())){
                         Toast.makeText(this,"发送成功",Toast.LENGTH_SHORT).show();
                         finish();
                     }

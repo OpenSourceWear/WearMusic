@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import java.io.FileNotFoundException;
+
 import cn.wearbbs.music.fragment.PlayerFragment;
 
 public class MusicPlayerService extends Service {
@@ -41,7 +43,7 @@ public class MusicPlayerService extends Service {
             prepareDone = true;
             mBinder.playMusic();
         });
-        return super.onStartCommand(intent, flags, startId);
+        return START_REDELIVER_INTENT;
     }
 
     public class MyBinder extends Binder {
@@ -99,6 +101,9 @@ public class MusicPlayerService extends Service {
 //                        e.printStackTrace();
 //                    }
 //                }).start();
+            } catch (FileNotFoundException fnfe){
+                Toast.makeText(getApplicationContext(),"音乐播放失败，无储存权限或文件不存在", Toast.LENGTH_SHORT).show();
+                fnfe.printStackTrace();
             } catch (Exception e) {
                 Log.d(TAG, "initAudio: 准备失败");
                 Toast.makeText(getApplicationContext(),"准备音乐失败，若多次出现此问题，请尝试重新登录", Toast.LENGTH_SHORT).show();

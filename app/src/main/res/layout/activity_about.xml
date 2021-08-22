@@ -2,7 +2,6 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/sv_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorOnPrimary"
@@ -24,7 +23,6 @@
             android:padding="8dp">
 
             <ImageView
-                android:id="@+id/iv_extraicon"
                 android:layout_width="12dp"
                 android:layout_height="19dp"
                 android:layout_marginStart="2dp"
@@ -45,7 +43,6 @@
         </RelativeLayout>
 
         <ImageView
-            android:id="@+id/iv_icon"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginTop="10dp"
@@ -53,7 +50,6 @@
             app:srcCompat="@mipmap/ic_launcher_round" />
 
         <TextView
-            android:id="@+id/tv_appName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -119,8 +115,8 @@
             android:layout_height="35dp"
             android:layout_marginTop="10dp"
             android:background="?attr/colorPrimary"
-            android:orientation="horizontal"
             android:onClick="onClick"
+            android:orientation="horizontal"
             android:visibility="visible">
 
             <TextView
@@ -154,7 +150,6 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/iv_qrcode"
             android:layout_width="108dp"
             android:layout_height="108dp"
             android:layout_gravity="center"
@@ -166,7 +161,6 @@
             app:srcCompat="@drawable/qrcode_group" />
 
         <TextView
-            android:id="@+id/tv_qrcode_hint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="40dp"

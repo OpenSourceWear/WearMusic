@@ -9,7 +9,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -33,14 +32,14 @@ import java.util.List;
 
 import cn.wearbbs.music.R;
 
-public class AddMusicActivity extends AppCompatActivity {
+public class FtpActivity extends AppCompatActivity {
     Boolean isStarted = false;
     FtpServerFactory serverFactory;
     FtpServer server;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_addmusic);
+        setContentView(R.layout.activity_ftp);
         TextView tv_hint_ftp = findViewById(R.id.tv_hint_ftp);
         tv_hint_ftp.setText(getString(R.string.hintForFtp).replace("Unknown", getIpAddress()));
     }
@@ -59,7 +58,7 @@ public class AddMusicActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.tv_path:
-                startActivity(new Intent(AddMusicActivity.this,QRCodeActivity.class).putExtra("url", String.format("%s\n%s\n%s", getString(R.string.musicRoot), getString(R.string.lyricsRoot),getString(R.string.coverRoot))));
+                startActivity(new Intent(FtpActivity.this,QRCodeActivity.class).putExtra("url", String.format("%s\n%s\n%s", getString(R.string.musicRoot), getString(R.string.lyricsRoot),getString(R.string.coverRoot))));
                 break;
         }
     }
@@ -101,7 +100,7 @@ public class AddMusicActivity extends AppCompatActivity {
                 btn.setText("关闭");
             }
             else{
-                Toast.makeText(AddMusicActivity.this,"您正在使用流量，无法打开FTP",Toast.LENGTH_SHORT).show();
+                Toast.makeText(FtpActivity.this,"您正在使用流量，无法打开FTP",Toast.LENGTH_SHORT).show();
                 Log.d("FTPServer","流量状态，打开失败");
             }
         }
@@ -123,11 +122,22 @@ public class AddMusicActivity extends AppCompatActivity {
         BaseUser baseUser = new BaseUser();
         baseUser.setName("WearMusic");
         baseUser.setPassword("WearMusic");
-        File file = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/files/download/music/");
+        File file = new File("/storage/emulated/0/Android/data/cn.wearbbs.music/files/download/");
         if(!file.exists()){
             file.mkdirs();
         }
-        baseUser.setHomeDirectory("/storage/emulated/0/Android/data/cn.wearbbs.music/files/download/music/");
+        File[] dirs = new File[4];
+        dirs[0] = new File(file.getPath() + "/music");
+        dirs[1] = new File(file.getPath() + "/lrc");
+        dirs[2] = new File(file.getPath() + "/cover");
+        dirs[3] = new File(file.getPath() + "/id");
+        for(int i = 0;i<4;i++){
+            if(!dirs[i].exists()){
+                dirs[i].mkdir();
+            }
+        }
+
+        baseUser.setHomeDirectory("/storage/emulated/0/Android/data/cn.wearbbs.music/files/download/");
 
         List<Authority> authorities = new ArrayList<Authority>();
         authorities.add(new WritePermission());

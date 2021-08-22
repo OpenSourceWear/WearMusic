@@ -37,8 +37,8 @@ public class MusicListActivity extends SlideBackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music);
-        cookie = SharedPreferencesUtil.getString("cookie", "", this);
-        musicListApi = new MusicListApi(SharedPreferencesUtil.getJSONObject("profile", this).getString("userId"), cookie);
+        cookie = SharedPreferencesUtil.getString("cookie", "");
+        musicListApi = new MusicListApi(SharedPreferencesUtil.getJSONObject("profile").getString("userId"), cookie);
         musicListDetail = JSON.parseObject(getIntent().getStringExtra("detail"));
         TextView tv_title = findViewById(R.id.tv_title);
         tv_title.setText(getString(R.string.musicLibraryDetail));
@@ -108,7 +108,7 @@ public class MusicListActivity extends SlideBackActivity {
     }
 
     public void initMusicList(String id){
-        String cookie = SharedPreferencesUtil.getString("cookie", "", this);
+        String cookie = SharedPreferencesUtil.getString("cookie", "");
         MusicApi musicApi = new MusicApi(cookie);
         LoadingView lv_loading = findViewById(R.id.lv_loading);
         RecyclerView rv_main = findViewById(R.id.rv_main);
