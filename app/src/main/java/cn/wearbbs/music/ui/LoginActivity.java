@@ -18,7 +18,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.util.concurrent.TimeUnit;
 
-import api.UserApi;
+import cn.jackuxl.api.UserApi;
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.util.SharedPreferencesUtil;
 

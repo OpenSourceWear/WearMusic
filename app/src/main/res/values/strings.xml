@@ -5,7 +5,7 @@
     <string name="no_more">没有更多了</string>
     <string name="musicList">音乐列表</string>
     <string name="permission_denied">没有储存权限</string>
-    <string name="opensource_content">本项目在Github开源，欢迎Star！\n地址：https://github.com/JackuXL/WearMusic\n\n本项目使用了以下开源项目：\n（排名不分先后）\nExpandableTextView\nby Carbs0126\nApache License 2.0\nhttps://github.com/Carbs0126/ExpandableTextView\n\nNeteaseCloudMusicApi-SDK\nby JackuXL\nMIT License\nhttps://github.com/JackuXL/NeteaseCloudMusicApi-SDK\n\nShareApi\nby imoo\nNo License\n\nGlide\nby bumptech\nUnknown License\nhttps://github.com/bumptech/glide\n\nFastJSON\nby alibaba\nApache-2.0 License\nhttps://github.com/alibaba/fastjson\n\nFlowLayout\nby hongyangAndroid\nApache-2.0 License\nhttps://github.com/hongyangAndroid/FlowLayout\n\nLrcView\nby wangchenyan\nNo License\nhttps://github.com/wangchenyan/lrcview\n\nSketch\nby panpf\nApache License 2.0\nhttps://github.com/panpf/sketch\n\nZXing\nby zxing\nApache-2.0 License\nhttps://github.com/zxing/zxing</string>
+    <string name="opensource_content">本项目在Github开源，欢迎Star！\n地址：https://github.com/JackuXL/WearMusic\n\n本项目使用了以下开源项目：\n（排名不分先后）\nExpandableTextView\nby Carbs0126\nApache License 2.0\nhttps://github.com/Carbs0126/ExpandableTextView\n\nNeteaseCloudMusicApi-SDK\nby JackuXL\nMIT License\nhttps://github.com/JackuXL/NeteaseCloudMusicApi-SDK\n\nGlide\nby bumptech\nUnknown License\nhttps://github.com/bumptech/glide\n\nFastJSON\nby alibaba\nApache-2.0 License\nhttps://github.com/alibaba/fastjson\n\nFlowLayout\nby hongyangAndroid\nApache-2.0 License\nhttps://github.com/hongyangAndroid/FlowLayout\n\nLrcView\nby wangchenyan\nNo License\nhttps://github.com/wangchenyan/lrcview\n\nSketch\nby panpf\nApache License 2.0\nhttps://github.com/panpf/sketch\n\nZXing\nby zxing\nApache-2.0 License\nhttps://github.com/zxing/zxing</string>
 
     <!-- 菜单标题 -->
     <string name="musicLibrary">我的歌单</string>
@@ -74,7 +74,7 @@
     <string name="qqQunQRCode">官方群二维码</string>
     <string name="feedback">反馈问题</string>
     <string name="checkUpdate">检查更新</string>
-    <string name="aboutContent">v%s\n音乐的力量，听你所想。\n作者： JackuXL\n出品：WearBBS\n官方QQ群：133636679\n官网：https://wmusic.wearbbs.cn\n论坛：https://wearbbs.cn\n使用【网易云API】开发\n特别感谢：@luern0313</string>
+    <string name="aboutContent">v%s\n音乐的力量，听你所想。\n作者： JackuXL\n出品：WearBBS\n官方QQ群：133636679\n官网：https://wmusic.pro\n论坛：https://wearbbs.cn\n使用【网易云API】开发\n特别感谢：@luern0313</string>
 
     <!-- 其他-->
     <string name="msg_noLogin">你还没有登录哦</string>
@@ -105,5 +105,7 @@
     <string name="where_is_the_console">控制台去哪了</string>
     <string name="changeLog">更新日志</string>
     <string name="time">时间</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

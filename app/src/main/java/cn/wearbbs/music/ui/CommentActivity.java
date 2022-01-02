@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSONArray;
 
-import api.MusicApi;
+import cn.jackuxl.api.SongApi;
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.adapter.CommentAdapter;
 import cn.wearbbs.music.util.SharedPreferencesUtil;
@@ -27,7 +27,7 @@ public class CommentActivity extends AppCompatActivity {
     }
 
     public void init(){
-        MusicApi api = new MusicApi(SharedPreferencesUtil.getString("cookie",""));
+        SongApi api = new SongApi(SharedPreferencesUtil.getString("cookie",""));
         RecyclerView rv_main = findViewById(R.id.rv_main);
         rv_main.setLayoutManager(new LinearLayoutManager(this));
         new Thread(()->{

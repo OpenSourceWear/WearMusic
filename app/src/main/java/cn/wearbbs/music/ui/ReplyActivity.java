@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import api.MusicApi;
+import cn.jackuxl.api.SongApi;
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.util.SharedPreferencesUtil;
 
@@ -31,7 +31,7 @@ public class ReplyActivity extends AppCompatActivity {
                 EditText et_content = findViewById(R.id.et_content);
                 new Thread(()->{
                     Looper.prepare();
-                    if(new MusicApi(SharedPreferencesUtil.getString("cookie","")).sendComment(getIntent().getStringExtra("id"),et_content.getText().toString())){
+                    if(new SongApi(SharedPreferencesUtil.getString("cookie","")).sendComment(getIntent().getStringExtra("id"),et_content.getText().toString())){
                         Toast.makeText(this,"发送成功",Toast.LENGTH_SHORT).show();
                         finish();
                     }

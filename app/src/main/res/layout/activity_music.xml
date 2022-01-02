@@ -36,14 +36,14 @@
 
     </RelativeLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <me.jingbin.library.ByRecyclerView
         android:id="@+id/rv_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
         tools:ignore="SpeakableTextPresentCheck">
 
-    </androidx.recyclerview.widget.RecyclerView>
+    </me.jingbin.library.ByRecyclerView>
 
     <cn.wearbbs.music.view.MessageView
         android:id="@+id/mv_message"

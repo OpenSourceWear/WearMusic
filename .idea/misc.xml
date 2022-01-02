@@ -3,6 +3,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudioProjects/WearMusic/app/src/main/res/layout/activity_about.xml" value="0.8392857142857143" />
+        <entry key="..\:/AndroidStudioProjects/WearMusic/app/src/main/res/layout/activity_localmusic.xml" value="0.8964285714285715" />
+        <entry key="..\:/AndroidStudioProjects/WearMusic/app/src/main/res/layout/activity_main.xml" value="0.7030812324929971" />
+        <entry key="..\:/AndroidStudioProjects/WearMusic/app/src/main/res/layout/activity_menu.xml" value="1.4666666666666666" />
+        <entry key="..\:/AndroidStudioProjects/WearMusic/app/src/main/res/layout/activity_music.xml" value="1.5" />
+        <entry key="..\:/AndroidStudioProjects/WearMusic/app/src/main/res/layout/activity_search.xml" value="1.3" />
+        <entry key="..\:/AndroidStudioProjects/WearMusic/app/src/main/res/layout/activity_test.xml" value="2.1714285714285713" />
+        <entry key="..\:/AndroidStudioProjects/WearMusic/app/src/main/res/layout/activity_userprofile.xml" value="1.3" />
+        <entry key="..\:/AndroidStudioProjects/WearMusic/app/src/main/res/layout/fragment_blank.xml" value="2.2" />
+        <entry key="..\:/AndroidStudioProjects/WearMusic/app/src/main/res/layout/fragment_console.xml" value="1.5" />
+        <entry key="..\:/AndroidStudioProjects/WearMusic/app/src/main/res/layout/fragment_player.xml" value="0.5704225352112676" />
+        <entry key="..\:/AndroidStudioProjects/WearMusic/app/src/main/res/layout/item_hot.xml" value="1.1857142857142857" />
+        <entry key="..\:/AndroidStudioProjects/WearMusic/app/src/main/res/layout/item_music.xml" value="1.1708333333333334" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/drawable/btn_blue.xml" value="1.278125" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/drawable/hot_blue.xml" value="1.21875" />
         <entry key="..\:/AndroidStudioProjects/WearMusicPro/app/src/main/res/drawable/ic_baseline_android_24.xml" value="1.275" />

@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.gson.Gson;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -20,13 +22,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import api.MusicApi;
+import cn.jackuxl.api.SongApi;
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.adapter.ViewPagerAdapter;
 import cn.wearbbs.music.event.MessageEvent;
 import cn.wearbbs.music.util.SharedPreferencesUtil;
 import cn.wearbbs.music.util.ToastUtil;
-import util.NetWorkUtil;
+import cn.jackuxl.util.NetWorkUtil;
 
 
 /**
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
             NetWorkUtil.setDomain("https://music.wearbbs.cn/");
         }
         else{
-            NetWorkUtil.setDomain("https://wmusic.vercel.app/");
+            NetWorkUtil.setDomain("https://api.wmusic.pro/");
         }
 
         if (SharedPreferencesUtil.getBoolean("dark", false)) {
@@ -63,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         ViewPager2 vp_main = findViewById(R.id.vp_main);
-        vp_main.setOffscreenPageLimit(2);
+        vp_main.setOffscreenPageLimit(3);
         vp_main.setSaveEnabled(false);
         if(getIntent().getBooleanExtra("local",false)){
             data = getIntent().getStringExtra("data");
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                         findViewById(R.id.lv_loading).setVisibility(View.VISIBLE);
                     });
                     try{
-                        String data = new MusicApi(cookie).getFM().toJSONString();
+                        String data = new Gson().toJson(new SongApi(cookie).getFM());
                         EventBus.getDefault().post(new MessageEvent(data));
                     }
                     catch (Exception e){

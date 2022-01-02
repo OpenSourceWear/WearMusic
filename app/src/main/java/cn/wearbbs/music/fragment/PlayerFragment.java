@@ -11,7 +11,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,6 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -35,10 +33,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import api.MusicApi;
-import api.MusicPanApi;
+import cn.jackuxl.api.SongApi;
+import cn.jackuxl.api.CloudSongApi;
 import cn.wearbbs.music.R;
-import cn.wearbbs.music.adapter.ViewPagerAdapter;
 import cn.wearbbs.music.application.MainApplication;
 import cn.wearbbs.music.event.MessageEvent;
 import cn.wearbbs.music.service.MusicPlayerService;
@@ -149,7 +146,7 @@ public class PlayerFragment extends Fragment {
         // 兼容音乐云盘
         if (data.getJSONObject(0).containsKey("simpleSong")) {
             new Thread(() -> {
-                MusicPanApi api = new MusicPanApi(SharedPreferencesUtil.getString("cookie", ""));
+                CloudSongApi api = new CloudSongApi(SharedPreferencesUtil.getString("cookie", ""));
                 String[] ids = new String[data.size()];
                 for (int i = 0; i < data.size(); i++) {
                     ids[i] = data.getJSONObject(i).getJSONObject("simpleSong").getString("id");
@@ -170,7 +167,7 @@ public class PlayerFragment extends Fragment {
             activity.bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
         } else {
             new Thread(() -> {
-                MusicApi api = new MusicApi(SharedPreferencesUtil.getString("cookie", ""));
+                SongApi api = new SongApi(SharedPreferencesUtil.getString("cookie", ""));
                 String[] ids = new String[data.size()];
                 for (int i = 0; i < data.size(); i++) {
                     ids[i] = data.getJSONObject(i).getString("id");
@@ -235,7 +232,7 @@ public class PlayerFragment extends Fragment {
             musicIndex=0;
         }
 
-        MusicApi api = new MusicApi(SharedPreferencesUtil.getString("cookie", ""));
+        SongApi api = new SongApi(SharedPreferencesUtil.getString("cookie", ""));
         RequestOptions options = RequestOptions.bitmapTransform(new RoundedCorners(15)).placeholder(R.drawable.ic_baseline_photo_size_select_actual_24).error(R.drawable.ic_baseline_photo_size_select_actual_24);
 
         // 利用特征判断并兼容音乐云盘和歌单
@@ -261,7 +258,7 @@ public class PlayerFragment extends Fragment {
                 // 设置封面
                 try{
                     ImageView iv_cover = requireView().findViewById(R.id.iv_cover);
-                    imgUrl = api.getMusicCover(currentMusicInfo.getJSONObject("album").getString("id"));
+                    imgUrl = api.getSongCover(currentMusicInfo.getJSONObject("album").getInteger("id"));
                     requireActivity().runOnUiThread(() -> {
                         iv_cover.setImageResource(R.drawable.ic_baseline_photo_size_select_actual_24);
                         Glide.with(MainApplication.getContext()).load(imgUrl.replace("http://", "https://")).apply(options).into(iv_cover);

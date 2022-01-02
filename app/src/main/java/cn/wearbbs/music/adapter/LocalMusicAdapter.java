@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
-import api.UserApi;
+import cn.jackuxl.api.UserApi;
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.application.MainApplication;
 import cn.wearbbs.music.ui.LocalMusicActivity;

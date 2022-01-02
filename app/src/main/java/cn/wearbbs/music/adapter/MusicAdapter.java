@@ -2,7 +2,6 @@ package cn.wearbbs.music.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSONArray;
@@ -20,10 +18,9 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 import org.jetbrains.annotations.NotNull;
 
-import api.MusicApi;
+import cn.jackuxl.api.SongApi;
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.event.MessageEvent;
 import cn.wearbbs.music.ui.MainActivity;
@@ -49,7 +46,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> 
 
     @NotNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if(viewType==ITEM_TYPE_HEADER){
             return new ViewHolder(header);
         }
@@ -69,7 +66,8 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(final ViewHolder viewHolder, int position) {
+        System.out.println(position);
         if(getItemViewType(position)==ITEM_TYPE_CONTENT){
             if(header!=null){
                 position--;
@@ -83,12 +81,12 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> 
             }
             if (musicInfo.containsKey("artists")) {
                 artists = musicInfo.getJSONArray("artists");
-                MusicApi api;
-                api = new MusicApi(SharedPreferencesUtil.getString("cookie", ""));
+                SongApi api;
+                api = new SongApi(SharedPreferencesUtil.getString("cookie", ""));
                 JSONObject finalMusicInfo = musicInfo;
                 new Thread(() -> {
                     try{
-                        imgUrl[0] = api.getMusicCover(finalMusicInfo.getJSONObject("album").getString("id"));
+                        imgUrl[0] = api.getSongCover(finalMusicInfo.getJSONObject("album").getInteger("id"));
                         activity.runOnUiThread(()->{
                             viewHolder.iv_cover.setImageResource(R.drawable.ic_baseline_photo_size_select_actual_24);
                             RequestOptions options = RequestOptions.bitmapTransform(new RoundedCorners(10)).placeholder(R.drawable.ic_baseline_photo_size_select_actual_24).error(R.drawable.ic_baseline_photo_size_select_actual_24);
@@ -138,7 +136,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> 
         TextView tv_artists;
         LinearLayout ll_main;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
             iv_cover = itemView.findViewById(R.id.iv_cover);
             tv_title = itemView.findViewById(R.id.tv_title);

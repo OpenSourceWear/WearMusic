@@ -23,8 +23,8 @@
 
     <!-- 服务器偏好 -->
     <string-array name="server_entries">
-        <item>稳定</item>
-        <item>极速</item>
+        <item>Vercel（推荐）</item>
+        <item>WearBBS</item>
     </string-array>
 
     <string-array name="server_values">

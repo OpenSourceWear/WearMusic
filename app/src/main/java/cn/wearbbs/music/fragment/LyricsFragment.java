@@ -24,7 +24,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import api.MusicApi;
+import cn.jackuxl.api.SongApi;
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.ui.MainActivity;
 import cn.wearbbs.music.util.SharedPreferencesUtil;
@@ -132,7 +132,7 @@ public class LyricsFragment extends Fragment {
                 }
             }
             else{
-                MusicApi api = new MusicApi(SharedPreferencesUtil.getString("cookie", ""));
+                SongApi api = new SongApi(SharedPreferencesUtil.getString("cookie", ""));
                 try {
                     String lyric;
                     if (data.getJSONObject(0).containsKey("simpleSong")) {

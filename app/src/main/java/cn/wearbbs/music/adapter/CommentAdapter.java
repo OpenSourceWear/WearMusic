@@ -17,15 +17,13 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
 import org.jetbrains.annotations.NotNull;
 
-import api.MusicApi;
+import cn.jackuxl.api.SongApi;
 import cn.carbs.android.expandabletextview.library.ExpandableTextView;
 import cn.wearbbs.music.R;
-import cn.wearbbs.music.ui.MenuActivity;
 import cn.wearbbs.music.ui.UserProfileActivity;
 import cn.wearbbs.music.util.SharedPreferencesUtil;
 
@@ -92,7 +90,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             viewHolder.iv_thumb.setOnClickListener(v -> new Thread(()->{
                 Looper.prepare();
                 if(currentCommentInfo.getBoolean("liked")){
-                    if(new MusicApi(SharedPreferencesUtil.getString("cookie",""))
+                    if(new SongApi(SharedPreferencesUtil.getString("cookie",""))
                             .likeComment(id,currentCommentInfo.getString("commentId"), false)){
                         currentCommentInfo.put("liked",false);
                         activity.runOnUiThread(()->viewHolder.iv_thumb.setImageResource(R.drawable.ic_outline_thumb_up_24));
@@ -102,7 +100,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                     }
                 }
                 else{
-                    if(new MusicApi(SharedPreferencesUtil.getString("cookie",""))
+                    if(new SongApi(SharedPreferencesUtil.getString("cookie",""))
                             .likeComment(id,currentCommentInfo.getString("commentId"), true)){
                         currentCommentInfo.put("liked",true);
                         activity.runOnUiThread(()->viewHolder.iv_thumb.setImageResource(R.drawable.ic_baseline_thumb_up_24));

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Looper;
@@ -104,14 +105,18 @@ public class ViewPictureActivity extends AppCompatActivity {
     public void checkPermissionForSave(){
         // 读取权限
         String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-        // 检查权限是否已授权
-        int hasPermission = checkSelfPermission(permission);
-        // 如果没有授权
-        if (hasPermission != PackageManager.PERMISSION_GRANTED) {
-            // 请求权限
-            requestPermissions(new String[]{permission}, 0);
-        }else {
-            // 已授权权限
+        if(Build.VERSION.SDK_INT>=23){
+            // 检查权限是否已授权
+            int hasPermission = checkSelfPermission(permission);
+            // 如果没有授权
+            if (hasPermission != PackageManager.PERMISSION_GRANTED) {
+                // 请求权限
+                requestPermissions(new String[]{permission}, 0);
+            } else {
+                // 已授权权限
+                savePicture(getIntent().getStringExtra("url"));
+            }
+        } else{
             savePicture(getIntent().getStringExtra("url"));
         }
     }

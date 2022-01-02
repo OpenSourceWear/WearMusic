@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSONArray;
 
-import api.MusicListApi;
+import cn.jackuxl.api.MusicListApi;
 import cn.wearbbs.music.R;
 import cn.wearbbs.music.adapter.MusicLibraryAdapter;
 import cn.wearbbs.music.util.SharedPreferencesUtil;

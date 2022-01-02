@@ -11,17 +11,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
-import api.MusicApi;
-import api.MusicListApi;
+import java.util.List;
+
+import cn.jackuxl.api.SongApi;
+import cn.jackuxl.api.MusicListApi;
 import cn.carbs.android.expandabletextview.library.ExpandableTextView;
+import cn.jackuxl.model.Song;
 import cn.wearbbs.music.R;
-import cn.wearbbs.music.adapter.MusicAdapter;
+import cn.wearbbs.music.adapter.SongAdapter;
 import cn.wearbbs.music.util.SharedPreferencesUtil;
 import cn.wearbbs.music.view.LoadingView;
 import cn.wearbbs.music.view.MessageView;
@@ -109,7 +111,7 @@ public class MusicListActivity extends SlideBackActivity {
 
     public void initMusicList(String id){
         String cookie = SharedPreferencesUtil.getString("cookie", "");
-        MusicApi musicApi = new MusicApi(cookie);
+        SongApi songApi = new SongApi(cookie);
         LoadingView lv_loading = findViewById(R.id.lv_loading);
         RecyclerView rv_main = findViewById(R.id.rv_main);
         if (cookie.isEmpty()) {
@@ -119,19 +121,20 @@ public class MusicListActivity extends SlideBackActivity {
             rv_main.setVisibility(View.GONE);
             new Thread(() -> {
                 try{
-                    JSONArray data = musicApi.getMusicDetail(musicListApi.getMusicListDetail(id));
+                    List<Song> data = songApi.getMusicDetail(musicListApi.getMusicListDetail(id));
                     runOnUiThread(() -> {
                         if (data.size() == 0) {
                             showNoLoginMessage();
                         } else {
                             rv_main.setLayoutManager(new LinearLayoutManager(this));
-                            rv_main.setAdapter(new MusicAdapter(data, this, getHeader()));
+                            rv_main.setAdapter(new SongAdapter(data, this, getHeader()));
                             lv_loading.setVisibility(View.GONE);
                             rv_main.setVisibility(View.VISIBLE);
                         }
                     });
                 }
                 catch (Exception e){
+                    System.out.println("cookie:"+cookie);
                     runOnUiThread(this::showErrorMessage);
                 }
             }).start();

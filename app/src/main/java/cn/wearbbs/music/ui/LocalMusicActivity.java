@@ -4,10 +4,12 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -147,16 +149,21 @@ public class LocalMusicActivity extends AppCompatActivity {
     public void checkPermissionForInit(){
         // 读取权限
         String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-        // 检查权限是否已授权
-        int hasPermission = checkSelfPermission(permission);
-        // 如果没有授权
-        if (hasPermission != PackageManager.PERMISSION_GRANTED) {
-            // 请求权限
-            requestPermissions(new String[]{permission}, 0);
-        }else {
-            // 已授权权限
+        if(Build.VERSION.SDK_INT>=23){
+            // 检查权限是否已授权
+            int hasPermission = checkSelfPermission(permission);
+            // 如果没有授权
+            if (hasPermission != PackageManager.PERMISSION_GRANTED) {
+                // 请求权限
+                requestPermissions(new String[]{permission}, 0);
+            } else {
+                // 已授权权限
+                initList();
+            }
+        } else{
             initList();
         }
+
     }
 
     @Override

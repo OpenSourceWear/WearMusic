@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.percentlayout.widget.PercentFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_player"
@@ -8,76 +8,84 @@
     android:visibility="visible"
     tools:context=".fragment.PlayerFragment">
 
-    <LinearLayout
+    <androidx.percentlayout.widget.PercentFrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
+        android:layout_gravity="top|center_horizontal"
+        android:orientation="horizontal"
+        app:layout_heightPercent="60%"
+        app:layout_widthPercent="90%">
 
         <ImageView
             android:id="@+id/iv_cover"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_gravity="start|center_vertical"
             android:contentDescription="@string/todo"
+            app:layout_heightPercent="80%"
+            app:layout_widthPercent="50%"
             app:srcCompat="@drawable/ic_baseline_photo_size_select_actual_24" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="10dp"
+        <androidx.percentlayout.widget.PercentFrameLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_gravity="end|center_vertical"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:layout_heightPercent="90%"
+            app:layout_widthPercent="50%">
 
             <TextView
                 android:id="@+id/tv_name"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="3dp"
-                android:layout_marginRight="10dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxLines="2"
                 android:singleLine="false"
                 android:text="@string/msg_noMusic"
                 android:textColor="?attr/colorPrimaryVariant"
-                android:textSize="12sp" />
+                android:textSize="13sp"
+                app:layout_widthPercent="90%"
+                tools:ignore="TextContrastCheck" />
 
             <TextView
                 android:id="@+id/tv_author"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="3dp"
-                android:layout_marginRight="10dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxLines="2"
                 android:singleLine="false"
                 android:text="@string/unknown"
                 android:textColor="#999999"
-                android:textSize="10sp"
-                tools:ignore="SmallSp" />
-        </LinearLayout>
+                android:textSize="11sp"
+                app:layout_widthPercent="90%"
+                tools:ignore="SmallSp,TextContrastCheck" />
+        </androidx.percentlayout.widget.PercentFrameLayout>
 
-    </LinearLayout>
+    </androidx.percentlayout.widget.PercentFrameLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="bottom|center_horizontal"
         android:layout_marginTop="2dp"
-        android:orientation="horizontal">
+        android:layout_marginBottom="20dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        app:layout_heightPercent="30%"
+        app:layout_widthPercent="60%">
 
         <ImageView
             android:id="@+id/iv_precious"
             android:layout_width="0dp"
-            android:layout_height="30dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_marginEnd="10dp"
             android:layout_weight="1"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/todo"
@@ -89,7 +97,7 @@
         <ImageView
             android:id="@+id/iv_start"
             android:layout_width="0dp"
-            android:layout_height="45dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_weight="3"
             android:background="?android:attr/selectableItemBackgroundBorderless"
@@ -100,9 +108,8 @@
         <ImageView
             android:id="@+id/iv_next"
             android:layout_width="0dp"
-            android:layout_height="30dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_marginStart="10dp"
             android:layout_weight="1"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/todo"
@@ -112,4 +119,4 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</androidx.percentlayout.widget.PercentFrameLayout>

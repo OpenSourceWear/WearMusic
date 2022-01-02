@@ -3,9 +3,11 @@ package cn.wearbbs.music.api;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import java.net.URLEncoder;
+
 import cn.wearbbs.music.application.MainApplication;
 import cn.wearbbs.music.util.SharedPreferencesUtil;
-import util.NetWorkUtil;
+import cn.jackuxl.util.NetWorkUtil;
 
 public class AppServiceApi {
     public static JSONObject getLatestVersionInfo() {
@@ -20,7 +22,7 @@ public class AppServiceApi {
         String token = "C6ZdL45yZgBjHCmk";
         int code = 400;
         try{
-            code = JSON.parseObject(NetWorkUtil.sendByGetUrl(String.format("https://wmusic.wearbbs.cn/AppService/feedback/?token=%s&content=%s", token, content), null)).getInteger("code");
+            code = JSON.parseObject(NetWorkUtil.sendByGetUrl(String.format("https://wmusic.wearbbs.cn/AppService/feedback/?token=%s&content=%s", token, URLEncoder.encode(content, "utf-8")), null)).getInteger("code");
         }
         catch (Exception ignored){ }
         resetServer();
@@ -32,7 +34,7 @@ public class AppServiceApi {
             NetWorkUtil.setDomain("https://music.wearbbs.cn");
         }
         else{
-            NetWorkUtil.setDomain("https://wmusic.vercel.app");
+            NetWorkUtil.setDomain("https://api.wmusic.pro");
         }
     }
 }

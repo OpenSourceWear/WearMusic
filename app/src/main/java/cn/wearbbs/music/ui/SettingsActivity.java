@@ -10,7 +10,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import cn.wearbbs.music.R;
-import util.NetWorkUtil;
+import cn.jackuxl.util.NetWorkUtil;
 
 /**
  * 设置
@@ -65,7 +65,7 @@ public class SettingsActivity extends SlideBackActivity {
 
             findPreference("server").setOnPreferenceChangeListener((preference, newValue) -> {
                 if(newValue.equals("vercel")){
-                    NetWorkUtil.setDomain("https://wmusic.vercel.app/");
+                    NetWorkUtil.setDomain("https://api.wmusic.pro/");
                 }
                 else{
                     NetWorkUtil.setDomain("https://music.wearbbs.cn");

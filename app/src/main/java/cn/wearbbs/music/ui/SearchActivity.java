@@ -11,14 +11,17 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alibaba.fastjson.JSONArray;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
-import api.MusicApi;
+import java.util.List;
+
+import cn.jackuxl.api.SongApi;
+import cn.jackuxl.model.Song;
+import cn.jackuxl.model.result.SearchHot;
 import cn.wearbbs.music.R;
-import cn.wearbbs.music.adapter.MusicAdapter;
+import cn.wearbbs.music.adapter.SongAdapter;
 import cn.wearbbs.music.util.SharedPreferencesUtil;
 import cn.wearbbs.music.view.LoadingView;
 import cn.wearbbs.music.view.MessageView;
@@ -27,24 +30,24 @@ import cn.wearbbs.music.view.MessageView;
  * 搜索
  */
 public class SearchActivity extends SlideBackActivity {
-    MusicApi api;
+    SongApi api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        api = new MusicApi(SharedPreferencesUtil.getString("cookie", ""));
+        api = new SongApi(SharedPreferencesUtil.getString("cookie", ""));
         TextView tv_noMore = findViewById(R.id.tv_noMore);
         tv_noMore.setText(R.string.loading);
         // 获取热搜
         new Thread(() -> {
             try{
-                JSONArray hot = api.getHot();
+                List<SearchHot> hot = api.getSearchHot();
                 if (hot.size() > 0) {
                     TagFlowLayout tfl_hot = findViewById(R.id.tfl_hot);
                     String[] hotList = new String[10];
                     for (int i = 0; i < 10; i++) {
-                        hotList[i] = hot.getJSONObject(i).getString("first");
+                        hotList[i] = hot.get(i).getFirst();
                     }
                     runOnUiThread(() -> {
                         tv_noMore.setText(R.string.no_more);
@@ -107,7 +110,7 @@ public class SearchActivity extends SlideBackActivity {
         new Thread(() -> {
             try{
                 String keyword = et_search.getText().toString();
-                JSONArray data = api.searchMusic(keyword);
+                List<Song> data = api.searchMusic(keyword);
                 if (data.size() == 0) {
                     runOnUiThread(() -> {
                         lv_loading.setVisibility(View.GONE);
@@ -122,7 +125,7 @@ public class SearchActivity extends SlideBackActivity {
                         }
                     });
                 } else {
-                    MusicAdapter adapter = new MusicAdapter(data, this);
+                    SongAdapter adapter = new SongAdapter(data, this);
                     runOnUiThread(() -> {
                         lv_loading.setVisibility(View.GONE);
                         findViewById(R.id.rv_search).setVisibility(View.VISIBLE);
