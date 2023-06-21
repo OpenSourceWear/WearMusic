@@ -30,11 +30,6 @@ public class AppServiceApi {
     }
 
     public static void resetServer(){
-        if(SharedPreferencesUtil.getString("server","vercel").equals("wearbbs")){
-            NetWorkUtil.setDomain("https://music.wearbbs.cn");
-        }
-        else{
-            NetWorkUtil.setDomain("https://api.wmusic.pro");
-        }
+        NetWorkUtil.setDomain("https://api.wmusic.pro");
     }
 }

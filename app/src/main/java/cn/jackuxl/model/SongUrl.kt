@@ -27,7 +27,7 @@ data class SongUrl(
     @SerializedName("freeTrialPrivilege")
     val freeTrialPrivilege: FreeTrialPrivilege,
     @SerializedName("gain")
-    val gain: Int,
+    val gain: Float,
     @SerializedName("id")
     val id: Int,
     @SerializedName("level")

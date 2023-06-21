@@ -64,7 +64,7 @@ class SongAdapter : RecyclerView.Adapter<SongAdapter.ViewHolder> {
                 position--
             }
             val (album, _, artists, _, _, _, _, _, _, _, name) = data[position]
-            val imgUrl = arrayOf("")
+            val imgUrl: Array<String?> = arrayOf("")
             // 兼容音乐云盘
 //            if (songDetail.containsKey("simpleSong")) {
 //                songDetail = songDetail.getJSONObject("simpleSong");
@@ -87,10 +87,11 @@ class SongAdapter : RecyclerView.Adapter<SongAdapter.ViewHolder> {
                             .error(R.drawable.ic_baseline_photo_size_select_actual_24)
                         try {
                             viewHolder.ivCover?.let {
-                                Glide.with(activity).load(imgUrl[0].replace("http://", "https://"))
+                                Glide.with(activity).load(imgUrl[0]?.replace("http://", "https://"))
                                     .apply(options).into(it)
                             }
                         } catch (ignored: Exception) {
+                            ignored.printStackTrace()
                         }
                     }
                 } catch (ignored: Exception) {

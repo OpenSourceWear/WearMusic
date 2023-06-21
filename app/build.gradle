@@ -12,14 +12,16 @@ android {
         applicationId "cn.wearbbs.music"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 11
-        versionName "3.4"
+        versionCode 12
+        versionName "3.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
     packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
+        resources {
+            excludes += ['META-INF/DEPENDENCIES']
+        }
     }
     buildTypes {
         release {
@@ -34,6 +36,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    namespace 'cn.wearbbs.music'
 }
 
 

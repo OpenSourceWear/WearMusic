@@ -8,41 +8,41 @@ data class Privilege(
     @SerializedName("chargeInfoList")
     val chargeInfoList: List<ChargeInfo>,
     @SerializedName("cp")
-    val cp: Int,
+    val cp: Long,
     @SerializedName("cs")
     val cs: Boolean,
     @SerializedName("dl")
-    val dl: Int,
+    val dl: Long,
     @SerializedName("downloadMaxbr")
-    val downloadMaxbr: Int,
+    val downloadMaxbr: Long,
     @SerializedName("fee")
-    val fee: Int,
+    val fee: Long,
     @SerializedName("fl")
-    val fl: Int,
+    val fl: Long,
     @SerializedName("flag")
-    val flag: Int,
+    val flag: Long,
     @SerializedName("freeTrialPrivilege")
     val freeTrialPrivilege: FreeTrialPrivilege,
     @SerializedName("id")
-    val id: Int,
+    val id: Long,
     @SerializedName("maxbr")
-    val maxbr: Int,
+    val maxbr: Long,
     @SerializedName("payed")
-    val payed: Int,
+    val payed: Long,
     @SerializedName("pl")
-    val pl: Int,
+    val pl: Long,
     @SerializedName("playMaxbr")
-    val playMaxbr: Int,
+    val playMaxbr: Long,
     @SerializedName("preSell")
     val preSell: Boolean,
     @SerializedName("rscl")
-    val rscl: Int,
+    val rscl: Long,
     @SerializedName("sp")
-    val sp: Int,
+    val sp: Long,
     @SerializedName("st")
-    val st: Int,
+    val st: Long,
     @SerializedName("subp")
-    val subp: Int,
+    val subp: Long,
     @SerializedName("toast")
     val toast: Boolean
 )

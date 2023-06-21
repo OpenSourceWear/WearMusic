@@ -74,7 +74,7 @@
     <string name="qqQunQRCode">官方群二维码</string>
     <string name="feedback">反馈问题</string>
     <string name="checkUpdate">检查更新</string>
-    <string name="aboutContent">v%s\n音乐的力量，听你所想。\n作者： JackuXL\n出品：WearBBS\n官方QQ群：133636679\n官网：https://wmusic.pro\n论坛：https://wearbbs.cn\n使用【网易云API】开发\n特别感谢：@luern0313</string>
+    <string name="aboutContent">v%s LTS\n音乐的力量，听你所想。\n作者： JackuXL\n官方QQ群：133636679\n官网：https://wmusic.pro\n敬请期待 v4.0</string>
 
     <!-- 其他-->
     <string name="msg_noLogin">你还没有登录哦</string>
@@ -94,7 +94,6 @@
     <string name="qrcode">二维码</string>
     <string name="playList">播放列表</string>
     <string name="send">发送</string>
-    <string name="server">服务器偏好</string>
     <string name="noLogin">未登录</string>
     <string name="path_hint"><![CDATA[储存位置 >]]></string>
     <string name="musicRoot">音乐储存位置：\n/storage/emulated/0/Android/data/cn.wearbbs.music/files/download/music/</string>

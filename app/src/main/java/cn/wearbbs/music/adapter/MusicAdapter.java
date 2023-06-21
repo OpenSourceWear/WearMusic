@@ -113,7 +113,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> 
             int finalPosition = position;
             viewHolder.ll_main.setOnClickListener(v -> {
                 Intent intent = new Intent(activity, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 EventBus.getDefault().post(new MessageEvent(data.toJSONString()));
                 intent.putExtra("musicIndex", finalPosition);

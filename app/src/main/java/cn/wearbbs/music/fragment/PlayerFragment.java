@@ -186,6 +186,7 @@ public class PlayerFragment extends Fragment {
                         activity.bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
                     }
                     catch (Exception ex){
+                        ex.printStackTrace();
                         Looper.prepare();
                         ToastUtil.show(requireActivity(),"音乐地址获取失败，若多次出现此问题，请尝试重新登录");
                         Looper.loop();

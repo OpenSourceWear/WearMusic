@@ -44,12 +44,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         EventBus.getDefault().register(this);
 
-        if(SharedPreferencesUtil.getString("server","vercel").equals("wearbbs")){
-            NetWorkUtil.setDomain("https://music.wearbbs.cn/");
-        }
-        else{
-            NetWorkUtil.setDomain("https://api.wmusic.pro/");
-        }
+        NetWorkUtil.setDomain("https://musicapi.technet.space/");
 
         if (SharedPreferencesUtil.getBoolean("dark", false)) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);

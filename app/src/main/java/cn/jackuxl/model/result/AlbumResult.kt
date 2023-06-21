@@ -13,5 +13,5 @@ data class AlbumResult(
     @SerializedName("resourceState")
     val resourceState: Boolean,
     @SerializedName("songs")
-    val songs: List<Song>
+    val songs: List<Song?>
 )

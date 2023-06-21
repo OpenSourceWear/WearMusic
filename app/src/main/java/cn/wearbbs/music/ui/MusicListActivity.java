@@ -68,6 +68,7 @@ public class MusicListActivity extends SlideBackActivity {
                     runOnUiThread(()->initMusicList(id));
                 }
                 catch (Exception e){
+                    e.printStackTrace();
                     runOnUiThread(this::showErrorMessage);
                 }
             }).start();
@@ -99,7 +100,9 @@ public class MusicListActivity extends SlideBackActivity {
         try{
             Glide.with(this).load(imgUrl).apply(options).into(iv_cover);
         }
-        catch (Exception ignored){}
+        catch (Exception ignored){
+            ignored.printStackTrace();
+        }
         if(description==null||description.isEmpty()){
             etv_summary.setVisibility(View.GONE);
         }
@@ -134,6 +137,7 @@ public class MusicListActivity extends SlideBackActivity {
                     });
                 }
                 catch (Exception e){
+                    e.printStackTrace();
                     System.out.println("cookie:"+cookie);
                     runOnUiThread(this::showErrorMessage);
                 }

@@ -4,6 +4,7 @@ package cn.jackuxl.model
 import cn.jackuxl.model.info.Info
 import com.google.gson.annotations.SerializedName
 
+
 data class Album(
     @SerializedName("alias")
     val alias: List<Any>,
@@ -60,3 +61,4 @@ data class Album(
     @SerializedName("type")
     val type: String
 )
+

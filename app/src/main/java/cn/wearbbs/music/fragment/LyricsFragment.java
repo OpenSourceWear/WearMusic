@@ -180,7 +180,7 @@ public class LyricsFragment extends Fragment {
         @Override
         public void handleMessage(android.os.Message msg) {
             if (currentPosition > 0) {
-                lrcView.updateTime(currentPosition);
+                //lrcView.updateTime(currentPosition);
             }
             //调取子线程
             handler.sendEmptyMessageDelayed(0, 1000);

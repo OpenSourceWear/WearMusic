@@ -21,7 +21,7 @@ data class Song(
     @SerializedName("id")
     val id: Int,
     @SerializedName("mark")
-    val mark: Int,
+    val mark: Long,
     @SerializedName("mvid")
     val mvid: Int,
     @SerializedName("name")

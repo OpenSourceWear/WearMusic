@@ -49,7 +49,9 @@ public class MusicLibraryAdapter extends RecyclerView.Adapter<MusicLibraryAdapte
         try{
             Glide.with(activity).load(playListDetail.getString("coverImgUrl").replace("http://", "https://")).apply(options).into(viewHolder.iv_cover);
         }
-        catch (Exception ignored){}
+        catch (Exception ignored){
+            ignored.printStackTrace();
+        }
         viewHolder.ll_main.setOnClickListener(v -> {
             Intent intent = new Intent(activity, MusicListActivity.class);
             intent.putExtra("detail", playListDetail.toJSONString());

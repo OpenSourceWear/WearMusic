@@ -62,17 +62,6 @@ public class SettingsActivity extends SlideBackActivity {
                 startActivity(new Intent(getActivity(), OpenSourceActivity.class));
                 return true;
             });
-
-            findPreference("server").setOnPreferenceChangeListener((preference, newValue) -> {
-                if(newValue.equals("vercel")){
-                    NetWorkUtil.setDomain("https://api.wmusic.pro/");
-                }
-                else{
-                    NetWorkUtil.setDomain("https://music.wearbbs.cn");
-                }
-                return true;
-            });
-
         }
     }
 }

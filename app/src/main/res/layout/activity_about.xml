@@ -77,7 +77,7 @@
             android:background="?attr/colorPrimary"
             android:onClick="onClick"
             android:orientation="horizontal"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/tv_check"
@@ -117,7 +117,7 @@
             android:background="?attr/colorPrimary"
             android:onClick="onClick"
             android:orientation="horizontal"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/tv_contact"
