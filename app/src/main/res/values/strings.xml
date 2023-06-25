@@ -74,7 +74,7 @@
     <string name="qqQunQRCode">官方群二维码</string>
     <string name="feedback">反馈问题</string>
     <string name="checkUpdate">检查更新</string>
-    <string name="aboutContent">v%s LTS\n音乐的力量，听你所想。\n作者： JackuXL\n官方QQ群：133636679\n官网：https://wmusic.pro\n敬请期待 v4.0</string>
+    <string name="aboutContent">v%s LTS\n补丁版本：bugfixed_230621\n音乐的力量，听你所想。\n作者： JackuXL\n官方QQ群：133636679\n敬请期待 v4.0</string>
 
     <!-- 其他-->
     <string name="msg_noLogin">你还没有登录哦</string>

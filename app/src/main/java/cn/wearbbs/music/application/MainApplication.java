@@ -26,13 +26,15 @@ public class MainApplication extends Application {
     public static Context getContext(){
         return context;
     }
-    public static double getApplicationVersion(){
-        PackageManager packageManager = context.getPackageManager();
+    // 获取应用版本号
+    public static String getApplicationVersion() {
         try {
-            PackageInfo packInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
-            return Double.parseDouble(packInfo.versionName);
-        } catch (PackageManager.NameNotFoundException ignored) {
+            PackageManager packageManager = context.getPackageManager();
+            PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            return packageInfo.versionName;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "0.0.0";
         }
-        return 0;
     }
 }

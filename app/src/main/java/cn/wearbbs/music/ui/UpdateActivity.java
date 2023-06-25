@@ -62,7 +62,7 @@ public class UpdateActivity extends AppCompatActivity {
     }
 
     /**
-     * 检查更新
+     * 检查更新（已知BUG：如果服务器返回的版本号不是数字，会导致崩溃）
      * @return 是否需要更新
      */
     public static JSONObject checkUpdate() {
@@ -72,7 +72,7 @@ public class UpdateActivity extends AppCompatActivity {
             JSONObject info;
             info = AppServiceApi.getLatestVersionInfo();
             latestVersion = info.getDouble("latestVersion");
-            currentVersion = MainApplication.getApplicationVersion();
+            currentVersion = Double.parseDouble(MainApplication.getApplicationVersion());
             info.put("needUpdate",currentVersion < latestVersion);
             info.put("currentVersion",currentVersion);
             return info;
